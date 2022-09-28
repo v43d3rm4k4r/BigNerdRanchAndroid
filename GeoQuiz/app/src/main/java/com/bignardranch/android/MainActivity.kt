@@ -34,6 +34,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Toast.makeText(
+            this,
+            "onCreate() Toast",
+            Toast.LENGTH_SHORT
+        ).show()
+
         Log.d(TAG, "onCreate() called")
         super.setContentView(R.layout.activity_main)
 
@@ -98,6 +105,15 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(
             this,
             "onStop() Toast",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Toast.makeText(
+            this,
+            "onDestroy() Toast",
             Toast.LENGTH_SHORT
         ).show()
     }
