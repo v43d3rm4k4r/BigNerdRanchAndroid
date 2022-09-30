@@ -6,9 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.fragment
-import androidx.activity.viewModels
+import androidx.activity.viewModels // ??
 import com.bignardranch.android.geoquiz.GeoQuizViewModel
 import com.bignardranch.android.geoquiz.Question
 
@@ -26,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var falseButton: Button
     private lateinit var prevButton: View // ImageButton in activity_main.xml and Button in land-activity_main.xml
     private lateinit var nextButton: View //
-    private val model: GeoQuizViewModel by viewModels()
+    //private val model: GeoQuizViewModel by viewModels() // NOT WORKING
 
     private val questions = listOf(
         Question(R.string.question_australia, true),
@@ -43,12 +41,9 @@ class MainActivity : AppCompatActivity() {
     private var correctAnswers = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val model: GeoQuizViewModel by activityViewModels()
         super.onCreate(savedInstanceState)
 
-
-
-        var a = 4.toDouble() / 7.toDouble() * 100.toDouble()
+        //val model: GeoQuizViewModel by activityViewModels() // NOT WORKING
 
         if (DEBUG) {
             Toast.makeText(
@@ -59,9 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_main)
-
-        val model: GeoQuizViewModel by viewModels()
-
 
         questionTextView = findViewById(R.id.question_text_view)
         trueButton = findViewById(R.id.true_button)
