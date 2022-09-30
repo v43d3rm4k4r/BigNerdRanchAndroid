@@ -1,12 +1,12 @@
 package com.bignardranch.android
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels // ??
+import androidx.appcompat.app.AppCompatActivity
 import com.bignardranch.android.geoquiz.GeoQuizViewModel
 import com.bignardranch.android.geoquiz.Question
 
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var falseButton: Button
     private lateinit var prevButton: View // ImageButton in activity_main.xml and Button in land-activity_main.xml
     private lateinit var nextButton: View //
-    //private val model: GeoQuizViewModel by viewModels() // NOT WORKING
+    private val model: GeoQuizViewModel by viewModels() // NOT WORKING
 
     private val questions = listOf(
         Question(R.string.question_australia, true),
