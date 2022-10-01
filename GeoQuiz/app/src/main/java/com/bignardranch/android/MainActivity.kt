@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState?.let {
             viewModel.currentQuestion = it.getInt("currentQuestion", 0)
             viewModel.correctAnswers = it.getInt("currentAnswers", 0)
-            viewModel.checkedAnswers = it.getBooleanArray("checkedAnswers")?.toMutableList()!!
+            viewModel.checkedAnswers = it.getBooleanArray("checkedAnswers")?.toMutableList() ?: mutableListOf()
         }
 
         questionTextView = findViewById(R.id.question_text_view)
