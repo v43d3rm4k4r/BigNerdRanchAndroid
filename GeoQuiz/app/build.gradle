@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.bignardranch.android"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -33,7 +33,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    //implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.activity:activity-ktx:1.6.0' // for viewModels() delegate for creating ViewModel instance
     implementation 'androidx.fragment:fragment-ktx:1.5.3' //
