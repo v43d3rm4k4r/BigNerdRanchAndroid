@@ -1,6 +1,7 @@
 package com.bignardranch.android
 
 //import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
+    private lateinit var cheatButton: Button
     private lateinit var prevButton: View // ImageButton in activity_main.xml and Button in land-activity_main.xml
     private lateinit var nextButton: View //
 
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         questionTextView = findViewById(R.id.question_text_view)
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
+        cheatButton = findViewById(R.id.cheat_button)
         prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
 
@@ -59,6 +62,10 @@ class MainActivity : AppCompatActivity() {
 
         falseButton.setOnClickListener {
             checkAnswer(false)
+        }
+
+        cheatButton.setOnClickListener {
+            startActivity(CheatActivity.newIntent(this, viewModel.currentQuestionAnswer))
         }
 
         prevButton.setOnClickListener {

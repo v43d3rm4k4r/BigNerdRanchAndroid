@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/question_text_view"
@@ -32,42 +33,47 @@
             android:text="@string/false_button" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/cheat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="@string/cheat_button" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-<!--                    Buttons with text:                         >
-<!-        <Button-->
-<!--            android:id="@+id/next_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:drawableStart="@drawable/arrow_left"-->
-<!--            android:drawablePadding="4dp"-->
-<!--            android:text="@string/next_button" />-->
+        <!--                    Buttons with text:                         >
+        <!-        <Button-->
+        <!--            android:id="@+id/next_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:drawableStart="@drawable/arrow_left"-->
+        <!--            android:drawablePadding="4dp"-->
+        <!--            android:text="@string/next_button" />-->
 
-<!--        <Button-->
-<!--            android:id="@+id/prev_button"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:drawableEnd="@drawable/arrow_right"-->
-<!--            android:drawablePadding="4dp"-->
-<!--            android:text="@string/next_button" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/prev_button"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:drawableEnd="@drawable/arrow_right"-->
+        <!--            android:drawablePadding="4dp"-->
+        <!--            android:text="@string/next_button" />-->
 
         <ImageButton
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/arrow_left"
-            android:contentDescription="@string/previous_button_description"/>
+            android:contentDescription="@string/previous_button_description"
+            android:src="@drawable/arrow_left" />
 
         <ImageButton
             android:id="@+id/next_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/arrow_right"
-            android:contentDescription="@string/next_button_description"/>
-
+            android:contentDescription="@string/next_button_description"
+            android:src="@drawable/arrow_right" />
     </LinearLayout>
 </LinearLayout>
-
