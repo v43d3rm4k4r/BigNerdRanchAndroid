@@ -1,6 +1,7 @@
 package com.bignardranch.android
 
 //import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -16,6 +19,7 @@ import com.bignardranch.android.geoquiz.GeoQuizViewModel
 
 
 private const val TAG = "MainActivity"
+private const val REQUEST_CODE_CHEAT = 0
 const val DEBUG = true
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +32,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: View //
 
     private val viewModel: GeoQuizViewModel by viewModels() // TODO: see delegates
+
+    private val cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // There are no request codes
+            viewModel.isCheater = result.data?.getBooleanExtra(
+                EXTRA_ANSWER_SHOWN, false
+            ) ?: false
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +59,8 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState?.let {
             viewModel.currentQuestion = it.getInt("currentQuestion", 0)
             viewModel.correctAnswers = it.getInt("currentAnswers", 0)
-            viewModel.checkedAnswers = it.getBooleanArray("checkedAnswers")?.toMutableList() ?: mutableListOf()
+            viewModel.checkedAnswers =
+                it.getBooleanArray("checkedAnswers")?.toMutableList() ?: mutableListOf()
         }
 
         questionTextView = findViewById(R.id.question_text_view)
@@ -65,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         cheatButton.setOnClickListener {
-            startActivity(CheatActivity.newIntent(this, viewModel.currentQuestionAnswer))
+            cheatActivityLauncher.launch(CheatActivity.newIntent(this, viewModel.currentQuestionAnswer))
         }
 
         prevButton.setOnClickListener {
@@ -106,10 +120,11 @@ class MainActivity : AppCompatActivity() {
         setAnswerButtonsEnabled(false)
 
         with(viewModel) {
-            val toastStr = if (answer == currentQuestionAnswer) {
-                ++correctAnswers
-                R.string.correct_toast
-            } else R.string.incorrect_toast
+            val toastResId = when {
+                viewModel.isCheater -> R.string.judgment_toast
+                answer == currentQuestionAnswer -> R.string.correct_toast
+                else -> R.string.incorrect_toast
+            }
 
             setCurrentCheckedAnswer()
 
@@ -125,14 +140,10 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this@MainActivity,
-                    toastStr,
+                    toastResId,
                     Toast.LENGTH_SHORT
                 )
             }
-//            toast.setGravity(
-//                if (resources.configuration.orientation == ORIENTATION_LANDSCAPE) Gravity.TOP else Gravity.BOTTOM,
-//                0, 0
-//            )
             toast.show()
         }
     }

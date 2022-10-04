@@ -32,6 +32,7 @@ class GeoQuizViewModel : ViewModel() {
 
     var currentQuestion = 0
     var correctAnswers = 0
+    var isCheater = false
 
     val currentQuestionAnswer: Boolean
         get() = questions[currentQuestion].answer
