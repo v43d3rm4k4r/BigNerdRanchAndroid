@@ -2,7 +2,6 @@ package com.bignardranch.android
 
 //import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,12 +14,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 
+import com.bignardranch.android.geoquiz.CheckedQuestion
 import com.bignardranch.android.geoquiz.GeoQuizViewModel
 
 
 private const val TAG = "MainActivity"
-private const val REQUEST_CODE_CHEAT = 0
-const val DEBUG = true
+const val DEBUG = false
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,15 +32,16 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: GeoQuizViewModel by viewModels() // TODO: see delegates
 
+    // Must call before STARTED Activity state ("LifecycleOwners must call register before they are STARTED")
     private val cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             // There are no request codes
-            viewModel.isCheater = result.data?.getBooleanExtra(
+            val isCheated = result.data?.getBooleanExtra(
                 EXTRA_ANSWER_SHOWN, false
             ) ?: false
+            if (isCheated) viewModel.setCurrentAnswerCheated()
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +60,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.currentQuestion = it.getInt("currentQuestion", 0)
             viewModel.correctAnswers = it.getInt("currentAnswers", 0)
             viewModel.checkedAnswers =
-                it.getBooleanArray("checkedAnswers")?.toMutableList() ?: mutableListOf()
+                it.getParcelableArrayList<CheckedQuestion>("checkedAnswers")?.toMutableList()
+                    ?: mutableListOf()
+            // TODO: Add all properties
         }
 
         questionTextView = findViewById(R.id.question_text_view)
@@ -112,27 +114,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateQuestion() {
         questionTextView.setText(viewModel.currentQuestionText)
-        if (viewModel.isCurrentAnswerChecked()) setAnswerButtonsEnabled(false)
-        else setAnswerButtonsEnabled(true)
+        (!viewModel.isCurrentAnswerChecked).let {
+            setAnswerButtonsEnabled(it)
+            setCheatButtonEnabled(it)
+        }
     }
 
     private fun checkAnswer(answer: Boolean) {
         setAnswerButtonsEnabled(false)
+        setCheatButtonEnabled(false)
 
         with(viewModel) {
             val toastResId = when {
-                viewModel.isCheater -> R.string.judgment_toast
-                answer == currentQuestionAnswer -> R.string.correct_toast
+                viewModel.isCurrentAnswerCheated -> { ++correctAnswers; R.string.judgment_toast }
+                answer == currentQuestionAnswer -> { ++correctAnswers; R.string.correct_toast }
                 else -> R.string.incorrect_toast
             }
 
-            setCurrentCheckedAnswer()
+            setCurrentAnswerChecked()
 
-            val toast = if (isAllAnswersChecked()) {
+            val toast = if (isAllAnswersChecked) {
+                val isCorrectStr = if (answer == currentQuestionAnswer) "Correct!" else "Incorrect"
                 Toast.makeText(
                     this@MainActivity,
                     String.format(
-                        "Correct! Your have answered $correctAnswers of $questionsSize (%.2f%%)",
+                        "$isCorrectStr Your have answered $correctAnswers of $questionsSize (%.2f%%).\n",
                         correctAnswers.toDouble() / questionsSize.toDouble() * 100.toDouble()
                     ),
                     Toast.LENGTH_LONG
@@ -145,6 +151,11 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             toast.show()
+            if (isAnyAnswersCheated && isAllAnswersChecked) {
+                Toast.makeText(this@MainActivity,
+                    "Your have cheated $cheatedAnswers times",
+                    Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -153,6 +164,8 @@ class MainActivity : AppCompatActivity() {
         trueButton.isEnabled = enabled
     }
 
+    private fun setCheatButtonEnabled(enabled: Boolean) { cheatButton.isEnabled = enabled }
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         Log.d(TAG, "onSaveInstanceState() called")
@@ -160,7 +173,7 @@ class MainActivity : AppCompatActivity() {
             bundleOf(                                   // TODO: use delegates for keys
                 "currentQuestion" to viewModel.currentQuestion,
                 "correctAnswers" to viewModel.correctAnswers,
-                "checkedAnswers" to viewModel.checkedAnswers.toBooleanArray()
+                "checkedAnswers" to viewModel.checkedAnswers.toMutableList()
             )
         )
     }

@@ -33,6 +33,13 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/cheat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="@string/cheat_button" />
+
+    <Button
         android:id="@+id/prev_button"
         android:text="@string/prev_button"
         android:drawableStart="@drawable/arrow_left"

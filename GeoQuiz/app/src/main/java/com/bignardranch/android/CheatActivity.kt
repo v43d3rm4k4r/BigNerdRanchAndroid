@@ -35,13 +35,9 @@ class CheatActivity : AppCompatActivity() {
         answer = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
     }
 
-//    private fun setAnswerShownResult(isAnswerShown: Boolean) {
-//        setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_ANSWER_IS_SHOWN, isAnswerShown))
-//    }
-
     companion object {
         // Intent to start this Activity with the given context and answer
         fun newIntent(packageContext: Context, answer: Boolean): Intent =
-            Intent(packageContext, this::class.java).putExtra(EXTRA_ANSWER_IS_TRUE, answer)
+            Intent(packageContext, CheatActivity::class.java).putExtra(EXTRA_ANSWER_IS_TRUE, answer)
     }
 }

@@ -19,26 +19,24 @@ class GeoQuizViewModel : ViewModel() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
-    val questionsSize: Int
-        get() = questions.size
+    val questionsSize: Int get() = questions.size
 
-    var checkedAnswers = MutableList(questions.size) { false }
-    fun setCurrentCheckedAnswer() {
-        checkedAnswers[currentQuestion] = true
-    }
+    var checkedAnswers = MutableList(questions.size) { CheckedQuestion( isChecked = false,
+                                                                        isCheated = false) }
 
-    fun isCurrentAnswerChecked() = checkedAnswers[currentQuestion]
-    fun isAllAnswersChecked() = checkedAnswers.all { it }
+    fun setCurrentAnswerChecked() { checkedAnswers[currentQuestion].isChecked = true }
+    fun setCurrentAnswerCheated() { checkedAnswers[currentQuestion].isCheated = true; ++cheatedAnswers}
 
     var currentQuestion = 0
     var correctAnswers = 0
-    var isCheater = false
+    var cheatedAnswers = 0
 
-    val currentQuestionAnswer: Boolean
-        get() = questions[currentQuestion].answer
-
-    val currentQuestionText: Int
-        get() = questions[currentQuestion].textResId
+    val isCurrentAnswerCheated: Boolean get() = checkedAnswers[currentQuestion].isCheated
+    val isCurrentAnswerChecked: Boolean get() = checkedAnswers[currentQuestion].isChecked
+    val isAllAnswersChecked: Boolean get() = checkedAnswers.all { it.isChecked }
+    val isAnyAnswersCheated: Boolean get() = checkedAnswers.any { it.isCheated }
+    val currentQuestionAnswer: Boolean get() = questions[currentQuestion].answer
+    val currentQuestionText: Int get() = questions[currentQuestion].textResId
 
     override fun onCleared() {
         Log.d(TAG, "$TAG.onCleared() called")
