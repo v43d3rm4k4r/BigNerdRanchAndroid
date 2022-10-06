@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         savedInstanceState?.let {
             viewModel.currentQuestion = it.getInt("currentQuestion", 0)
-            viewModel.correctAnswers = it.getInt("currentAnswers", 0)
+            viewModel.correctAnswers = it.getInt("correctAnswers", 0)
             viewModel.checkedAnswers =
                 it.getParcelableArrayList<CheckedQuestion>("checkedAnswers")?.toMutableList()
                     ?: mutableListOf()
