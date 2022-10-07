@@ -1,6 +1,6 @@
 package com.bignardranch.android
 
-//import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
 
 import com.bignardranch.android.geoquiz.CheckedQuestion
@@ -27,10 +28,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var cheatButton: Button
+    private lateinit var cheatsRemainingTextView: TextView
     private lateinit var prevButton: View // ImageButton in activity_main.xml and Button in land-activity_main.xml
     private lateinit var nextButton: View //
 
-    private val viewModel: GeoQuizViewModel by viewModels() // TODO: see delegates
+    private val viewModel: GeoQuizViewModel by viewModels()
 
     // Must call before STARTED Activity state ("LifecycleOwners must call register before they are STARTED")
     private val cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -39,7 +41,11 @@ class MainActivity : AppCompatActivity() {
             val isCheated = result.data?.getBooleanExtra(
                 EXTRA_ANSWER_SHOWN, false
             ) ?: false
-            if (isCheated) viewModel.setCurrentAnswerCheated()
+            if (isCheated) {
+                viewModel.setCurrentAnswerCheated()
+                updateCheatsRemainingTextView()
+                if (viewModel.isCheatedLimitReached) cheatButton.isEnabled = false
+            }
         }
     }
 
@@ -62,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.checkedAnswers =
                 it.getParcelableArrayList<CheckedQuestion>("checkedAnswers")?.toMutableList()
                     ?: mutableListOf()
+            viewModel.cheatedAnswers = it.getInt("cheatedAnswers", 0)
             // TODO: Add all properties
         }
 
@@ -69,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         cheatButton = findViewById(R.id.cheat_button)
+        cheatsRemainingTextView = findViewById(R.id.cheats_remaining_text_view)
         prevButton = findViewById(R.id.prev_button)
         nextButton = findViewById(R.id.next_button)
 
@@ -80,9 +88,12 @@ class MainActivity : AppCompatActivity() {
             checkAnswer(false)
         }
 
-        cheatButton.setOnClickListener {
-            cheatActivityLauncher.launch(CheatActivity.newIntent(this, viewModel.currentQuestionAnswer))
+        cheatButton.setOnClickListener { view ->
+            val options = ActivityOptionsCompat.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
+            cheatActivityLauncher.launch(CheatActivity.newIntent(this, viewModel.currentQuestionAnswer), options)
         }
+
+        updateCheatsRemainingTextView()
 
         prevButton.setOnClickListener {
             showPrevQuestion()
@@ -116,7 +127,10 @@ class MainActivity : AppCompatActivity() {
         questionTextView.setText(viewModel.currentQuestionText)
         (!viewModel.isCurrentAnswerChecked).let {
             setAnswerButtonsEnabled(it)
-            setCheatButtonEnabled(it)
+            if (!viewModel.isCheatedLimitReached)
+                setCheatButtonEnabled(it)
+            else
+                setCheatButtonEnabled(false)
         }
     }
 
@@ -166,6 +180,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun setCheatButtonEnabled(enabled: Boolean) { cheatButton.isEnabled = enabled }
 
+    @SuppressLint("SetTextI18n")
+    fun updateCheatsRemainingTextView() {
+        cheatsRemainingTextView.text = resources.getString(R.string.cheats_remaining) +
+                " ${viewModel.cheatsRemaining}"
+    }
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         Log.d(TAG, "onSaveInstanceState() called")
@@ -173,7 +193,8 @@ class MainActivity : AppCompatActivity() {
             bundleOf(                                   // TODO: use delegates for keys
                 "currentQuestion" to viewModel.currentQuestion,
                 "correctAnswers" to viewModel.correctAnswers,
-                "checkedAnswers" to viewModel.checkedAnswers.toMutableList()
+                "checkedAnswers" to viewModel.checkedAnswers.toMutableList(),
+                "cheatedAnswers" to viewModel.cheatedAnswers
             )
         )
     }

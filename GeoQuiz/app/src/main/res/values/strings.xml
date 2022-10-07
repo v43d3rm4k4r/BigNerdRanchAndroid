@@ -18,4 +18,6 @@
     <string name="judgment_toast">Cheating is wrong.</string>
     <string name="previous_button_description">Previous button</string>
     <string name="next_button_description">Next button</string>
+    <string name="api_level">API Level</string>
+    <string name="cheats_remaining">Cheats remaining:</string>
 </resources>

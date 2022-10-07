@@ -39,6 +39,14 @@
         android:layout_gravity="center_horizontal|bottom"
         android:text="@string/cheat_button" />
 
+    <TextView
+        android:id="@+id/cheats_remaining_text_view"
+        android:layout_width="440dp"
+        android:layout_height="114dp"
+        android:layout_gravity="bottom|end"
+        android:padding="12dp"
+        tools:text="@string/cheats_remaining" />
+
     <Button
         android:id="@+id/prev_button"
         android:text="@string/prev_button"

@@ -40,6 +40,14 @@
         android:layout_gravity="bottom|center_horizontal"
         android:text="@string/cheat_button" />
 
+    <TextView
+        android:id="@+id/cheats_remaining_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="12dp"
+        tools:text="@string/cheats_remaining" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

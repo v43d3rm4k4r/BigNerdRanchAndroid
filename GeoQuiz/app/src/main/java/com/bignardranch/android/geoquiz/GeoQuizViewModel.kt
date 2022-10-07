@@ -2,7 +2,9 @@ package com.bignardranch.android.geoquiz
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+
 import com.bignardranch.android.R
+
 
 private const val TAG = "GeoQuizViewModel"
 
@@ -37,8 +39,14 @@ class GeoQuizViewModel : ViewModel() {
     val isAnyAnswersCheated: Boolean get() = checkedAnswers.any { it.isCheated }
     val currentQuestionAnswer: Boolean get() = questions[currentQuestion].answer
     val currentQuestionText: Int get() = questions[currentQuestion].textResId
+    val cheatsRemaining: Int get() = CHEATED_ANSWERS_LIMIT - cheatedAnswers
+    val isCheatedLimitReached: Boolean get() = cheatsRemaining == 0
 
     override fun onCleared() {
         Log.d(TAG, "$TAG.onCleared() called")
+    }
+
+    companion object {
+        const val CHEATED_ANSWERS_LIMIT = 3
     }
 }
