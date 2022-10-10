@@ -30,5 +30,11 @@
         android:id="@+id/crime_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:text="Wed Nov 14 11:56 EST 2018"/>
+
+    <CheckBox
+        android:id="@+id/crime_solved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/crime_solved_label"/>
 </LinearLayout>
