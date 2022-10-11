@@ -1,4 +1,4 @@
-package com.bignardranch.criminalintent
+package com.bignardranch.android.criminalintent
 
 import java.util.*
 
