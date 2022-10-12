@@ -1,6 +1,7 @@
 package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,7 @@ class CrimeFragment : Fragment() {
         titleField = view.findViewById(R.id.crime_title_text_view)
         dateButton = view.findViewById(R.id.crime_date_button)
         dateButton.apply {
-            text = crime.date.toString()
+            text = DateFormat.format("dd-MM-yyyy hh:mm:ss a", crime.date) // TODO: should be like "Monday, Jul 22, 2019"
             isEnabled = false
         }
         solvedCheckBox = view.findViewById(R.id.crime_solved_checkbox)
