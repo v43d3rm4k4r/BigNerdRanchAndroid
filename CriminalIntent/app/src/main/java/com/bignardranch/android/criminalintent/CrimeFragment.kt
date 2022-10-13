@@ -11,6 +11,8 @@ import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 
+import com.bignardranch.android.R
+
 
 class CrimeFragment : Fragment() {
 
