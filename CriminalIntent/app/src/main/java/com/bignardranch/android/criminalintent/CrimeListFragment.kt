@@ -33,7 +33,7 @@ class CrimeListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = layoutInflater.inflate(R.layout.fragment_crime_list, container, false) // TODO: use `layoutInflater` property instead (че будет?)
+        val view = inflater.inflate(R.layout.fragment_crime_list, container, false) // TODO: use `layoutInflater` property instead (че будет?)
         crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
         crimeRecyclerView.layoutManager = LinearLayoutManager(context) // configuring layout settings of the recycler view (must be initialized)
                                                                        // TODO: remove this and check 218 page of the book
@@ -47,12 +47,10 @@ class CrimeListFragment : Fragment() {
         val dateTextView: TextView = itemView.findViewById(R.id.crime_date)
     }
 
-    private inner class CrimeAdapter(val crimes: List<Crime>) : RecyclerView.Adapter<CrimeHolder>() { // why was var?
+    private inner class CrimeAdapter(val crimes: List<Crime>) : RecyclerView.Adapter<CrimeHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-            val view = layoutInflater.inflate(R.layout.list_item_crime, parent, false) // TODO: set breakpoint
-            return CrimeHolder(view)
-        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder =
+            CrimeHolder(layoutInflater.inflate(R.layout.list_item_crime, parent, false))
 
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
             val crime = crimes[position]
