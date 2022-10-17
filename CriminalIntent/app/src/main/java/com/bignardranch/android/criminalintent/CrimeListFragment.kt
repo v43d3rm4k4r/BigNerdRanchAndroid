@@ -1,13 +1,12 @@
 package com.bignardranch.android.criminalintent
 
-import kotlin.random.Random
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 
@@ -15,16 +14,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.view.isVisible
 
 import com.bignardranch.android.R
-
 
 private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment : Fragment() {
 
-    private lateinit var crimeRecyclerView: RecyclerView
     private val crimeListViewModel: CrimeListViewModel by viewModels()
+    private lateinit var crimeRecyclerView: RecyclerView
     private lateinit var adapter: CrimesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +48,14 @@ class CrimeListFragment : Fragment() {
         private lateinit var crime: Crime
         private val titleTextView: TextView = itemView.findViewById(R.id.crime_title_text_view)
         private val dateTextView: TextView = itemView.findViewById(R.id.crime_date_text_view)
+        private val solvedImageView: ImageView? = itemView.findViewById(R.id.crime_solved_image_view)
         private val callThePoliceButton: Button? = itemView.findViewById(R.id.call_the_police_button)
 
         fun bind(crime: Crime) {
             this.crime = crime
             titleTextView.text = this.crime.title
             dateTextView.text = this.crime.date.toString()
+            solvedImageView?.let { it.isVisible = crime.isSolved }
             if (crime.requiresPolice) callThePoliceButton?.setOnClickListener {
                 Toast.makeText(context, resources.getString(R.string.calling_the_police), Toast.LENGTH_SHORT).show()
             }
@@ -68,7 +69,7 @@ class CrimeListFragment : Fragment() {
     private inner class CrimesAdapter(val crimes: List<Crime>) : RecyclerView.Adapter<CrimeHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-            val itemId = if (viewType == 1) R.layout.list_item_crime_serious
+            val itemId = if (viewType == 1) R.layout.list_item_crime_serious // TODO: make with ConstraintLayout
             else R.layout.list_item_crime
             val view = layoutInflater.inflate(itemId, parent, false)
             return CrimeHolder(view)
@@ -77,7 +78,8 @@ class CrimeListFragment : Fragment() {
             val crime = crimes[position]
             holder.bind(crime)
         }
-        override fun getItemViewType(position: Int): Int = if (crimes[position].requiresPolice) 1 else 0
+        override fun getItemViewType(position: Int): Int =
+            if (!crimes[position].isSolved && crimes[position].requiresPolice) 1 else 0
         override fun getItemCount(): Int = crimes.size
     }
 

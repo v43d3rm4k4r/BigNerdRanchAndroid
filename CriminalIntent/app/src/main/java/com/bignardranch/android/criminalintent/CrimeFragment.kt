@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 
 import com.bignardranch.android.R
 
-
 class CrimeFragment : Fragment() {
 
     private lateinit var crime: Crime
@@ -32,13 +31,13 @@ class CrimeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_crime, container, false)
-        titleField = view.findViewById(R.id.crime_title)
-        dateButton = view.findViewById(R.id.crime_date)
+        titleField = view.findViewById(R.id.crime_title_text_view)
+        dateButton = view.findViewById(R.id.crime_date_button)
         dateButton.apply {
             text = crime.date.toString()
             isEnabled = false
         }
-        solvedCheckBox = view.findViewById(R.id.crime_solved)
+        solvedCheckBox = view.findViewById(R.id.crime_solved_checkbox)
         return view
     }
 
