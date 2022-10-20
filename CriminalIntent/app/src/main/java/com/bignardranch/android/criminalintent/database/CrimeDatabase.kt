@@ -4,11 +4,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-import com.bignardranch.android.criminalintent.Crime
+import com.bignardranch.android.criminalintent.model.Crime
 
 @Database(entities = [Crime::class], version = 1)
 @TypeConverters(CrimeTypeConverters::class)
 abstract class CrimeDatabase : RoomDatabase() {
 
-    abstract fun crimeDao(): CrimeDao
+    abstract fun crimeDao(): CrimeDao // TODO: set another name
 }

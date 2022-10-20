@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent
+package com.bignardranch.android.criminalintent.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

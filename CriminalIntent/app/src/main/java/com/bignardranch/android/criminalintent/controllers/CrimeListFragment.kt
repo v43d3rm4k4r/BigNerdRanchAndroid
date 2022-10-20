@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent
+package com.bignardranch.android.criminalintent.controllers
 
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +15,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.view.isVisible
-
-import com.bignardranch.android.R
+import com.bignardranch.android.criminalintent.model.Crime
+import com.bignardranch.android.criminalintent.R
 
 private const val TAG = "CrimeListFragment"
 

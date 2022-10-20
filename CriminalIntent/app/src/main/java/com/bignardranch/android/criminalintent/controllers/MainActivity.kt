@@ -1,10 +1,9 @@
-package com.bignardranch.android
+package com.bignardranch.android.criminalintent.controllers
 
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
-
-import com.bignardranch.android.criminalintent.CrimeListFragment
+import com.bignardranch.android.criminalintent.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

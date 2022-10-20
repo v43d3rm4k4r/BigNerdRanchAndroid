@@ -1,6 +1,7 @@
-package com.bignardranch.android.criminalintent
+package com.bignardranch.android.criminalintent.controllers
 
 import androidx.lifecycle.ViewModel
+import com.bignardranch.android.criminalintent.model.Crime
 import kotlin.random.Random
 
 class CrimeListViewModel : ViewModel() {

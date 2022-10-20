@@ -5,7 +5,7 @@ import java.util.UUID
 import androidx.room.Dao
 import androidx.room.Query
 
-import com.bignardranch.android.criminalintent.Crime
+import com.bignardranch.android.criminalintent.model.Crime
 
 @Dao
 interface CrimeDao {
