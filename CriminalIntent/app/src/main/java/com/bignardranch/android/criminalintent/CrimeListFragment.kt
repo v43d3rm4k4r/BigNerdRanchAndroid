@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent.controllers
+package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +15,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.view.isVisible
+
 import com.bignardranch.android.criminalintent.model.Crime
-import com.bignardranch.android.criminalintent.R
 
 private const val TAG = "CrimeListFragment"
 
@@ -24,12 +24,7 @@ class CrimeListFragment : Fragment() {
 
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private lateinit var crimeRecyclerView: RecyclerView
-    private lateinit var adapter: CrimesAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total crimes: ${crimeListViewModel.crimes.size}")
-    }
+    private var adapter: CrimesAdapter = CrimesAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,8 +34,18 @@ class CrimeListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
         crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
         crimeRecyclerView.layoutManager = LinearLayoutManager(context) // TODO: add itemAnimator
-        updateUI()
+        crimeRecyclerView.adapter = adapter
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        crimeListViewModel.crimeListLiveData.observe(viewLifecycleOwner) { crimes ->
+                crimes?.let {
+                    Log.i(TAG, "Got crimes ${crimes.size}")
+                    updateUI(crimes)
+                }
+        }
     }
 
     private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -83,8 +88,7 @@ class CrimeListFragment : Fragment() {
         override fun getItemCount(): Int = crimes.size
     }
 
-    private fun updateUI() {
-        val crimes = crimeListViewModel.crimes
+    private fun updateUI(crimes: List<Crime>) {
         adapter = CrimesAdapter(crimes)
         crimeRecyclerView.adapter = adapter
     }

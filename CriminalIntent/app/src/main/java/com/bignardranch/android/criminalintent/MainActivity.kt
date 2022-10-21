@@ -1,9 +1,8 @@
-package com.bignardranch.android.criminalintent.controllers
+package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
-import com.bignardranch.android.criminalintent.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

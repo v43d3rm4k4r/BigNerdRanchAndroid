@@ -1,18 +1,32 @@
-package com.bignardranch.android.criminalintent.controllers
+package com.bignardranch.android.criminalintent
+
+import java.util.UUID
 
 import android.content.Context
-import androidx.room.Room
-import com.bignardranch.android.criminalintent.database.CrimeDatabase
 
+import androidx.lifecycle.LiveData
+import androidx.room.Room
+
+import com.bignardranch.android.criminalintent.database.CrimeDatabase
+import com.bignardranch.android.criminalintent.model.Crime
+
+const val DATABASE_NAME = "crime-database"
+
+/**
+ * Must be initialized in [CriminalIntentApplication.onCreate]
+ */
 class CrimeRepository private constructor(context: Context) {
 
     private val database: CrimeDatabase = Room.databaseBuilder(
         context.applicationContext,
         CrimeDatabase::class.java,
-        "crime-database"
+        DATABASE_NAME
     ).build()
 
     private val crimeDao = database.crimeDao()
+
+    fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
+    fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
 
     companion object {
         private var INSTANCE: CrimeRepository? = null

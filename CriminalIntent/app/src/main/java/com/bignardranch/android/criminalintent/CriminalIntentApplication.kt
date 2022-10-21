@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent.controllers
+package com.bignardranch.android.criminalintent
 
 import android.app.Application
 
