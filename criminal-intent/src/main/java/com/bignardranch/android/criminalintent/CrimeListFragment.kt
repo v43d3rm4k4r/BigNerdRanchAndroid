@@ -13,7 +13,7 @@ import com.bignardranch.android.criminalintent.model.Crime
 
 private const val TAG = "CrimeListFragment"
 
-class CrimeListFragment : Fragment() {
+class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private lateinit var crimeRecyclerView: RecyclerView
@@ -22,22 +22,28 @@ class CrimeListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
-        crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
-        crimeRecyclerView.layoutManager = LinearLayoutManager(context) // TODO: add itemAnimator
-        crimeRecyclerView.adapter = adapter
-        return view
+        return super.onCreateView(inflater, container, savedInstanceState)?.apply {
+            crimeRecyclerView = findViewById(R.id.crime_recycler_view)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupView()
+        observeCrimes()
+    }
+
+    private fun setupView() {
+        crimeRecyclerView.layoutManager = LinearLayoutManager(context) // TODO: add itemAnimator
+        crimeRecyclerView.adapter = adapter
+    }
+
+    private fun observeCrimes() {
         crimeListViewModel.crimeListLiveData.observe(viewLifecycleOwner) { crimes ->
-                crimes?.let {
-                    Log.i(TAG, "Got crimes ${crimes.size}")
-                    updateUI(crimes)
-                }
+            Log.i(TAG, "Got crimes ${crimes.size}")
+            updateUI(crimes)
         }
     }
 
