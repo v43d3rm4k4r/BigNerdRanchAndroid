@@ -1,52 +1,65 @@
 package com.bignardranch.android.criminalintent
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bignardranch.android.criminalintent.model.Crime
 
-class CrimesAdapter(val crimes: List<Crime>) : RecyclerView.Adapter<CrimesAdapter.CrimeHolder>() {
+class CrimesAdapter(
+    private val onItemClicked: (crime: Crime) -> Unit,
+    private val onCallPoliceClicked: () -> Unit
+) : RecyclerView.Adapter<CrimesAdapter.CrimeHolder>() {
+
+    private var crimes: List<Crime> = emptyList()
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun submitItems(crimes: List<Crime>) {
+        this.crimes = crimes
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-        val itemId = if (viewType == 1) R.layout.list_item_crime_serious // TODO: make with ConstraintLayout
-        else R.layout.list_item_crime
-        val view = LayoutInflater.from(parent.context).inflate(itemId, parent, false)
-        return CrimeHolder(view)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val view = layoutInflater.inflate(viewType, parent, false)
+        return CrimeHolder(view, onItemClicked, onCallPoliceClicked)
     }
+
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
-        val crime = crimes[position]
-        holder.bind(crime)
+        holder.bind(crimes[position])
     }
-    override fun getItemViewType(position: Int): Int =
-        if (!crimes[position].isSolved && crimes[position].requiresPolice) 1 else 0
+
+    override fun getItemViewType(position: Int): Int{
+        return when {
+            !crimes[position].isSolved && crimes[position].requiresPolice -> R.layout.list_item_crime_serious
+            else -> R.layout.list_item_crime
+        }
+    }
+
     override fun getItemCount(): Int = crimes.size
 
-    class CrimeHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        init { itemView.setOnClickListener(this) }
-        private lateinit var crime: Crime
+    class CrimeHolder(
+        view: View,
+        private val onItemClicked: (crime: Crime) -> Unit,
+        private val onCallPoliceClicked: () -> Unit
+    ) : RecyclerView.ViewHolder(view){
+
         private val titleTextView: TextView = itemView.findViewById(R.id.crime_title_text_view)
         private val dateTextView: TextView = itemView.findViewById(R.id.crime_date_text_view)
         private val solvedImageView: ImageView? = itemView.findViewById(R.id.crime_solved_image_view)
         private val callThePoliceButton: Button? = itemView.findViewById(R.id.call_the_police_button)
 
         fun bind(crime: Crime) {
-            this.crime = crime
-            titleTextView.text = this.crime.title
-            dateTextView.text = this.crime.date.toString()
-            solvedImageView?.let { it.isVisible = crime.isSolved }
-            if (crime.requiresPolice) callThePoliceButton?.setOnClickListener {
-                Toast.makeText(itemView.context, itemView.context.getString(R.string.calling_the_police), Toast.LENGTH_SHORT).show()
-            }
+            itemView.setOnClickListener { onItemClicked(crime) }
+            callThePoliceButton?.setOnClickListener { onCallPoliceClicked() }
+            titleTextView.text = crime.title
+            dateTextView.text = crime.date.toString()
+            solvedImageView?.isVisible = crime.isSolved
         }
-
-        override fun onClick(v: View) =
-            Toast.makeText(v.context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
-        //adapter.notifyItemMoved(0, adapter.itemCount - 1)
     }
 }

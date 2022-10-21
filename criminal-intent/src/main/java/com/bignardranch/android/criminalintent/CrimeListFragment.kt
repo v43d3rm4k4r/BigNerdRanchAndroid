@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +18,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private lateinit var crimeRecyclerView: RecyclerView
-    private var adapter: CrimesAdapter = CrimesAdapter(emptyList())
+    private var adapter: CrimesAdapter = CrimesAdapter(::onCrimeClicked, ::onCallPoliceClicked)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,13 +44,17 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private fun observeCrimes() {
         crimeListViewModel.crimeListLiveData.observe(viewLifecycleOwner) { crimes ->
             Log.i(TAG, "Got crimes ${crimes.size}")
-            updateUI(crimes)
+            adapter.submitItems(crimes)
         }
     }
 
-    private fun updateUI(crimes: List<Crime>) {
-        adapter = CrimesAdapter(crimes)
-        crimeRecyclerView.adapter = adapter
+    private fun onCrimeClicked(crime: Crime) {
+        Toast.makeText(requireContext(), "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
+        //adapter.notifyItemMoved(0, adapter.itemCount - 1)
+    }
+
+    private fun onCallPoliceClicked() {
+        Toast.makeText(requireContext(), getString(R.string.calling_the_police), Toast.LENGTH_SHORT).show()
     }
 
     companion object {
