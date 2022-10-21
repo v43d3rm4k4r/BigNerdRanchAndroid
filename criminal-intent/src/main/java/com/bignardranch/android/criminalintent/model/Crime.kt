@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.util.*
+import kotlin.random.Random
 
 @Entity
 data class Crime(
@@ -14,5 +15,5 @@ data class Crime(
 ){
 
     @Ignore
-    var requiresPolice: Boolean = false
+    var requiresPolice: Boolean = Random.nextBoolean()
 }
