@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent
+package com.bignardranch.android.criminalintent.crimelistfragment
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bignardranch.android.criminalintent.R
 import com.bignardranch.android.criminalintent.model.Crime
 
 class CrimesAdapter(
@@ -47,7 +48,7 @@ class CrimesAdapter(
         view: View,
         private val onItemClicked: (crime: Crime) -> Unit,
         private val onCallPoliceClicked: () -> Unit
-    ) : RecyclerView.ViewHolder(view){
+    ) : RecyclerView.ViewHolder(view) {
 
         private val titleTextView: TextView = itemView.findViewById(R.id.crime_title_text_view)
         private val dateTextView: TextView = itemView.findViewById(R.id.crime_date_text_view)

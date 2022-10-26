@@ -3,6 +3,7 @@ package com.bignardranch.android.criminalintent
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
+import com.bignardranch.android.criminalintent.crimelistfragment.CrimeListFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

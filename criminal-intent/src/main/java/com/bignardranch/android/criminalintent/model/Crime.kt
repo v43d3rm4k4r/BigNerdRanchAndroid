@@ -12,8 +12,7 @@ data class Crime(
     var title: String = "",
     var date: Date = Date(),
     var isSolved: Boolean = false
-){
-
-    @Ignore
+) {
+    @Ignore // missing from the database, so need to be ignored
     var requiresPolice: Boolean = Random.nextBoolean()
 }

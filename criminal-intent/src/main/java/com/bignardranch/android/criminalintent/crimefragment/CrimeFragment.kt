@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent
+package com.bignardranch.android.criminalintent.crimefragment
 
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -11,6 +11,7 @@ import android.widget.EditText
 
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.bignardranch.android.criminalintent.R
 import com.bignardranch.android.criminalintent.model.Crime
 
 class CrimeFragment : Fragment() {
