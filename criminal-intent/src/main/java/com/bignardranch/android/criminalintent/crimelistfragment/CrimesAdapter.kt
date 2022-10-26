@@ -35,7 +35,7 @@ class CrimesAdapter(
         holder.bind(crimes[position])
     }
 
-    override fun getItemViewType(position: Int): Int{
+    override fun getItemViewType(position: Int): Int {
         return when {
             !crimes[position].isSolved && crimes[position].requiresPolice -> R.layout.list_item_crime_serious
             else -> R.layout.list_item_crime

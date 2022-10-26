@@ -17,9 +17,9 @@ private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
-    private val crimeListViewModel: CrimeListViewModel by viewModels()
     private lateinit var crimeRecyclerView: RecyclerView
-    private var adapter: CrimesAdapter = CrimesAdapter(::onCrimeClicked, ::onCallPoliceClicked)
+    private val crimeListViewModel: CrimeListViewModel by viewModels()
+    private val adapter: CrimesAdapter = CrimesAdapter(::onCrimeClicked, ::onCallPoliceClicked)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +32,6 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setupView()
         observeCrimes()
     }
