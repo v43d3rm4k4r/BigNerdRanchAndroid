@@ -2,9 +2,7 @@ package com.bignardranch.android.geoquiz
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-
 import com.bignardranch.android.R
-
 
 private const val TAG = "GeoQuizViewModel"
 
@@ -27,7 +25,7 @@ class GeoQuizViewModel : ViewModel() {
                                                                         isCheated = false) }
 
     fun setCurrentAnswerChecked() { checkedAnswers[currentQuestion].isChecked = true }
-    fun setCurrentAnswerCheated() { checkedAnswers[currentQuestion].isCheated = true; ++cheatedAnswers}
+    fun setCurrentAnswerCheated() { checkedAnswers[currentQuestion].isCheated = true; ++cheatedAnswers }
 
     var currentQuestion = 0
     var correctAnswers = 0
