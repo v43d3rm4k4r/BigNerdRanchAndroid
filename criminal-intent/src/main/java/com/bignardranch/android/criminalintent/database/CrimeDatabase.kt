@@ -10,5 +10,5 @@ import com.bignardranch.android.criminalintent.model.Crime
 @TypeConverters(CrimeTypeConverters::class)
 abstract class CrimeDatabase : RoomDatabase() {
 
-    abstract fun crimeDao(): CrimeDao // TODO: set another name
+    abstract fun crimeDao(): CrimeDao
 }

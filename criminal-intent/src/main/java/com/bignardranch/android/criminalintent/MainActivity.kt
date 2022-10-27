@@ -1,14 +1,14 @@
 package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
-
 import androidx.appcompat.app.AppCompatActivity
 import com.bignardranch.android.criminalintent.crimelistfragment.CrimeListFragment
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main), CrimeListFragment.Callbacks {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
@@ -21,5 +21,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         // TODO: do something with currentFragment
+    }
+
+    override fun onCrimeSelected(crimeId: UUID) {
+        TODO("Not yet implemented")
     }
 }
