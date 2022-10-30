@@ -1,8 +1,6 @@
 package com.bignardranch.android.criminalintent.crimelistfragment
 
-import android.content.Context
 import android.os.Bundle
-import android.telecom.Call
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bignardranch.android.criminalintent.R
+import com.bignardranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignardranch.android.criminalintent.model.Crime
 import java.util.*
 
@@ -23,28 +19,24 @@ private const val TAG = "CrimeListFragment"
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     /**
-     * Must be implemented by host activity.
+     * Functional interface for crime navigation. Must be implemented by host activity.
      */
-    fun interface Callbacks {
-        fun onCrimeSelected(crimeId: UUID)
-    }
+    fun interface OnCrimeSelectedListener { fun onCrimeSelected(crimeId: UUID) }
 
-    private lateinit var crimeRecyclerView: RecyclerView
+    private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-    private val adapter: CrimesAdapter = CrimesAdapter(::onCrimeClicked, ::onCallPoliceClicked)
-    private val callbacks get() = activity as Callbacks
-
-    private val _seconds = MutableLiveData<Int>()
-    val seconds: LiveData<Int> get() = _seconds
+    private val parent get() = activity as OnCrimeSelectedListener
+    private val adapter: CrimesAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        CrimesAdapter(parent, ::onCrimeClicked, ::onCallPoliceClicked)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)?.apply {
-            crimeRecyclerView = findViewById(R.id.crime_recycler_view)
-        }
+    ): View {
+        binding = FragmentCrimeListBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,8 +45,10 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     }
 
     private fun setupView() {
-        crimeRecyclerView.layoutManager = LinearLayoutManager(context) // TODO: add itemAnimator
-        crimeRecyclerView.adapter = adapter
+        with(binding.crimeRecyclerView) {
+            layoutManager = LinearLayoutManager(context) // TODO: add itemAnimator
+            adapter = this@CrimeListFragment.adapter
+        }
     }
 
     private fun observeCrimes() {

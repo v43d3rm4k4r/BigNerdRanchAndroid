@@ -2,10 +2,14 @@ package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment
 import com.bignardranch.android.criminalintent.crimelistfragment.CrimeListFragment
 import java.util.*
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), CrimeListFragment.Callbacks {
+private const val TAG = "MainActivity"
+
+class MainActivity : AppCompatActivity(R.layout.activity_main),
+    CrimeListFragment.OnCrimeSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), CrimeListFragmen
     }
 
     override fun onCrimeSelected(crimeId: UUID) {
-        TODO("Not yet implemented")
+        val fragment = CrimeFragment.newInstance(crimeId)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bignardranch.android.criminalintent.R
 import com.bignardranch.android.criminalintent.model.Crime
 
+/**
+ * Part of the [CrimeListFragment].
+ */
 class CrimesAdapter(
+    private val parent: CrimeListFragment.OnCrimeSelectedListener,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit
 ) : RecyclerView.Adapter<CrimesAdapter.CrimeHolder>() {
@@ -44,7 +48,7 @@ class CrimesAdapter(
 
     override fun getItemCount(): Int = crimes.size
 
-    class CrimeHolder(
+    inner class CrimeHolder(
         view: View,
         private val onItemClicked: (crime: Crime) -> Unit,
         private val onCallPoliceClicked: () -> Unit
@@ -56,7 +60,7 @@ class CrimesAdapter(
         private val callThePoliceButton: Button? = itemView.findViewById(R.id.call_the_police_button)
 
         fun bind(crime: Crime) {
-            itemView.setOnClickListener { onItemClicked(crime) }
+            itemView.setOnClickListener { onItemClicked(crime); parent.onCrimeSelected(crime.id) }
             callThePoliceButton?.setOnClickListener { onCallPoliceClicked() }
             titleTextView.text = crime.title
             dateTextView.text = crime.date.toString()
