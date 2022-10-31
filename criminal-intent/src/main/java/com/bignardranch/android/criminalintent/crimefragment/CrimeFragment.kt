@@ -32,7 +32,7 @@ class CrimeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCrimeBinding.inflate(layoutInflater) //inflater.inflate(R.layout.fragment_crime, container, false)
+        binding = FragmentCrimeBinding.inflate(layoutInflater)
         binding.crimeDateButton.apply {
             text = DateFormat.format("dd-MM-yyyy hh:mm:ss a", crime.date) // TODO: should be like "Monday, Jul 22, 2019"
             isEnabled = false
@@ -74,6 +74,7 @@ class CrimeFragment : Fragment() {
             crimeTitleTextView.setText(crime.title)
             crimeDateButton.text = crime.date.toString()
             crimeSolvedCheckbox.isChecked = crime.isSolved
+            crimeSolvedCheckbox.jumpDrawablesToCurrentState() // cancelling checkbox animation
         }
     }
 

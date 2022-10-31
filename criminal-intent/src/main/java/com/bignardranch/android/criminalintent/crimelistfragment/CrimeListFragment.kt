@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bignardranch.android.criminalintent.CrimeRepository
 import com.bignardranch.android.criminalintent.R
 import com.bignardranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignardranch.android.criminalintent.model.Crime
