@@ -15,9 +15,12 @@ class CrimeViewModel : ViewModel() {
     var crimeLiveData: LiveData<Crime?> = Transformations.switchMap(crimeIdLiveData) { crimeId ->
         crimeRepository.getCrime(crimeId)
     }
-    // TODO: mb use public LiveData<Crime?> property instead?
 
     fun loadCrime(crimeId: UUID) {
         crimeIdLiveData.value = crimeId
+    }
+
+    fun saveCrime(crime: Crime) {
+        crimeRepository.updateCrime(crime)
     }
 }

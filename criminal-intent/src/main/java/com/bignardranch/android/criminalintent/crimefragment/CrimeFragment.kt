@@ -69,6 +69,11 @@ class CrimeFragment : Fragment() {
         binding.crimeSolvedCheckbox.setOnCheckedChangeListener { _, isChecked -> crime.isSolved = isChecked }
     }
 
+    override fun onStop() {
+        super.onStop()
+        crimeViewModel.saveCrime(crime)
+    }
+
     private fun updateUI() {
         with(binding) {
             crimeTitleTextView.setText(crime.title)
