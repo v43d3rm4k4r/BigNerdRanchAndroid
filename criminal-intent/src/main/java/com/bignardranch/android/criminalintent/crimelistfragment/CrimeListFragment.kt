@@ -21,12 +21,13 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     /**
      * Functional interface for crime navigation. Must be implemented by host activity.
+     * TODO: move to "contract" package as Navigator in the future
      */
     fun interface OnCrimeSelectedListener { fun onCrimeSelected(crimeId: UUID) }
 
     private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-    private val parent get() = activity as OnCrimeSelectedListener
+    private val parent get() = activity as OnCrimeSelectedListener // TODO: implement as Fragment extension
     private val adapter: CrimesAdapter by lazy(LazyThreadSafetyMode.NONE) {
         CrimesAdapter(parent, ::onCrimeClicked, ::onCallPoliceClicked)
     }
