@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bignardranch.android.criminalintent.R
@@ -14,7 +17,7 @@ import com.bignardranch.android.criminalintent.model.Crime
  * Part of the [CrimeListFragment].
  */
 class CrimesAdapter(
-    private val parent: CrimeListFragment.OnCrimeSelectedListener,
+    private val host: CrimeListFragment.OnCrimeSelectedListener,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit
 ) : RecyclerView.Adapter<CrimesAdapter.CrimeHolder>() {
@@ -52,21 +55,16 @@ class CrimesAdapter(
         private val onCallPoliceClicked: () -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
-        // TODO: replace using itemView.bind()
-        private val binding = FragmentCrimeBinding.bind(view)
-//        private val titleTextView: TextView = itemView.findViewById(R.id.crime_title_text_view)
-//        private val dateTextView: TextView = itemView.findViewById(R.id.crime_date_text_view)
-//        private val solvedImageView: ImageView? = itemView.findViewById(R.id.crime_solved_image_view)
-//        private val callThePoliceButton: Button? = itemView.findViewById(R.id.call_the_police_button)
+        private val titleTextView: TextView = itemView.findViewById(R.id.crime_title_text_view)
+        private val dateTextView: TextView = itemView.findViewById(R.id.crime_date_text_view)
+        private val solvedImageView: ImageView? = itemView.findViewById(R.id.crime_solved_image_view)
+        private val callThePoliceButton: Button? = itemView.findViewById(R.id.call_the_police_button)
 
         fun bind(crime: Crime) {
-            with(binding) {
-                itemView.setOnClickListener { onItemClicked(crime); parent.onCrimeSelected(crime.id) }
-                callThePoliceButton?.setOnClickListener { onCallPoliceClicked() }
-                crimeTitleTextView.setText(crime.title)
-                dateTextView.text = crime.date.toString()
-                solvedImageView?.isVisible = crime.isSolved
-            }
+            itemView.setOnClickListener { onItemClicked(crime); host.onCrimeSelected(crime.id) }
+            callThePoliceButton?.setOnClickListener { onCallPoliceClicked() }
+            titleTextView.text = crime.title
+            dateTextView.text = crime.date.toString()
         }
     }
 }
