@@ -9,27 +9,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bignardranch.android.criminalintent.CrimeRepository
 import com.bignardranch.android.criminalintent.R
+import com.bignardranch.android.criminalintent.contracts.navigator
 import com.bignardranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignardranch.android.criminalintent.model.Crime
-import java.util.*
 
 private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
-    /**
-     * Functional interface for crime navigation. Must be implemented by host activity.
-     * TODO: move to "contract" package as Navigator in the future
-     */
-    fun interface OnCrimeSelectedListener { fun onCrimeSelected(crimeId: UUID) }
-
     private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-    private val parent get() = activity as OnCrimeSelectedListener // TODO: implement as Fragment extension
     private val adapter: CrimesAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        CrimesAdapter(parent, ::onCrimeClicked, ::onCallPoliceClicked)
+        CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked)
     }
 
     override fun onCreateView(

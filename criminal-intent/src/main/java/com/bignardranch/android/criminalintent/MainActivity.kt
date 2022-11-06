@@ -2,29 +2,28 @@ package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+//import androidx.fragment.app.Fragment
+import com.bignardranch.android.criminalintent.contracts.Navigator
 import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment
 import com.bignardranch.android.criminalintent.crimelistfragment.CrimeListFragment
 import java.util.*
 
-private const val TAG = "MainActivity"
+class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {
 
-class MainActivity : AppCompatActivity(R.layout.activity_main),
-    CrimeListFragment.OnCrimeSelectedListener {
+//    private val currentFragment: Fragment by lazy(LazyThreadSafetyMode.NONE) {
+//        supportFragmentManager.findFragmentById(R.id.fragment_container)!!
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-
-        if (currentFragment == null) {
+        if (savedInstanceState == null) {
             val fragment = CrimeListFragment.newInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
-
-        // TODO: do something with currentFragment
     }
 
     override fun onCrimeSelected(crimeId: UUID) {

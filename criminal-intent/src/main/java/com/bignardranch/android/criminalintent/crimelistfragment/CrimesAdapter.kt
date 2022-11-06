@@ -10,14 +10,14 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bignardranch.android.criminalintent.R
-import com.bignardranch.android.criminalintent.databinding.FragmentCrimeBinding
+import com.bignardranch.android.criminalintent.contracts.Navigator
 import com.bignardranch.android.criminalintent.model.Crime
 
 /**
  * Part of the [CrimeListFragment].
  */
 class CrimesAdapter(
-    private val host: CrimeListFragment.OnCrimeSelectedListener,
+    private val host: Navigator,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit
 ) : RecyclerView.Adapter<CrimesAdapter.CrimeHolder>() {
@@ -65,6 +65,7 @@ class CrimesAdapter(
             callThePoliceButton?.setOnClickListener { onCallPoliceClicked() }
             titleTextView.text = crime.title
             dateTextView.text = crime.date.toString()
+            solvedImageView?.let { it.isVisible = crime.isSolved }
         }
     }
 }
