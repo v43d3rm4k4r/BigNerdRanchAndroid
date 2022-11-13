@@ -48,7 +48,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private fun observeCrimes() {
         crimeListViewModel.crimeListLiveData.observe(viewLifecycleOwner) { crimes ->
             Log.i(TAG, "Got crimes ${crimes.size}")
-            adapter.crimes = crimes
+            adapter.submitList(crimes)
         }
     }
 
