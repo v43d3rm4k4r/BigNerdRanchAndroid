@@ -24,7 +24,7 @@ class CrimesAdapter(
     private val host: Navigator,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit
-) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder<ViewBinding>>(ItemCallback), View.OnClickListener {
+) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback), View.OnClickListener {
 
     var crimes: List<Crime> = emptyList()
         @SuppressLint("NotifyDataSetChanged")
@@ -46,7 +46,7 @@ class CrimesAdapter(
     }
 
     // This method for setting on click listener...
-    override fun onCreateViewHolder(parent: ViewGroup, @LayoutRes viewType: Int): BaseViewHolder<ViewBinding> {
+    override fun onCreateViewHolder(parent: ViewGroup, @LayoutRes viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(viewType, parent, false)
 
@@ -66,7 +66,7 @@ class CrimesAdapter(
     }
 
     // ...this one is for other stuff
-    override fun onBindViewHolder(holder: BaseViewHolder<ViewBinding>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         holder.bind(crimes[position])
     }
 
@@ -77,14 +77,14 @@ class CrimesAdapter(
 
     override fun getItemCount(): Int = crimes.size
 
-    abstract class BaseViewHolder<out VB : ViewBinding>(open val binding: VB)
+    abstract class BaseViewHolder(binding: ViewBinding)
         : RecyclerView.ViewHolder(binding.root) {
             abstract fun bind(crime: Crime)
         }
 
     class CrimeHolder(
-        override val binding: ListItemCrimeBinding,
-    ) : BaseViewHolder<ListItemCrimeBinding>(binding) {
+        private val binding: ListItemCrimeBinding,
+    ) : BaseViewHolder(binding) {
 
         override fun bind(crime: Crime) {
             with(binding) {
@@ -97,8 +97,8 @@ class CrimesAdapter(
     }
 
     class SeriousCrimeHolder(
-        override val binding: ListItemCrimeSeriousBinding,
-    ) : BaseViewHolder<ListItemCrimeSeriousBinding>(binding) {
+        private val binding: ListItemCrimeSeriousBinding,
+    ) : BaseViewHolder(binding) {
 
         override fun bind(crime: Crime) {
             with(binding) {
