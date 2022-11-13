@@ -24,7 +24,7 @@ class CrimesAdapter(
     private val host: Navigator,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit
-) : ListAdapter<Crime, CrimesAdapter.Binder>(ItemCallback), View.OnClickListener {
+) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder<ViewBinding>>(ItemCallback), View.OnClickListener {
 
     var crimes: List<Crime> = emptyList()
         @SuppressLint("NotifyDataSetChanged")
@@ -46,7 +46,7 @@ class CrimesAdapter(
     }
 
     // This method for setting on click listener...
-    override fun onCreateViewHolder(parent: ViewGroup, @LayoutRes viewType: Int): Binder {
+    override fun onCreateViewHolder(parent: ViewGroup, @LayoutRes viewType: Int): BaseViewHolder<ViewBinding> {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(viewType, parent, false)
 
@@ -66,7 +66,7 @@ class CrimesAdapter(
     }
 
     // ...this one is for other stuff
-    override fun onBindViewHolder(holder: Binder, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<ViewBinding>, position: Int) {
         holder.bind(crimes[position])
     }
 
@@ -77,17 +77,17 @@ class CrimesAdapter(
 
     override fun getItemCount(): Int = crimes.size
 
-    abstract class Binder(open val binding: ViewBinding)
+    abstract class BaseViewHolder<out VB : ViewBinding>(open val binding: VB)
         : RecyclerView.ViewHolder(binding.root) {
             abstract fun bind(crime: Crime)
         }
 
     class CrimeHolder(
-        override val binding: ViewBinding,
-    ) : Binder(binding) {
+        override val binding: ListItemCrimeBinding,
+    ) : BaseViewHolder<ListItemCrimeBinding>(binding) {
 
         override fun bind(crime: Crime) {
-            with(binding as ListItemCrimeBinding) {
+            with(binding) {
                 root.tag = crime
                 crimeTitleTextView.text = crime.title
                 crimeDateTextView.text = crime.date.toString()
@@ -97,11 +97,11 @@ class CrimesAdapter(
     }
 
     class SeriousCrimeHolder(
-        override val binding: ViewBinding,
-    ) : Binder(binding) {
+        override val binding: ListItemCrimeSeriousBinding,
+    ) : BaseViewHolder<ListItemCrimeSeriousBinding>(binding) {
 
         override fun bind(crime: Crime) {
-            with(binding as ListItemCrimeSeriousBinding) {
+            with(binding) {
                 root.tag = crime
                 crimeTitleTextView.text = crime.title
                 crimeDateTextView.text = crime.date.toString()
@@ -117,7 +117,7 @@ class CrimesAdapter(
             oldItem == newItem
     }
 
-    companion object {
+    private companion object {
         @LayoutRes const val ITEM_CRIME = R.layout.list_item_crime
         @LayoutRes const val ITEM_CRIME_SERIOUS = R.layout.list_item_crime_serious
     }
