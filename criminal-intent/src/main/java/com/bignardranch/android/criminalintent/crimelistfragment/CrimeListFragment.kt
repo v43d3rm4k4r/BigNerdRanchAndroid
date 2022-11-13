@@ -21,7 +21,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private val adapter: CrimesAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked)
+        CrimesAdapter(navigator()::onCrimeSelected, ::onCrimeClicked, ::onCallPoliceClicked)
     }
 
     override fun onCreateView(

@@ -15,13 +15,14 @@ import com.bignardranch.android.criminalintent.contracts.Navigator
 import com.bignardranch.android.criminalintent.databinding.ListItemCrimeBinding
 import com.bignardranch.android.criminalintent.databinding.ListItemCrimeSeriousBinding
 import com.bignardranch.android.criminalintent.model.Crime
+import java.util.UUID
 
 /**
  * Part of the [CrimeListFragment].
  */
 
 class CrimesAdapter(
-    private val host: Navigator,
+    private val onCrimeSelected: (UUID) -> Unit,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit
 ) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback), View.OnClickListener {
@@ -29,7 +30,7 @@ class CrimesAdapter(
     override fun onClick(view: View) {
         val crime = view.tag as Crime
         when (view.id) {
-            R.id.list_item_crime, R.id.list_item_crime_serious -> { onItemClicked(crime); host.onCrimeSelected(crime.id) }
+            R.id.list_item_crime, R.id.list_item_crime_serious -> { onItemClicked(crime); onCrimeSelected(crime.id) }
             R.id.call_the_police_button -> onCallPoliceClicked()
         }
     }
