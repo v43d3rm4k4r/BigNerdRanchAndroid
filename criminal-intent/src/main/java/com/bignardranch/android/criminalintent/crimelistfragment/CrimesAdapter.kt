@@ -26,17 +26,6 @@ class CrimesAdapter(
     private val onCallPoliceClicked: () -> Unit
 ) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback), View.OnClickListener {
 
-    var crimes: List<Crime> = emptyList()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-//    fun submitItems(crimes: List<Crime>) {
-//        this.crimes = crimes
-//    }
-
     override fun onClick(view: View) {
         val crime = view.tag as Crime
         when (view.id) {
@@ -67,15 +56,16 @@ class CrimesAdapter(
 
     // ...this one is for other stuff
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        holder.bind(crimes[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemViewType(position: Int): Int = when {
-            !crimes[position].isSolved && crimes[position].requiresPolice -> ITEM_CRIME_SERIOUS
+    override fun getItemViewType(position: Int): Int {
+        val currentItem = getItem(position)
+        return when {
+            !currentItem.isSolved && currentItem.requiresPolice -> ITEM_CRIME_SERIOUS
             else -> ITEM_CRIME
         }
-
-    override fun getItemCount(): Int = crimes.size
+    }
 
     abstract class BaseViewHolder(binding: ViewBinding)
         : RecyclerView.ViewHolder(binding.root) {
