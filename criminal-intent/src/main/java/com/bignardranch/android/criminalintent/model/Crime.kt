@@ -9,10 +9,10 @@ import kotlin.random.Random
 @Entity
 data class Crime(
     @PrimaryKey val id: UUID = UUID.randomUUID(),
-    var title: String = "",
-    var date: Date = Date(),
-    var isSolved: Boolean = false
+    val title: String = "",
+    val date: Date = Date(),
+    val isSolved: Boolean = false
 ) {
     @Ignore // missing from the database, so need to be ignored
-    var requiresPolice: Boolean = Random.nextBoolean()
+    val requiresPolice: Boolean = Random.nextBoolean()
 }

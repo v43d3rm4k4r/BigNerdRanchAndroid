@@ -1,6 +1,5 @@
 package com.bignardranch.android.criminalintent.crimelistfragment
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,6 +92,7 @@ class CrimesAdapter(
         override fun bind(crime: Crime) {
             with(binding) {
                 root.tag = crime
+                callThePoliceButton.tag = crime
                 crimeTitleTextView.text = crime.title
                 crimeDateTextView.text = crime.date.toString()
             }
