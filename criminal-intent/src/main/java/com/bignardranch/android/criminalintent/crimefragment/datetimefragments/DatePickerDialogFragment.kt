@@ -1,8 +1,7 @@
-package com.bignardranch.android.criminalintent.datetimefragments
+package com.bignardranch.android.criminalintent.crimefragment.datetimefragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Build
 import android.os.Bundle
@@ -21,12 +20,17 @@ const val RESULT_DATE = "result_date"
 /**
  * This date picker is hosted by [CrimeFragment].
  */
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerDialogFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+
+    private lateinit var calendar: java.util.Calendar
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val date         = arguments?.getSerializable(ARG_DATE) as Date
-        val calendar     = Calendar.getInstance().apply { time = date }
+
+        calendar = Calendar.getInstance().apply {
+            time = arguments?.getSerializable(ARG_DATE) as Date
+        }
+
         val initialYear  = calendar[Calendar.YEAR]
         val initialMonth = calendar[Calendar.MONTH]
         val initialDay   = calendar[Calendar.DAY_OF_MONTH]
@@ -42,16 +46,25 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val resultDate = GregorianCalendar(year, month, dayOfMonth).time
+        val resultDate = Calendar.getInstance().apply {
+            this[Calendar.YEAR] = year
+            this[Calendar.MONTH] = month
+            this[Calendar.DAY_OF_MONTH] = dayOfMonth
+            this[Calendar.HOUR] = calendar[Calendar.HOUR]
+            this[Calendar.MINUTE] = calendar[Calendar.MINUTE]
+        }.time
         setFragmentResult(DIALOG_DATE_TIME_REQUEST_CODE, bundleOf(RESULT_DATE to resultDate))
     }
 
     companion object {
-        fun newInstance(date: Date): DatePickerFragment {
+
+        @JvmStatic val TAG = DatePickerDialogFragment::class.java.simpleName
+
+        fun newInstance(date: Date): DatePickerDialogFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_DATE, date)
             }
-            return DatePickerFragment().apply {
+            return DatePickerDialogFragment().apply {
                 arguments = args
             }
         }

@@ -2,13 +2,14 @@ package com.bignardranch.android.criminalintent.crimelistfragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlin.LazyThreadSafetyMode.NONE
 import com.bignardranch.android.criminalintent.R
 import com.bignardranch.android.criminalintent.contracts.navigator
 import com.bignardranch.android.criminalintent.databinding.FragmentCrimeListBinding
@@ -20,9 +21,8 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-    private val adapter: CrimesAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked)
-    }
+    private val adapter by lazy(NONE) { CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked) }
+    private val menuProvider by lazy(NONE) { CrimeListMenuProvider(navigator(), crimeListViewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +34,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(menuProvider)
         setupView()
         observeCrimes()
     }
@@ -59,6 +60,11 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private fun onCallPoliceClicked() {
         Toast.makeText(requireContext(), getString(R.string.calling_the_police), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireActivity().removeMenuProvider(menuProvider)
     }
 
     companion object {

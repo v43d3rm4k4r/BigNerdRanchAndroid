@@ -1,4 +1,4 @@
-package com.bignardranch.android.criminalintent.datetimefragments
+package com.bignardranch.android.criminalintent.crimefragment.datetimefragments
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -17,7 +17,7 @@ const val RESULT_TIME = "result_date"
 /**
  * This time picker is hosted by [CrimeFragment].
  */
-class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     private lateinit var calendar: Calendar
 
@@ -27,8 +27,6 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
         }
         val initialHour   = calendar[Calendar.HOUR]
         val initialMinute = calendar[Calendar.MINUTE]
-
-        isCancelable = false
 
         return TimePickerDialog(
             requireContext(),
@@ -46,11 +44,14 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     companion object {
-        fun newInstance(date: Date): TimePickerFragment {
+
+        @JvmStatic val TAG = TimePickerDialogFragment::class.java.simpleName
+
+        fun newInstance(date: Date): TimePickerDialogFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_TIME, date)
             }
-            return TimePickerFragment().apply {
+            return TimePickerDialogFragment().apply {
                 arguments = args
             }
         }

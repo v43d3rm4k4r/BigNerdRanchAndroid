@@ -7,7 +7,7 @@ import com.bignardranch.android.criminalintent.MainActivity
 fun Fragment.navigator(): Navigator = requireActivity() as Navigator
 
 /**
- * Callbacks implemented by host activity ([MainActivity]).
+ * Main fragment navigation callbacks implemented by host activity ([MainActivity]).
  */
 fun interface Navigator {
     fun onCrimeSelected(crimeId: UUID)

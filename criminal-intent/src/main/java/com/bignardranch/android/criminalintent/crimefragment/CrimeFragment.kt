@@ -2,7 +2,6 @@ package com.bignardranch.android.criminalintent.crimefragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,18 +9,15 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bignardranch.android.criminalintent.databinding.FragmentCrimeBinding
-import com.bignardranch.android.criminalintent.datetimefragments.DatePickerFragment
-import com.bignardranch.android.criminalintent.datetimefragments.RESULT_DATE
-import com.bignardranch.android.criminalintent.datetimefragments.RESULT_TIME
-import com.bignardranch.android.criminalintent.datetimefragments.TimePickerFragment
+import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment
+import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.RESULT_DATE
+import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.RESULT_TIME
+import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment
 import com.bignardranch.android.criminalintent.model.Crime
 import java.text.SimpleDateFormat
 import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
-
-private const val DIALOG_DATE  = "DialogDate"
-private const val DIALOG_TIME  = "DialogTime"
 
 const val DIALOG_DATE_TIME_REQUEST_CODE = "Dialog date time result"
 
@@ -57,48 +53,19 @@ class CrimeFragment : Fragment() {
                 updateUI()
             }
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-
-//        val titleWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-//
-//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-//                crime.title = s.toString()
-//            }
-//
-//            override fun afterTextChanged(s: Editable) {}
-//        }
-//        titleField.addTextChangedListener(titleWatcher)
         with(binding) {
             crimeTitleTextView.doOnTextChanged { text, _, _, _ -> crime = crime.copy(title = text.toString()) }
             crimeSolvedCheckbox.setOnCheckedChangeListener { _, isChecked -> crime = crime.copy(isSolved = isChecked) }
-            crimeDateButton.setOnClickListener {
-                DatePickerFragment.newInstance(crime.date).apply {
-                    //setTargetFragment(this@CrimeFragment, DIALOG_REQUEST_CODE) // used in book, deprecated, use setFragmentResultListener()
-                    show(this@CrimeFragment.parentFragmentManager, DIALOG_DATE)
-                }
-                parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, viewLifecycleOwner) { requestKey, result ->
-                    if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
-                        val date = result.getSerializable(RESULT_DATE) as Date
-                        updateDate(date)
-                    }
-                }
+            crimeDateButton.setOnClickListener { // FIXME: Если при нажатии на DialogFragment, выборе времени (ОК не нажимать) и повороте экрана нажать ОК, то время не обновится. Если нажать второй раз - обновиться на кнопке, но в самом циферблате будет старое.
+                showDatePickerDialogFragment()
+                setupDatePickerDialogFragmentListener()
             }
             crimeTimeButton.setOnClickListener {
-                TimePickerFragment.newInstance(crime.date).apply {
-                    show(this@CrimeFragment.parentFragmentManager, DIALOG_TIME)
-                }
-                parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, viewLifecycleOwner) { requestKey, result ->
-                    if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
-                        val date = result.getSerializable(RESULT_TIME) as Date
-                        updateDate(date)
-                    }
-                }
+                showTimePickerDialogFragment()
+                setupTimePickerDialogFragmentListener()
             }
-        } // with
+        }
     }
 
     override fun onStop() {
@@ -124,6 +91,37 @@ class CrimeFragment : Fragment() {
 
             crimeSolvedCheckbox.isChecked = crime.isSolved
             crimeSolvedCheckbox.jumpDrawablesToCurrentState() // cancelling checkbox animation
+        }
+    }
+
+    private fun showDatePickerDialogFragment() {
+        DatePickerDialogFragment.newInstance(crime.date).apply {
+            //setTargetFragment(this@CrimeFragment, DIALOG_REQUEST_CODE) // used in book, deprecated, use setFragmentResultListener()
+            show(this@CrimeFragment.parentFragmentManager, DatePickerDialogFragment.TAG)
+        }
+    }
+
+    private fun setupDatePickerDialogFragmentListener() {
+        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, viewLifecycleOwner) { requestKey, result ->
+            if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
+                val date = result.getSerializable(RESULT_DATE) as Date
+                updateDate(date)
+            }
+        }
+    }
+
+    private fun showTimePickerDialogFragment() {
+        TimePickerDialogFragment.newInstance(crime.date).apply {
+            show(this@CrimeFragment.parentFragmentManager, TimePickerDialogFragment.TAG)
+        }
+    }
+
+    private fun setupTimePickerDialogFragmentListener() {
+        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, viewLifecycleOwner) { requestKey, result ->
+            if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
+                val date = result.getSerializable(RESULT_TIME) as Date
+                updateDate(date)
+            }
         }
     }
 

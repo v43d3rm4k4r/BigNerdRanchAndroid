@@ -8,6 +8,9 @@ import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment
 import com.bignardranch.android.criminalintent.crimelistfragment.CrimeListFragment
 import java.util.*
 
+open class Parent1<T>(val field: T)
+class New : Parent1<Int>(field = 5)
+
 class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {
 
 //    private val currentFragment: Fragment by lazy(LazyThreadSafetyMode.NONE) {
