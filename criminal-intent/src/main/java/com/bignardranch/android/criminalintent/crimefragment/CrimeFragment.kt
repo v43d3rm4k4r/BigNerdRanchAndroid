@@ -57,15 +57,15 @@ class CrimeFragment : Fragment() {
         with(binding) {
             crimeTitleTextView.doOnTextChanged { text, _, _, _ -> crime = crime.copy(title = text.toString()) }
             crimeSolvedCheckbox.setOnCheckedChangeListener { _, isChecked -> crime = crime.copy(isSolved = isChecked) }
-            crimeDateButton.setOnClickListener { // FIXME: Если при нажатии на DialogFragment, выборе времени (ОК не нажимать) и повороте экрана нажать ОК, то время не обновится. Если нажать второй раз - обновиться на кнопке, но в самом циферблате будет старое.
+            crimeDateButton.setOnClickListener {
                 showDatePickerDialogFragment()
-                setupDatePickerDialogFragmentListener()
             }
             crimeTimeButton.setOnClickListener {
                 showTimePickerDialogFragment()
-                setupTimePickerDialogFragmentListener()
             }
         }
+        setupDatePickerDialogFragmentListener()
+        setupTimePickerDialogFragmentListener()
     }
 
     override fun onStop() {
