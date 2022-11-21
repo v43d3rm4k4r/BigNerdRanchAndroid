@@ -2,14 +2,10 @@ package com.bignardranch.android.criminalintent
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-//import androidx.fragment.app.Fragment
 import com.bignardranch.android.criminalintent.contracts.Navigator
 import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment
 import com.bignardranch.android.criminalintent.crimelistfragment.CrimeListFragment
 import java.util.*
-
-open class Parent1<T>(val field: T)
-class New : Parent1<Int>(field = 5)
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {
 

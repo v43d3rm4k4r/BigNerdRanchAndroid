@@ -2,7 +2,6 @@ package com.bignardranch.android.criminalintent.crimefragment.datetimefragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.icu.util.GregorianCalendar
 import android.os.Build
 import android.os.Bundle
 import android.widget.DatePicker
@@ -47,11 +46,11 @@ class DatePickerDialogFragment : DialogFragment(), DatePickerDialog.OnDateSetLis
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val resultDate = Calendar.getInstance().apply {
-            this[Calendar.YEAR] = year
-            this[Calendar.MONTH] = month
+            this[Calendar.YEAR]         = year
+            this[Calendar.MONTH]        = month
             this[Calendar.DAY_OF_MONTH] = dayOfMonth
-            this[Calendar.HOUR] = calendar[Calendar.HOUR]
-            this[Calendar.MINUTE] = calendar[Calendar.MINUTE]
+            this[Calendar.HOUR]         = calendar[Calendar.HOUR]
+            this[Calendar.MINUTE]       = calendar[Calendar.MINUTE]
         }.time
         setFragmentResult(DIALOG_DATE_TIME_REQUEST_CODE, bundleOf(RESULT_DATE to resultDate))
     }
