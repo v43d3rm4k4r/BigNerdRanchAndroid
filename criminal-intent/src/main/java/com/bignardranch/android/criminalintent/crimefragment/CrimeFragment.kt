@@ -100,8 +100,8 @@ class CrimeFragment : Fragment() {
         }
     }
 
-    private fun setupDatePickerDialogFragmentListener() {
-        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, viewLifecycleOwner) { requestKey, result ->
+    private fun setupDatePickerDialogFragmentListener() { // TODO: Can be moved to corresponding DialogFragment
+        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, this) { requestKey, result ->
             if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
                 val date = result.getSerializable(RESULT_DATE) as Date
                 updateDate(date)
@@ -115,8 +115,8 @@ class CrimeFragment : Fragment() {
         }
     }
 
-    private fun setupTimePickerDialogFragmentListener() {
-        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, viewLifecycleOwner) { requestKey, result ->
+    private fun setupTimePickerDialogFragmentListener() { // TODO: Can be moved to corresponding DialogFragment
+        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, this) { requestKey, result ->
             if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
                 val date = result.getSerializable(RESULT_TIME) as Date
                 updateDate(date)
