@@ -5,21 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+
 import com.bignardranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment
-import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.RESULT_DATE
-import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.RESULT_TIME
+import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment.Companion.RESULT_DATE
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment
+import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment.Companion.RESULT_TIME
 import com.bignardranch.android.criminalintent.model.Crime
+
 import java.text.SimpleDateFormat
 import java.util.*
-
-private const val ARG_CRIME_ID = "crime_id"
-
-const val DIALOG_DATE_TIME_REQUEST_CODE = "Dialog date time result"
 
 class CrimeFragment : Fragment() {
 
@@ -126,6 +125,9 @@ class CrimeFragment : Fragment() {
     }
 
     companion object {
+
+        private const val ARG_CRIME_ID = "crime_id"
+        @JvmStatic val DIALOG_DATE_TIME_REQUEST_CODE = "Dialog date time result"
 
         fun newInstance(crimeId: UUID): CrimeFragment {
             val args = Bundle().apply {

@@ -8,11 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment
-import com.bignardranch.android.criminalintent.crimefragment.DIALOG_DATE_TIME_REQUEST_CODE
+import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment.Companion.DIALOG_DATE_TIME_REQUEST_CODE
 import java.util.*
-
-private const val ARG_TIME = "time"
-const val RESULT_TIME = "result_date"
 
 /**
  * This time picker is hosted by [CrimeFragment].
@@ -46,6 +43,8 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
     companion object {
 
         @JvmStatic val TAG = TimePickerDialogFragment::class.java.simpleName
+        @JvmStatic val RESULT_TIME = "result_date"
+        private const val ARG_TIME = "time"
 
         fun newInstance(date: Date): TimePickerDialogFragment {
             val args = Bundle().apply {
