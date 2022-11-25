@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds.*
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
@@ -66,6 +66,7 @@ class CrimeFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("Range")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         crimeViewModel.crimeLiveData.observe(
@@ -116,7 +117,38 @@ class CrimeFragment : Fragment() {
             }
 
             crimeCallSuspectButton.setOnClickListener {
-                
+                // Getting phone number by name (crime.suspect):
+                val resolver = requireActivity().contentResolver
+                val contactsCursor = resolver.query(
+                        ContactsContract.Contacts.CONTENT_URI, null,
+                        null, null, null
+                    )
+                if (contactsCursor == null || !contactsCursor.moveToFirst()) return@setOnClickListener
+                contactsCursor.use {
+                    val contactId = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    val phonesCursor = resolver.query(
+                        Phone.CONTENT_URI, null,
+                        Phone.CONTACT_ID + " = " + contactId,
+                        null, null
+                    );
+                    phonesCursor?.use {
+                        while (it.moveToNext()) {
+                            val numberStr = it.getString(it.getColumnIndex(Phone.NUMBER));
+                            when ( it.getInt(it.getColumnIndex(Phone.TYPE)) ) {
+                                Phone.TYPE_HOME -> {}
+                                Phone.TYPE_MOBILE -> {}
+                                Phone.TYPE_WORK -> {}
+                            }
+                        }
+                    }
+                }
+
+                // TODO: start dial activity
+//                Intent(Intent.ACTION_DIAL).apply {
+//                    //data = Uri.parse(phoneStr)
+//                }.also { intent ->
+//                    startActivity(intent)
+//                }
             }
         }
         setupDatePickerDialogFragmentListener()
@@ -149,8 +181,11 @@ class CrimeFragment : Fragment() {
 
             if (crime.suspect.isNotEmpty()) {
                 crimeChooseSuspectButton.text = getString(R.string.crime_suspect_text, crime.suspect)
+                crimeCallSuspectButton.text   = getString(R.string.crime_call_suspect_text)
+                crimeCallSuspectButton.isEnabled = true
             } else {
-                crimeChooseSuspectButton.text = getString(R.string.crime_choose_suspect_text)
+                crimeChooseSuspectButton.text = getString(R.string.crime_call_suspect_disabled_text)
+                crimeCallSuspectButton.isEnabled = false
             }
         }
     }

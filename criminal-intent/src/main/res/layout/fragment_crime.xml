@@ -63,6 +63,6 @@
         android:id="@+id/crime_call_suspect_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/crime_report_text"/>
+        android:text="@string/crime_call_suspect_disabled_text"/>
 
 </LinearLayout>
