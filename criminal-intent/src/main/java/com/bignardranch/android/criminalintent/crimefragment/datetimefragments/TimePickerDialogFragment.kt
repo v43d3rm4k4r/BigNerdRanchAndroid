@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment
-import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment.Companion.DIALOG_DATE_TIME_REQUEST_CODE
+import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment.Companion.REQUEST_DIALOG_DATE_TIME
 import java.util.*
 
 /**
@@ -37,7 +37,7 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         calendar[Calendar.HOUR]   = hourOfDay
         calendar[Calendar.MINUTE] = minute
-        setFragmentResult(DIALOG_DATE_TIME_REQUEST_CODE, bundleOf(RESULT_TIME to calendar.time))
+        setFragmentResult(REQUEST_DIALOG_DATE_TIME, bundleOf(RESULT_TIME to calendar.time))
     }
 
     companion object {

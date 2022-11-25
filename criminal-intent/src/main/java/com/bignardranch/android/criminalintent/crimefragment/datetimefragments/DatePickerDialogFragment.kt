@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment.*
-import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment.Companion.DIALOG_DATE_TIME_REQUEST_CODE
+import com.bignardranch.android.criminalintent.crimefragment.CrimeFragment.Companion.REQUEST_DIALOG_DATE_TIME
 import java.util.*
 
 /**
@@ -49,7 +49,7 @@ class DatePickerDialogFragment : DialogFragment(), DatePickerDialog.OnDateSetLis
             this[Calendar.HOUR]         = calendar[Calendar.HOUR]
             this[Calendar.MINUTE]       = calendar[Calendar.MINUTE]
         }.time
-        setFragmentResult(DIALOG_DATE_TIME_REQUEST_CODE, bundleOf(RESULT_DATE to resultDate))
+        setFragmentResult(REQUEST_DIALOG_DATE_TIME, bundleOf(RESULT_DATE to resultDate))
     }
 
     companion object {

@@ -1,22 +1,28 @@
 package com.bignardranch.android.criminalintent.crimefragment
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-
+import com.bignardranch.android.criminalintent.R
 import com.bignardranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment.Companion.RESULT_DATE
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment.Companion.RESULT_TIME
 import com.bignardranch.android.criminalintent.model.Crime
-
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,6 +31,24 @@ class CrimeFragment : Fragment() {
     private lateinit var binding: FragmentCrimeBinding
     private lateinit var crime: Crime
     private val crimeViewModel: CrimeViewModel by viewModels()
+    private val contactsActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK || result?.data?.data == null)
+            return@registerForActivityResult
+        val contactURI = result.data?.data!!
+        // Specify for which fields the query should return values:
+        val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+        val cursor = requireActivity().contentResolver
+            .query(contactURI, queryFields, null, null, null)
+        cursor?.use {
+            if (it.count == 0) return@registerForActivityResult
+            it.moveToFirst()
+            val suspectStr = it.getString(0)
+            crime = crime.copy(suspect = suspectStr)
+            crimeViewModel.saveCrime(crime)
+            binding.crimeChooseSuspectButton.text = getString(R.string.crime_suspect_text, suspectStr)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +86,38 @@ class CrimeFragment : Fragment() {
             crimeTimeButton.setOnClickListener {
                 showTimePickerDialogFragment()
             }
+
+            crimeChooseSuspectButton.apply {
+                val pickContactIntent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+                val options = ActivityOptionsCompat.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
+                setOnClickListener {
+                    contactsActivityLauncher.launch(pickContactIntent, options)
+                }
+                // If there is no phonebook application:
+                val packageManager = requireActivity().packageManager
+                val resolverActivity = packageManager.resolveActivity(pickContactIntent, PackageManager.MATCH_DEFAULT_ONLY)
+                if (resolverActivity == null) {
+                    isEnabled = false
+                }
+            }
+
+            crimeSendReportButton.setOnClickListener {
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT,    getCrimeReport())
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
+                }.also { intent ->
+                    // For some reason Android using getCrimeReport() result for chooser title,
+                    // but not R.string.send_report
+//                    val chooserIntent = Intent.createChooser(intent, getString(R.string.send_report))
+//                    startActivity(chooserIntent)
+                      startActivity(intent)
+                }
+            }
+
+            crimeCallSuspectButton.setOnClickListener {
+                
+            }
         }
         setupDatePickerDialogFragmentListener()
         setupTimePickerDialogFragmentListener()
@@ -90,6 +146,12 @@ class CrimeFragment : Fragment() {
 
             crimeSolvedCheckbox.isChecked = crime.isSolved
             crimeSolvedCheckbox.jumpDrawablesToCurrentState() // cancelling checkbox animation
+
+            if (crime.suspect.isNotEmpty()) {
+                crimeChooseSuspectButton.text = getString(R.string.crime_suspect_text, crime.suspect)
+            } else {
+                crimeChooseSuspectButton.text = getString(R.string.crime_choose_suspect_text)
+            }
         }
     }
 
@@ -101,8 +163,8 @@ class CrimeFragment : Fragment() {
     }
 
     private fun setupDatePickerDialogFragmentListener() { // TODO: Can be moved to corresponding DialogFragment
-        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, this) { requestKey, result ->
-            if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
+        parentFragmentManager.setFragmentResultListener(REQUEST_DIALOG_DATE_TIME, this) { requestKey, result ->
+            if (requestKey == REQUEST_DIALOG_DATE_TIME) {
                 val date = result.getSerializable(RESULT_DATE) as Date
                 updateDate(date)
             }
@@ -116,18 +178,36 @@ class CrimeFragment : Fragment() {
     }
 
     private fun setupTimePickerDialogFragmentListener() { // TODO: Can be moved to corresponding DialogFragment
-        parentFragmentManager.setFragmentResultListener(DIALOG_DATE_TIME_REQUEST_CODE, this) { requestKey, result ->
-            if (requestKey == DIALOG_DATE_TIME_REQUEST_CODE) {
+        parentFragmentManager.setFragmentResultListener(REQUEST_DIALOG_DATE_TIME, this) { requestKey, result ->
+            if (requestKey == REQUEST_DIALOG_DATE_TIME) {
                 val date = result.getSerializable(RESULT_TIME) as Date
                 updateDate(date)
             }
         }
     }
 
+    private fun getCrimeReport(): String {
+        val solvedString = if (crime.isSolved) {
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+
+        val dateString = DateFormat.format(DATE_FORMAT, crime.date).toString()
+        val suspect = if (crime.suspect.isBlank()) {
+            getString(R.string.crime_report_no_suspect)
+        } else {
+            getString(R.string.crime_report_suspect, crime.suspect)
+        }
+
+        return getString(R.string.crime_report, crime.title, dateString, solvedString, suspect)
+    }
+
     companion object {
 
         private const val ARG_CRIME_ID = "crime_id"
-        @JvmStatic val DIALOG_DATE_TIME_REQUEST_CODE = "Dialog date time result"
+        private const val DATE_FORMAT  = "EEE, MMM, dd"
+        @JvmStatic    val REQUEST_DIALOG_DATE_TIME = "Dialog date time result"
 
         fun newInstance(crimeId: UUID): CrimeFragment {
             val args = Bundle().apply {
