@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.*
+import android.provider.ContactsContract.Contacts
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +20,11 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bignardranch.android.criminalintent.R
-import com.bignardranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment.Companion.RESULT_DATE
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment
 import com.bignardranch.android.criminalintent.crimefragment.datetimefragments.TimePickerDialogFragment.Companion.RESULT_TIME
+import com.bignardranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignardranch.android.criminalintent.model.Crime
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,7 +40,7 @@ class CrimeFragment : Fragment() {
             return@registerForActivityResult
         val contactURI = result.data?.data!!
         // Specify for which fields the query should return values:
-        val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+        val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
         val cursor = requireActivity().contentResolver
             .query(contactURI, queryFields, null, null, null)
         cursor?.use {
@@ -120,35 +123,35 @@ class CrimeFragment : Fragment() {
                 // Getting phone number by name (crime.suspect):
                 val resolver = requireActivity().contentResolver
                 val contactsCursor = resolver.query(
-                        ContactsContract.Contacts.CONTENT_URI, null,
-                        null, null, null
-                    )
-                if (contactsCursor == null || !contactsCursor.moveToFirst()) return@setOnClickListener
+                    ContactsContract.Contacts.CONTENT_URI, null,
+                    null, null, null, null
+                )
+
+                if (contactsCursor == null || !contactsCursor.moveToNext()) return@setOnClickListener
                 contactsCursor.use {
-                    val contactId = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    val contactId = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
                     val phonesCursor = resolver.query(
                         Phone.CONTENT_URI, null,
-                        Phone.CONTACT_ID + " = " + contactId,
+                         "${Phone.DISPLAY_NAME_PRIMARY}='$contactId'",
                         null, null
-                    );
+                    )
                     phonesCursor?.use {
                         while (it.moveToNext()) {
-                            val numberStr = it.getString(it.getColumnIndex(Phone.NUMBER));
-                            when ( it.getInt(it.getColumnIndex(Phone.TYPE)) ) {
+                            val numberStr = it.getString(it.getColumnIndex(Phone.NUMBER))
+/*                            when ( it.getInt(it.getColumnIndex(Phone.TYPE)) ) {
                                 Phone.TYPE_HOME -> {}
                                 Phone.TYPE_MOBILE -> {}
                                 Phone.TYPE_WORK -> {}
+                            }*/
+                            Intent(Intent.ACTION_CALL).apply {
+                                data = Uri.parse("tel:$numberStr")
+                            }.also { intent ->
+                                startActivity(intent)
                             }
+                            return@setOnClickListener
                         }
                     }
                 }
-
-                // TODO: start dial activity
-//                Intent(Intent.ACTION_DIAL).apply {
-//                    //data = Uri.parse(phoneStr)
-//                }.also { intent ->
-//                    startActivity(intent)
-//                }
             }
         }
         setupDatePickerDialogFragmentListener()
