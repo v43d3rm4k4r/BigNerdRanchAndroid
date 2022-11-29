@@ -10,7 +10,6 @@ import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.*
 import android.provider.ContactsContract.Contacts
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -123,32 +122,30 @@ class CrimeFragment : Fragment() {
                 // Getting phone number by name (crime.suspect):
                 val resolver = requireActivity().contentResolver
                 val contactsCursor = resolver.query(
-                    ContactsContract.Contacts.CONTENT_URI, null,
+                    Contacts.CONTENT_URI, null,
                     null, null, null, null
-                )
+                ) ?: return@setOnClickListener
 
-                if (contactsCursor == null || !contactsCursor.moveToNext()) return@setOnClickListener
-                contactsCursor.use {
-                    val contactId = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
-                    val phonesCursor = resolver.query(
-                        Phone.CONTENT_URI, null,
-                         "${Phone.DISPLAY_NAME_PRIMARY}='$contactId'",
-                        null, null
-                    )
-                    phonesCursor?.use {
-                        while (it.moveToNext()) {
-                            val numberStr = it.getString(it.getColumnIndex(Phone.NUMBER))
-/*                            when ( it.getInt(it.getColumnIndex(Phone.TYPE)) ) {
-                                Phone.TYPE_HOME -> {}
-                                Phone.TYPE_MOBILE -> {}
-                                Phone.TYPE_WORK -> {}
-                            }*/
-                            Intent(Intent.ACTION_CALL).apply {
-                                data = Uri.parse("tel:$numberStr")
-                            }.also { intent ->
-                                startActivity(intent)
+                while (contactsCursor.moveToNext()) {
+                    val contactId = contactsCursor.getString(contactsCursor.getColumnIndex(Contacts.DISPLAY_NAME_PRIMARY))
+                    if (contactId == crime.suspect) {
+                        contactsCursor.use {
+                            val phonesCursor = resolver.query(
+                                Phone.CONTENT_URI, null,
+                                "${Phone.DISPLAY_NAME_PRIMARY}='$contactId'",
+                                null, null
+                            )
+                            phonesCursor?.use {
+                                while (it.moveToNext()) {
+                                    val numberStr = it.getString(it.getColumnIndex(Phone.NUMBER))
+                                    Intent(Intent.ACTION_CALL).apply {
+                                        data = Uri.parse("tel:$numberStr")
+                                    }.also { intent ->
+                                        startActivity(intent)
+                                    }
+                                    return@setOnClickListener
+                                }
                             }
-                            return@setOnClickListener
                         }
                     }
                 }
