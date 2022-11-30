@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.bignardranch.android">
+    package="com.bignerdranch.android">
 
     <application
         android:allowBackup="true"
@@ -14,10 +14,10 @@
         android:theme="@style/Theme.GeoQuiz"
         tools:targetApi="32">
         <activity
-            android:name=".CheatActivity"
+            android:name="com.bignerdranch.android.CheatActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.bignerdranch.android.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
