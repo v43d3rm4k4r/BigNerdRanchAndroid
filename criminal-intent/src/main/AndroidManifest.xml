@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bignerdranch.android.criminalintent">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
@@ -31,10 +35,13 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.bignerdranch.fileprovider"
+            android:authorities="com.bignerdranch.android.criminalintent.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-        </provider>
 
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files"/>
+        </provider>
     </application>
 </manifest>

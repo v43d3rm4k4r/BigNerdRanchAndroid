@@ -16,4 +16,7 @@ data class Crime(
 ) {
     @Ignore // missing from the database, so need to be ignored
     val requiresPolice: Boolean = Random.nextBoolean()
+
+    val photoFileName
+        get() = "IMG_$id.jpg"
 }

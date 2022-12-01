@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {
         }
     }
 
-    override fun onCrimeSelected(crimeId: UUID) {
+    override fun onCrimeSelected(crimeId: UUID) { // TODO: add loading animation before
         val fragment = CrimeFragment.newInstance(crimeId)
         supportFragmentManager
             .beginTransaction()
