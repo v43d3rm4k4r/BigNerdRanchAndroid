@@ -18,6 +18,8 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -85,6 +87,7 @@ class CrimeFragment : Fragment() {
     @SuppressLint("Range")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         crimeViewModel.crimeLiveData.observe(
             viewLifecycleOwner
         ) { crime ->
@@ -95,6 +98,7 @@ class CrimeFragment : Fragment() {
                     "com.bignerdranch.android.criminalintent.fileprovider",
                 photoFile)
                 updateUI()
+                binding.progressBar.isVisible = false
             }
         }
 
@@ -113,11 +117,11 @@ class CrimeFragment : Fragment() {
             crimeChooseSuspectButton.apply {
                 val pickContactIntent = Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI)
                 val options = ActivityOptionsCompat.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
+                // If there is no phonebook application:
+                if (!resolveActivityFor(this, pickContactIntent)) return@apply
                 setOnClickListener {
                     contactsActivityLauncher.launch(pickContactIntent, options)
                 }
-                // If there is no phonebook application:
-                resolveActivityFor(this, pickContactIntent)
             }
 
             crimeSendReportButton.setOnClickListener {
@@ -169,7 +173,7 @@ class CrimeFragment : Fragment() {
             crimeCameraButton.apply {
                 val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 // If there is no camera application:
-                resolveActivityFor(this, captureImageIntent)
+                if (!resolveActivityFor(this, captureImageIntent)) return@apply
 
                 setOnClickListener {
                     captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
@@ -194,6 +198,7 @@ class CrimeFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         crimeViewModel.saveCrime(crime)
+        binding.progressBar.isVisible = true
     }
 
     override fun onDetach() {
@@ -221,11 +226,12 @@ class CrimeFragment : Fragment() {
             //crimeSolvedCheckbox.jumpDrawablesToCurrentState() // cancelling checkbox animation
 
             if (crime.suspect.isNotEmpty()) {
-                crimeChooseSuspectButton.text = getString(R.string.crime_suspect_text, crime.suspect)
-                crimeCallSuspectButton.text   = getString(R.string.crime_call_suspect_text)
+                crimeChooseSuspectButton.text    = getString(R.string.crime_suspect_text, crime.suspect)
+                crimeCallSuspectButton.text      = getString(R.string.crime_call_suspect_text)
                 crimeCallSuspectButton.isEnabled = true
             } else {
-                crimeChooseSuspectButton.text = getString(R.string.crime_call_suspect_disabled_text)
+                crimeChooseSuspectButton.text    = getString(R.string.crime_choose_suspect_text)
+                crimeCallSuspectButton.text      = getString(R.string.crime_call_suspect_disabled_text)
                 crimeCallSuspectButton.isEnabled = false
             }
         }
@@ -290,12 +296,14 @@ class CrimeFragment : Fragment() {
     }
 
     // TODO: make Fragment/Activity extension
-    private fun resolveActivityFor(view: View, intent: Intent) {
+    private fun resolveActivityFor(view: View, intent: Intent): Boolean {
         val packageManager = requireActivity().packageManager
         val resolvedActivity = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
         if (resolvedActivity == null) {
             view.isEnabled = false
+            return false
         }
+        return true
     }
 
     companion object {
