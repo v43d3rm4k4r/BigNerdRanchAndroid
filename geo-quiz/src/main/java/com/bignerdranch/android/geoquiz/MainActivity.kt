@@ -13,6 +13,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
+import com.bignerdranch.android.R
+import com.bignerdranch.android.geoquiz.cheatactivity.CheatActivity
+import com.bignerdranch.android.geoquiz.cheatactivity.EXTRA_ANSWER_SHOWN
 import com.bignerdranch.android.geoquiz.model.CheckedQuestion
 
 private const val TAG = "MainActivity"
