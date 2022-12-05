@@ -1,4 +1,4 @@
-package com.bignerdranch.android.geoquiz
+package com.bignerdranch.android.geoquiz.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

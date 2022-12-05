@@ -1,4 +1,4 @@
-package com.bignerdranch.android
+package com.bignerdranch.android.geoquiz
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -13,8 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
-import com.bignerdranch.android.geoquiz.CheckedQuestion
-import com.bignerdranch.android.geoquiz.GeoQuizViewModel
+import com.bignerdranch.android.geoquiz.model.CheckedQuestion
 
 private const val TAG = "MainActivity"
 const val DEBUG = false
