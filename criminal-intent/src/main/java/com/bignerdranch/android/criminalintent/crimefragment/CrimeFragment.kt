@@ -2,7 +2,6 @@ package com.bignerdranch.android.criminalintent.crimefragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -18,7 +17,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -216,9 +214,9 @@ class CrimeFragment : Fragment() {
         with(binding) {
             crimeTitleTextView.setText(crime.title)
 
-            val calendar = Calendar.getInstance().apply { time = crime.date }
             val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy")
             val timeFormat = SimpleDateFormat("h:mm a")
+            val calendar = Calendar.getInstance().apply { time = crime.date }
             crimeDateButton.text = dateFormat.format(calendar.time)
             crimeTimeButton.text = timeFormat.format(calendar.time)
 
