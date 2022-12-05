@@ -15,7 +15,6 @@ import com.bignerdranch.android.R
 const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geoquiz.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE = "com.bignardranch.android.geoquiz.answer_is_true" // Intent extra key
 
-// TODO: remove from AndroidManifest and see what happens
 class CheatActivity : AppCompatActivity() {
 
     private lateinit var answerTextView: TextView
