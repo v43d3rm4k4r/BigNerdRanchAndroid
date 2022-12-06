@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Needed only if `FragmentContainerView` with `android:name tag` is not used:
         if (savedInstanceState == null) {
             val fragment = CrimeListFragment.newInstance()
             supportFragmentManager
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {
         }
     }
 
-    override fun onCrimeSelected(crimeId: UUID) { // TODO: add loading animation before
+    override fun onCrimeSelected(crimeId: UUID) {
         val fragment = CrimeFragment.newInstance(crimeId)
         supportFragmentManager
             .beginTransaction()

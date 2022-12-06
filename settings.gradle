@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "BigNerdRanchAndroid"
 include ':criminal-intent'
 include ':geo-quiz'
+include ':beat-box'
