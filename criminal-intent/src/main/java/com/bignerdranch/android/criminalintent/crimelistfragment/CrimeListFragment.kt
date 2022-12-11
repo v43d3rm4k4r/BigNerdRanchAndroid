@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,6 +48,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private fun observeCrimes() {
         crimeListViewModel.crimeListLiveData.observe(viewLifecycleOwner) { crimes ->
             Log.i(TAG, "Got crimes ${crimes.size}")
+            binding.noUsersTextView.isVisible = crimes.isEmpty()
             adapter.submitList(crimes)
         }
     }
