@@ -14,6 +14,7 @@ import com.bignerdranch.android.criminalintent.contracts.Navigator
 import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeBinding
 import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeSeriousBinding
 import com.bignerdranch.android.criminalintent.model.Crime
+import java.util.*
 
 /**
  * Part of the [CrimeListFragment].
@@ -22,8 +23,11 @@ import com.bignerdranch.android.criminalintent.model.Crime
 class CrimesAdapter(
     private val host: Navigator,
     private val onItemClicked: (crime: Crime) -> Unit,
-    private val onCallPoliceClicked: () -> Unit
-) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback), View.OnClickListener {
+    private val onCallPoliceClicked: () -> Unit,
+    private val onCrimeSwiped: (crime: Crime) -> Unit
+) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback),
+    View.OnClickListener,
+    ItemTouchHelperAdapter {
 
     override fun onClick(view: View) {
         val crime = view.tag as Crime
@@ -54,9 +58,8 @@ class CrimesAdapter(
     }
 
     // ...this one is for other stuff
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) =
         holder.bind(getItem(position))
-    }
 
     override fun getItemViewType(position: Int): Int {
         val currentItem = getItem(position)
@@ -66,6 +69,30 @@ class CrimesAdapter(
         }
     }
 
+    /**
+     * [ItemTouchHelperAdapter] interface implementations:
+     */
+    override fun onItemMove(fromPosition: Int, toPosition: Int) { // TODO: do it in fragment as onCrimeSwiped? (need one more item moved callback in adapter constructor)
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(currentList.toMutableList(), i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(currentList.toMutableList(), i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onItemDismiss(position: Int) {
+        onCrimeSwiped(getItem(position)) // crime list will be submitted in fragment
+        //notifyItemRemoved(position); // not needed because of DiffUtil
+    }
+
+    /**
+     * ViewHolders implementations:
+     */
     abstract class BaseViewHolder(binding: ViewBinding)
         : RecyclerView.ViewHolder(binding.root) {
             abstract fun bind(crime: Crime)
@@ -108,7 +135,7 @@ class CrimesAdapter(
     }
 
     private companion object {
-        @LayoutRes const val ITEM_CRIME = R.layout.list_item_crime
+        @LayoutRes const val ITEM_CRIME         = R.layout.list_item_crime
         @LayoutRes const val ITEM_CRIME_SERIOUS = R.layout.list_item_crime_serious
     }
 }
