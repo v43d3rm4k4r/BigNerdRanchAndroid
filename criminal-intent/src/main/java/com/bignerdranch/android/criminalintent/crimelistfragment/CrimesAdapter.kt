@@ -73,16 +73,18 @@ class CrimesAdapter(
      * [ItemTouchHelperAdapter] interface implementations:
      */
     override fun onItemMove(fromPosition: Int, toPosition: Int) { // TODO: do it in fragment as onCrimeSwiped? (need one more item moved callback in adapter constructor)
+        val currentListSnapshot = currentList.toMutableList()
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(currentList.toMutableList(), i, i + 1)
+                Collections.swap(currentListSnapshot, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(currentList.toMutableList(), i, i - 1)
+                Collections.swap(currentListSnapshot, i, i - 1)
             }
         }
-        notifyItemMoved(fromPosition, toPosition)
+//        notifyItemMoved(fromPosition, toPosition)
+        submitList(currentListSnapshot)
     }
 
     override fun onItemDismiss(position: Int) {
