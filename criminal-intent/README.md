@@ -16,4 +16,4 @@ A single-Activity application with MVC architecture that provides a criminal int
 - Localization
 
 Additionally added:
-- Swipe-to-dismiss and swap items touch events
+- Swipe-to-dismiss implementation
