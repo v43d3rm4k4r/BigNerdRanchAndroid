@@ -3,7 +3,9 @@ package com.bignerdranch.android.criminalintent.crimelistfragment
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+
 import androidx.core.view.MenuProvider
+
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.Navigator
 import com.bignerdranch.android.criminalintent.model.Crime

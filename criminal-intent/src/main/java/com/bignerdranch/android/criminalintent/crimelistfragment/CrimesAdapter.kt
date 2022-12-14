@@ -3,18 +3,19 @@ package com.bignerdranch.android.criminalintent.crimelistfragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.Navigator
 import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeBinding
 import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeSeriousBinding
 import com.bignerdranch.android.criminalintent.model.Crime
-import java.util.*
 
 /**
  * Part of the [CrimeListFragment].
@@ -24,7 +25,8 @@ class CrimesAdapter(
     private val host: Navigator,
     private val onItemClicked: (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit,
-    private val onCrimeSwiped: (crime: Crime) -> Unit
+    private val onCrimeSwiped: (crime: Crime) -> Unit,
+    private val onCrimeMoved: (fromPosition: Int, toPosition: Int) -> Unit
 ) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback),
     View.OnClickListener,
     ItemTouchHelperAdapter {
@@ -72,23 +74,8 @@ class CrimesAdapter(
     /**
      * [ItemTouchHelperAdapter] interface implementations:
      */
-    override fun onItemMove(fromPosition: Int, toPosition: Int) { // TODO: do it in fragment as onCrimeSwiped? (need one more item moved callback in adapter constructor)
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(currentList.toMutableList(), i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(currentList.toMutableList(), i, i - 1)
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition)
-    }
-
-    override fun onItemDismiss(position: Int) {
-        onCrimeSwiped(getItem(position)) // crime list will be submitted in fragment
-        //notifyItemRemoved(position); // not needed because of DiffUtil
-    }
+    override fun onItemMove(fromPosition: Int, toPosition: Int) = onCrimeMoved(fromPosition, toPosition)
+    override fun onItemDismiss(position: Int) = onCrimeSwiped(getItem(position))
 
     /**
      * ViewHolders implementations:

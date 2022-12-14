@@ -3,6 +3,7 @@
     <string name="crime_title_hint">Введите имя преступления.</string>
     <string name="crime_details_label">Детали</string>
     <string name="crime_solved_label">Разрешено</string>
+    <string name="crime_serious_label">Серьёзное</string>
     <string name="crime_title">Название Преступления</string>
     <string name="crime_date">Время преступления</string>
     <string name="call_the_police">Вызывать полицию</string>

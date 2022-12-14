@@ -1,10 +1,13 @@
 package com.bignerdranch.android.criminalintent
 
 import android.os.Bundle
+
 import androidx.appcompat.app.AppCompatActivity
+
 import com.bignerdranch.android.criminalintent.contracts.Navigator
 import com.bignerdranch.android.criminalintent.crimefragment.CrimeFragment
 import com.bignerdranch.android.criminalintent.crimelistfragment.CrimeListFragment
+
 import java.util.*
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), Navigator {

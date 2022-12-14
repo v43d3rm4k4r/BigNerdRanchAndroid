@@ -1,11 +1,15 @@
 package com.bignerdranch.android.criminalintent
 
 import android.content.Context
+
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+
 import com.bignerdranch.android.criminalintent.database.CrimeDatabase
 import com.bignerdranch.android.criminalintent.database.Migration_1_to_2
+import com.bignerdranch.android.criminalintent.database.Migration_2_to_3
 import com.bignerdranch.android.criminalintent.model.Crime
+
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
@@ -21,7 +25,7 @@ class CrimeRepository private constructor(context: Context) {
         context.applicationContext,
         CrimeDatabase::class.java,
         DATABASE_NAME
-    ).addMigrations(Migration_1_to_2)
+    ).addMigrations(Migration_1_to_2, Migration_2_to_3)
      .build()
 
     private val crimeDao = database.crimeDao()
@@ -37,6 +41,7 @@ class CrimeRepository private constructor(context: Context) {
     fun getPhotoFile(crime: Crime): File = File(filesDir, crime.photoFileName)
 
     companion object {
+
         private var INSTANCE: CrimeRepository? = null
 
         fun initialize(context: Context) {

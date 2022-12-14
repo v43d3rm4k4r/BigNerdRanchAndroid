@@ -4,16 +4,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.navigator
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignerdranch.android.criminalintent.model.Crime
+
 import kotlin.LazyThreadSafetyMode.NONE
 
 private const val TAG = "CrimeListFragment"
@@ -23,7 +25,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private val adapter by lazy(NONE) {
-        CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked, ::onCrimeSwiped)
+        CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked, ::onCrimeSwiped, ::onCrimeMoved)
     }
     private val menuProvider by lazy(NONE) { CrimeListMenuProvider(navigator(), crimeListViewModel) }
 
@@ -44,9 +46,9 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private fun setupView() {
         with(binding.crimeRecyclerView) {
-            layoutManager = LinearLayoutManager(context) // TODO: add itemAnimator
+            // TODO: add itemAnimator
             adapter = this@CrimeListFragment.adapter
-            val callback = SimpleItemTouchHelperCallback(this@CrimeListFragment.adapter)
+            val callback = SimpleItemTouchHelperCallback(context.resources, this@CrimeListFragment.adapter)
             val touchHelper = ItemTouchHelper(callback)
             touchHelper.attachToRecyclerView(this)
         }
@@ -67,11 +69,13 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private fun onCrimeSwiped(crime: Crime) = crimeListViewModel.deleteCrime(crime)
 
-    private fun showToast(@StringRes resId: Int) =
-        Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+    private fun onCrimeMoved(fromPosition: Int, toPosition: Int) {
+        TODO("No needed in this app, for now")
+    }
 
-    private fun showToast(msg: String) =
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+    private fun showToast(@StringRes resId: Int) = showToast(getString(resId))
+
+    private fun showToast(msg: String) = Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 
     override fun onDestroyView() {
         super.onDestroyView()

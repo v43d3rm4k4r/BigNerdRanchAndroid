@@ -4,6 +4,7 @@
     <string name="crime_title_label">Title</string>
     <string name="crime_details_label">Details</string>
     <string name="crime_solved_label">Solved</string>
+    <string name="crime_serious_label">Is serious</string>
     <string name="crime_title">Crime Title</string>
     <string name="crime_date">Crime Date</string>
     <string name="call_the_police">Call the police</string>

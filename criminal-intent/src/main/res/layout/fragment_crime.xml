@@ -15,7 +15,6 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/darker_gray"
         android:cropToPadding="true"
@@ -60,7 +59,6 @@
         app:layout_constraintStart_toEndOf="@+id/crime_photo"
         app:layout_constraintTop_toBottomOf="@+id/title_text_view" />
 
-
     <TextView
         android:id="@+id/textView2"
         style="?android:listSeparatorTextViewStyle"
@@ -97,30 +95,40 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/crime_solved_label"
-        app:layout_constraintBottom_toTopOf="@+id/crime_choose_suspect_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/crime_choose_suspect_button"
+        app:layout_constraintEnd_toStartOf="@id/crime_serious_checkbox"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/crime_time_button" />
+        app:layout_constraintTop_toBottomOf="@id/crime_time_button" />
+
+    <CheckBox
+        android:id="@+id/crime_serious_checkbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/crime_serious_label"
+        app:layout_constraintBottom_toTopOf="@id/crime_choose_suspect_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/crime_solved_checkbox"
+        app:layout_constraintTop_toBottomOf="@id/crime_time_button" />
 
     <Button
         android:id="@+id/crime_choose_suspect_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="@string/crime_suspect_text"
-        app:layout_constraintBottom_toTopOf="@+id/crime_send_report_button"
+        app:layout_constraintBottom_toTopOf="@id/crime_send_report_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/crime_solved_checkbox" />
+        app:layout_constraintTop_toBottomOf="@id/crime_solved_checkbox" />
 
     <Button
         android:id="@+id/crime_send_report_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/crime_report_text"
-        app:layout_constraintBottom_toTopOf="@+id/crime_call_suspect_button"
+        app:layout_constraintBottom_toTopOf="@id/crime_call_suspect_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/crime_choose_suspect_button" />
+        app:layout_constraintTop_toBottomOf="@id/crime_choose_suspect_button" />
 
     <Button
         android:id="@+id/crime_call_suspect_button"
@@ -131,7 +139,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/crime_send_report_button" />
+        app:layout_constraintTop_toBottomOf="@id/crime_send_report_button" />
 
     <ProgressBar
         android:id="@+id/progressBar"

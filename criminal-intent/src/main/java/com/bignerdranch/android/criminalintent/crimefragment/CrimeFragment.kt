@@ -14,6 +14,7 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
@@ -21,6 +22,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment
 import com.bignerdranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment.Companion.RESULT_DATE
@@ -29,6 +31,7 @@ import com.bignerdranch.android.criminalintent.crimefragment.datetimefragments.T
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.utils.getScaledBitmap
+
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -104,10 +107,24 @@ class CrimeFragment : Fragment() {
 
         with(binding) {
             crimeTitleTextView.doOnTextChanged { text, _, _, _ -> crime = crime.copy(title = text.toString()) }
-            crimeSolvedCheckbox.setOnCheckedChangeListener { _, isChecked -> crime = crime.copy(isSolved = isChecked) }
+            crimeSolvedCheckbox.setOnCheckedChangeListener  { _, isChecked ->
+                crime = crime.copy(isSolved = isChecked, requiresPolice = !isChecked)
+                crimeSeriousCheckbox.isVisible = !isChecked
+                crimeSeriousCheckbox.isChecked = crime.requiresPolice
+            }
+
+            crimeSeriousCheckbox.apply {
+                isVisible = !crimeSolvedCheckbox.isChecked
+                isChecked = crime.requiresPolice
+                setOnCheckedChangeListener { _, isChecked ->
+                    crime = crime.copy(requiresPolice = isChecked)
+                }
+            }
+
             crimeDateButton.setOnClickListener {
                 showDatePickerDialogFragment()
             }
+
             crimeTimeButton.setOnClickListener {
                 showTimePickerDialogFragment()
             }
@@ -168,6 +185,7 @@ class CrimeFragment : Fragment() {
                     }
                 }
             }
+
             crimeCameraButton.apply {
                 val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 // If there is no camera application:
@@ -189,6 +207,7 @@ class CrimeFragment : Fragment() {
                 }
             }
         } // with
+
         setupDatePickerDialogFragmentListener()
         setupTimePickerDialogFragmentListener()
     }
@@ -220,8 +239,10 @@ class CrimeFragment : Fragment() {
             crimeDateButton.text = dateFormat.format(calendar.time)
             crimeTimeButton.text = timeFormat.format(calendar.time)
 
-            crimeSolvedCheckbox.isChecked = crime.isSolved
-            //crimeSolvedCheckbox.jumpDrawablesToCurrentState() // cancelling checkbox animation
+            crimeSolvedCheckbox.isChecked  = crime.isSolved
+            crimeSeriousCheckbox.isChecked = crime.requiresPolice
+            crimeSolvedCheckbox.jumpDrawablesToCurrentState() // cancelling checkbox animation
+            crimeSeriousCheckbox.jumpDrawablesToCurrentState()
 
             if (crime.suspect.isNotEmpty()) {
                 crimeChooseSuspectButton.text    = getString(R.string.crime_suspect_text, crime.suspect)
