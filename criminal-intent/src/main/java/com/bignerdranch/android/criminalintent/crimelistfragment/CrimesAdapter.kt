@@ -20,7 +20,6 @@ import com.bignerdranch.android.criminalintent.model.Crime
 /**
  * Part of the [CrimeListFragment].
  */
-
 class CrimesAdapter(
     private val host: Navigator,
     private val onItemClicked: (crime: Crime) -> Unit,
@@ -75,7 +74,7 @@ class CrimesAdapter(
      * [ItemTouchHelperAdapter] interface implementations:
      */
     override fun onItemMove(fromPosition: Int, toPosition: Int) = onCrimeMoved(fromPosition, toPosition)
-    override fun onItemDismiss(position: Int) = onCrimeSwiped(getItem(position))
+    override fun onItemDismiss(position: Int)                   = onCrimeSwiped(getItem(position))
 
     /**
      * ViewHolders implementations:

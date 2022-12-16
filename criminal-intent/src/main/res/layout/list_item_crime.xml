@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/list_item_crime"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/crime_title_text_view"
@@ -16,6 +17,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/crime_title"
         android:textSize="18sp"
+
         app:layout_constraintEnd_toStartOf="@id/crime_solved_image_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

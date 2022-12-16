@@ -6,7 +6,7 @@
     <string name="crime_serious_label">Серьёзное</string>
     <string name="crime_title">Название Преступления</string>
     <string name="crime_date">Время преступления</string>
-    <string name="call_the_police">Вызывать полицию</string>
+    <string name="call_the_police">Вызвать полицию</string>
     <string name="calling_the_police">Вызываем полицию…</string>
     <string name="new_crime">Новое преступление</string>
     <string name="crime_suspect_text">Подозреваемый: %1$s</string>
