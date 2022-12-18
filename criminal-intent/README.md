@@ -15,5 +15,5 @@ A single-Activity application with MVC architecture that provides a criminal int
 - FileProvider
 - Localization
 
-Additionally added:
+### Additionally added:
 - Swipe-to-dismiss implementation
