@@ -78,7 +78,7 @@ class SimpleItemTouchHelperCallback(
                 bottom = viewHolder.itemView.bottom
             }
         }
-        selectedViewHolderPaint.color = if (abs(dX) < width / 3) Color.BLACK
+        selectedViewHolderPaint.color = if (abs(dX) < width / 3) Color.GRAY
             else deleteColor
 
         canvas.drawRect(selectedViewHolderBgRect, selectedViewHolderPaint)
