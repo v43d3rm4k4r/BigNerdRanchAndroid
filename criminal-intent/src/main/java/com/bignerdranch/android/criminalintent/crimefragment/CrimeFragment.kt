@@ -38,7 +38,10 @@ import java.util.*
 
 class CrimeFragment : Fragment() {
 
-    private lateinit var binding: FragmentCrimeBinding
+
+    private var _binding: FragmentCrimeBinding? = null
+    private val binding:  FragmentCrimeBinding
+        get() = _binding!!
     private lateinit var crime: Crime
     private lateinit var photoFile: File
     private lateinit var photoUri: Uri
@@ -81,7 +84,7 @@ class CrimeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCrimeBinding.inflate(layoutInflater)
+        _binding = FragmentCrimeBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -216,6 +219,11 @@ class CrimeFragment : Fragment() {
         super.onStop()
         crimeViewModel.saveCrime(crime)
         binding.progressBar.isVisible = true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onDetach() {

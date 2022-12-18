@@ -17,6 +17,7 @@ import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.navigator
 import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.CrimesAdapter
 import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.SimpleItemTouchHelperCallback
+import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignerdranch.android.criminalintent.model.Crime
 
@@ -24,7 +25,9 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
-    private lateinit var binding: FragmentCrimeListBinding
+    private var _binding: FragmentCrimeListBinding? = null
+    private val binding: FragmentCrimeListBinding
+        get() = _binding!!
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private val adapter by lazy(NONE) {
         CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked, ::onCrimeSwiped, ::onCrimeMoved)
@@ -36,7 +39,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentCrimeListBinding.inflate(layoutInflater)
+        _binding = FragmentCrimeListBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -87,6 +90,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     override fun onDestroyView() {
         super.onDestroyView()
         requireActivity().removeMenuProvider(menuProvider)
+        _binding = null
     }
 
     companion object {
