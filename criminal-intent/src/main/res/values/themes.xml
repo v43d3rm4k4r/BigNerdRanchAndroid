@@ -13,4 +13,19 @@
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="TextStyleThemed">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BigTextStyleThemed" parent="BigTextStyle">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ItemStyle">
+        <item name="android:background">@color/white</item>
+    </style>
+
+
+
 </resources>

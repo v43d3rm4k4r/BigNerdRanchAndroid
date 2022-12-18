@@ -23,4 +23,5 @@
     <string name="crime_call_suspect_disabled_text">Choose suspect first to call it</string>
     <string name="send_report">Send crime report via</string>
     <string name="no_crimes">No crimes yet.</string>
+    <string name="tools_date">18 November 2022, 12:00</string>
 </resources>

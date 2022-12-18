@@ -23,4 +23,5 @@
     <string name="send_report">Послать отчёт через</string>
     <string name="crime_title_label">Имя</string>
     <string name="no_crimes">Ещё нет преступлений.</string>
+    <string name="tools_date">18 Ноября 2022, 12:00</string>
 </resources>
