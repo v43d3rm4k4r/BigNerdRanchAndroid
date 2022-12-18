@@ -17,3 +17,4 @@ A single-Activity application with MVC architecture that provides a criminal int
 
 ### Additionally added:
 - Swipe-to-dismiss implementation
+- RecyclerView items animations & decorations 
