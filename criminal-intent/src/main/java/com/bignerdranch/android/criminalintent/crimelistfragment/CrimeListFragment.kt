@@ -3,6 +3,7 @@ package com.bignerdranch.android.criminalintent.crimelistfragment
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.Toast
 
 import androidx.annotation.StringRes
@@ -11,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.navigator
@@ -21,8 +21,6 @@ import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBind
 import com.bignerdranch.android.criminalintent.model.Crime
 
 import kotlin.LazyThreadSafetyMode.NONE
-
-private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
@@ -56,7 +54,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
             val touchHelper = ItemTouchHelper(callback)
             touchHelper.attachToRecyclerView(this)
 
-            val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+            val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayout.VERTICAL)
             addItemDecoration(dividerItemDecoration)
 
             // TODO: add itemAnimator
@@ -68,7 +66,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
             Log.i(TAG, "Got crimes ${crimes.size}")
             binding.crimeRecyclerView.isVisible = crimes.isNotEmpty()
             binding.noUsersTextView.isVisible   = crimes.isEmpty()
-            adapter.submitList(crimes)
+            adapter.submitList(crimes.reversed())
         }
     }
 
@@ -92,6 +90,9 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     }
 
     companion object {
+
+        private const val TAG = "CrimeListFragment"
+
         fun newInstance(): CrimeListFragment = CrimeListFragment()
     }
 }
