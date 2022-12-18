@@ -1,5 +1,6 @@
-package com.bignerdranch.android.criminalintent.crimelistfragment
+package com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ import com.bignerdranch.android.criminalintent.contracts.Navigator
 import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeBinding
 import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeSeriousBinding
 import com.bignerdranch.android.criminalintent.model.Crime
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Part of the [CrimeListFragment].
@@ -81,7 +84,15 @@ class CrimesAdapter(
      */
     abstract class BaseViewHolder(binding: ViewBinding)
         : RecyclerView.ViewHolder(binding.root) {
+
             abstract fun bind(crime: Crime)
+
+            @SuppressLint("SimpleDateFormat")
+            protected fun Date.toFormattedString(): String {
+                val dateFormat = SimpleDateFormat("d MMMM yyyy, HH:mm")
+                val calendar   = Calendar.getInstance().apply { time = this@toFormattedString }
+                return dateFormat.format(calendar.time)
+            }
         }
 
     class CrimeHolder(
@@ -91,8 +102,8 @@ class CrimesAdapter(
         override fun bind(crime: Crime) {
             with(binding) {
                 root.tag = crime
-                crimeTitleTextView.text = crime.title
-                crimeDateTextView.text = crime.date.toString()
+                crimeTitleTextView.text        = crime.title
+                crimeDateTextView.text         = crime.date.toFormattedString()
                 crimeSolvedImageView.isVisible = crime.isSolved
             }
         }
@@ -107,7 +118,7 @@ class CrimesAdapter(
                 root.tag = crime
                 callThePoliceButton.tag = crime
                 crimeTitleTextView.text = crime.title
-                crimeDateTextView.text = crime.date.toString()
+                crimeDateTextView.text  = crime.date.toFormattedString()
             }
         }
     }

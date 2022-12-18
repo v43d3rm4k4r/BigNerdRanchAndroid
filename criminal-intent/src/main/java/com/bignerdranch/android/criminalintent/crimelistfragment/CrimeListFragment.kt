@@ -9,10 +9,14 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.navigator
+import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.CrimesAdapter
+import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.SimpleItemTouchHelperCallback
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignerdranch.android.criminalintent.model.Crime
 
@@ -46,11 +50,16 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
     private fun setupView() {
         with(binding.crimeRecyclerView) {
-            // TODO: add itemAnimator
             adapter = this@CrimeListFragment.adapter
-            val callback = SimpleItemTouchHelperCallback(context.resources, this@CrimeListFragment.adapter)
+
+            val callback = SimpleItemTouchHelperCallback(requireContext().resources, this@CrimeListFragment.adapter)
             val touchHelper = ItemTouchHelper(callback)
             touchHelper.attachToRecyclerView(this)
+
+            val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+            addItemDecoration(dividerItemDecoration)
+
+            // TODO: add itemAnimator
         }
     }
 

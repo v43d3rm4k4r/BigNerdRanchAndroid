@@ -1,12 +1,10 @@
-package com.bignerdranch.android.criminalintent.crimelistfragment
+package com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.util.DisplayMetrics
 import android.util.TypedValue
 
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -27,7 +25,6 @@ class SimpleItemTouchHelperCallback(
 
     // Using resources for onChildDraw()
     private val displayMetrics = resources.displayMetrics
-    private val height = (displayMetrics.heightPixels / displayMetrics.density).toInt().dp
     private val width  = (displayMetrics.widthPixels / displayMetrics.density).toInt().dp
     private val deleteColor = resources.getColor(android.R.color.holo_red_light)
     private val deleteIcon  = resources.getDrawable(R.drawable.ic_outline_delete, null)
@@ -53,7 +50,7 @@ class SimpleItemTouchHelperCallback(
         adapter.onItemDismiss(viewHolder.adapterPosition);
     }
 
-    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float = .3F
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float = .33F
 
     override fun isItemViewSwipeEnabled(): Boolean = true
     override fun isLongPressDragEnabled(): Boolean = false

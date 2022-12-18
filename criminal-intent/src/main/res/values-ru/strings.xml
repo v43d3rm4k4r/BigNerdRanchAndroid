@@ -12,7 +12,7 @@
     <string name="crime_suspect_text">Подозреваемый: %1$s</string>
     <string name="crime_choose_suspect_text">Выберите подозреваемого</string>
     <string name="crime_report_text">Послать отчёт о преступлении</string>
-    <string name="crime_report">%1$s! Преступление было совершено %2$s, %3$s and %4$s</string>
+    <string name="crime_report">%1$s! Преступление было совершено %2$s, %3$s и %4$s</string>
     <string name="crime_report_solved">Дело разрешено</string>
     <string name="crime_report_unsolved">Дело не разрешено</string>
     <string name="crime_report_no_suspect">подозреваемый отсутствует.</string>

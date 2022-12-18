@@ -233,8 +233,8 @@ class CrimeFragment : Fragment() {
         with(binding) {
             crimeTitleTextView.setText(crime.title)
 
-            val dateFormat = SimpleDateFormat("EEEE, d MMMM, yyyy")
-            val timeFormat = SimpleDateFormat("h:mm a")
+            val dateFormat = SimpleDateFormat("E, d MMMM, yyyy")
+            val timeFormat = SimpleDateFormat("h:mm")
             val calendar = Calendar.getInstance().apply { time = crime.date }
             crimeDateButton.text = dateFormat.format(calendar.time)
             crimeTimeButton.text = timeFormat.format(calendar.time)

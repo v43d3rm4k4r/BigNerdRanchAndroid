@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent.crimelistfragment
+package com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils
 
 interface ItemTouchHelperAdapter {
 
