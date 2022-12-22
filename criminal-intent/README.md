@@ -3,6 +3,7 @@ A single-Activity application with MVC architecture that provides a criminal int
 ### Reviewed Topics:
 - Views
 - Fragments
+- ViewBinding
 - RecyclerView
 - Constraint and other layouts
 - Room
