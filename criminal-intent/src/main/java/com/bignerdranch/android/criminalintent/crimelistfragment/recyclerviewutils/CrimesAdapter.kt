@@ -25,10 +25,10 @@ import java.util.*
  */
 class CrimesAdapter(
     private val host: Navigator,
-    private val onItemClicked: (crime: Crime) -> Unit,
+    private val onItemClicked:       (crime: Crime) -> Unit,
     private val onCallPoliceClicked: () -> Unit,
-    private val onCrimeSwiped: (crime: Crime) -> Unit,
-    private val onCrimeMoved: (fromPosition: Int, toPosition: Int) -> Unit
+    private val onCrimeSwiped:       (crime: Crime) -> Unit,
+    private val onCrimeMoved:        (fromPosition: Int, toPosition: Int) -> Unit
 ) : ListAdapter<Crime, CrimesAdapter.BaseViewHolder>(ItemCallback),
     View.OnClickListener,
     ItemTouchHelperAdapter {
