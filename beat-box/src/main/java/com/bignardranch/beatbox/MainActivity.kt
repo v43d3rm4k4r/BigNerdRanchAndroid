@@ -12,7 +12,7 @@ import com.bignardranch.beatbox.databinding.ListItemSoundBinding
 import com.bignardranch.beatbox.model.BeatBox
 import com.bignardranch.beatbox.model.Sound
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var beatBox: BeatBox
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         beatBox = BeatBox(assets)
 
