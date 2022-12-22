@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
-import android.widget.Toast
 
-import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,9 +15,9 @@ import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.contracts.navigator
 import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.CrimesAdapter
 import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.SimpleItemTouchHelperCallback
-import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignerdranch.android.criminalintent.model.Crime
+import com.bignerdranch.android.criminalintent.utils.showToast
 
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -82,10 +80,6 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private fun onCrimeMoved(fromPosition: Int, toPosition: Int) {
         TODO("No needed in this app, for now")
     }
-
-    private fun showToast(@StringRes resId: Int) = showToast(getString(resId))
-
-    private fun showToast(msg: String) = Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -76,7 +76,7 @@ class CrimeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         crime = Crime()
         val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        crimeViewModel.loadCrime(crimeId) // TODO: load crime only for the first time
+        crimeViewModel.loadCrime(crimeId)
     }
 
     override fun onCreateView(
@@ -109,6 +109,9 @@ class CrimeFragment : Fragment() {
         val packageManager = requireActivity().packageManager
 
         with(binding) {
+
+            // TODO: crimePhoto.setOnClickListener {} // add zoom in/out
+
             crimeTitleTextView.doOnTextChanged { text, _, _, _ -> crime = crime.copy(title = text.toString()) }
             crimeSolvedCheckbox.setOnCheckedChangeListener  { _, isChecked ->
                 crime = crime.copy(isSolved = isChecked, requiresPolice = !isChecked)
@@ -322,7 +325,6 @@ class CrimeFragment : Fragment() {
         return getString(R.string.crime_report, crime.title, dateString, solvedString, suspect)
     }
 
-    // TODO: make Fragment/Activity extension
     private fun resolveActivityFor(view: View, intent: Intent): Boolean {
         val packageManager = requireActivity().packageManager
         val resolvedActivity = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
