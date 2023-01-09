@@ -1,11 +1,8 @@
 package com.bignardranch.beatbox.model
 
-class Sound(val assetPath: String) {
+class Sound(val assetPath: String,
+            var soundId: Int? = null
+) {
 
-    val name = assetPath.split('/').last().removeSuffix(WAV)
-
-    private companion object {
-
-        const val WAV = ".WAV"
-    }
+    val name = assetPath.split('/').last().removeSuffix(".wav")
 }
