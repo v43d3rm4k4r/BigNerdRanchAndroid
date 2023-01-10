@@ -7,6 +7,10 @@ import android.util.Log
 import java.io.IOException
 
 // TODO: should this class belong to the model layer?
+/**
+ * - Loads sounds from assets
+ * - Plays the specified sound
+ */
 class BeatBox(
     private val assets: AssetManager
     ) {
@@ -49,6 +53,8 @@ class BeatBox(
             soundPool.play(it, 1.0f, 1.0f, 1, 0, 1.0f)
         }
     }
+
+    fun release() = soundPool.release()
 
     private companion object {
 

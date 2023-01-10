@@ -6,15 +6,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
 import com.bignardranch.beatbox.databinding.ActivityMainBinding
-import com.bignardranch.beatbox.model.BeatBox
 import com.bignardranch.beatbox.model.Sound
 import com.bignardranch.beatbox.viewmodel.SoundViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var beatBox: BeatBox
-    private val soundViewModel: SoundViewModel by viewModels()
+    private val soundViewModel: SoundViewModel by viewModels { factory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +20,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        beatBox = BeatBox(assets)
-
         binding.recyclerView.apply {
-            adapter = SoundAdapter(beatBox.sounds, ::onSoundClicked)
+            adapter = SoundAdapter(beatBoxApplication.beatBox.sounds, ::onSoundClicked)
         }
     }
 
     private fun onSoundClicked(sound: Sound) = soundViewModel.onSoundClicked(sound)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        beatBoxApplication.beatBox.release()
+    }
 }
