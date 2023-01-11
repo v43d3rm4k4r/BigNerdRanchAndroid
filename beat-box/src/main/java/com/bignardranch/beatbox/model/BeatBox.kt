@@ -15,12 +15,20 @@ class BeatBox(
     private val assets: AssetManager
     ) {
 
-    private val soundPool = SoundPool.Builder()
-        .setMaxStreams(MAX_SOUNDS)
-        .build()
+    private var soundPool: SoundPool? = buildSoundPool()
     val sounds: List<Sound> = loadSounds()
 
+    private fun buildSoundPool(): SoundPool = SoundPool.Builder()
+        .setMaxStreams(MAX_SOUNDS)
+        .build()
+
+    fun loadSoundsIfNeeded() {
+        if (sounds.isNotEmpty()) return
+        loadSounds()
+    }
+
     private fun loadSounds(): List<Sound> {
+        if (soundPool == null) soundPool = buildSoundPool()
         val soundNames: Array<String>
         try {
             soundNames = assets.list(SOUNDS_FOLDER_NAME)!!
@@ -44,17 +52,20 @@ class BeatBox(
 
     private fun load(sound: Sound) {
         val afd: AssetFileDescriptor = assets.openFd(sound.assetPath)
-        val soundId = soundPool.load(afd, 1)
+        val soundId = soundPool?.load(afd, 1)
         sound.soundId = soundId
     }
 
     fun play(sound: Sound) {
         sound.soundId?.let {
-            soundPool.play(it, 1.0f, 1.0f, 1, 0, 1.0f)
+            soundPool?.play(it, 1.0f, 1.0f, 1, 0, 1.0f)
         }
     }
 
-    fun release() = soundPool.release()
+    fun release() {
+        soundPool?.release()
+        soundPool = null
+    }
 
     private companion object {
 

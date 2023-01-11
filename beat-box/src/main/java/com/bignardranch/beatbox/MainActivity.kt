@@ -27,8 +27,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun onSoundClicked(sound: Sound) = soundViewModel.onSoundClicked(sound)
 
-    override fun onDestroy() {
-        super.onDestroy()
-        beatBoxApplication.beatBox.release()
+    override fun onStart() {
+        super.onStart()
+        soundViewModel.loadSoundsIfNeeded()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        soundViewModel.release()
     }
 }

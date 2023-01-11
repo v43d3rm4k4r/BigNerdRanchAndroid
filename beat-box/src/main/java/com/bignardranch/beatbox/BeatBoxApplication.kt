@@ -5,5 +5,10 @@ import com.bignardranch.beatbox.model.BeatBox
 
 class BeatBoxApplication : Application() {
 
-    val beatBox by lazy { BeatBox(assets) }
+    lateinit var beatBox: BeatBox
+
+    override fun onCreate() {
+        super.onCreate()
+        beatBox = BeatBox(assets)
+    }
 }

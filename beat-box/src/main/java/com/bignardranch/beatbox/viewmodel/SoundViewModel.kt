@@ -8,7 +8,9 @@ import com.bignardranch.beatbox.model.BeatBox
 
 import com.bignardranch.beatbox.model.Sound
 
-class SoundViewModel(private val beatBox: BeatBox) : ViewModel() {
+class SoundViewModel(
+    private val beatBox: BeatBox
+) : ViewModel() {
 
 //    var sound: Sound? = null
 //        set(sound) {
@@ -23,6 +25,10 @@ class SoundViewModel(private val beatBox: BeatBox) : ViewModel() {
 //    var titleLiveData: LiveData<String?> = Transformations.switchMap(_sound) { sound ->
 //        MutableLiveData(sound?.name)
 //    }
+
+    fun loadSoundsIfNeeded() = beatBox.loadSoundsIfNeeded()
+
+    fun release() = beatBox.release()
 
     fun onSoundClicked(sound: Sound) =
         sound.let {
