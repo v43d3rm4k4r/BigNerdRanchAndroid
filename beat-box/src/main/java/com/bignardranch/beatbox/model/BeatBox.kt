@@ -4,16 +4,16 @@ import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
 import android.media.SoundPool
 import android.util.Log
+
 import java.io.IOException
 
-// TODO: should this class belong to the model layer?
 /**
  * - Loads sounds from assets
  * - Plays the specified sound
  */
 class BeatBox(
     private val assets: AssetManager
-    ) {
+) {
 
     private var soundPool: SoundPool? = buildSoundPool()
     val sounds: List<Sound> = loadSounds()
@@ -23,12 +23,11 @@ class BeatBox(
         .build()
 
     fun loadSoundsIfNeeded() {
-        if (sounds.isNotEmpty()) return
+        if (soundPool == null) soundPool = buildSoundPool()
         loadSounds()
     }
 
     private fun loadSounds(): List<Sound> {
-        if (soundPool == null) soundPool = buildSoundPool()
         val soundNames: Array<String>
         try {
             soundNames = assets.list(SOUNDS_FOLDER_NAME)!!
@@ -56,9 +55,9 @@ class BeatBox(
         sound.soundId = soundId
     }
 
-    fun play(sound: Sound) {
+    fun play(sound: Sound, rate: Int = 100) {
         sound.soundId?.let {
-            soundPool?.play(it, 1.0f, 1.0f, 1, 0, 1.0f)
+            soundPool?.play(it, 1.0f, 1.0f, 1, 0, rate.toFloat() / 100)
         }
     }
 
