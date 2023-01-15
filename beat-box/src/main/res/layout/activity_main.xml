@@ -15,6 +15,7 @@
         android:padding="4dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
+        android:scrollbars="vertical"
         tools:itemCount="15"
         tools:listitem="@layout/list_item_sound">
     </androidx.recyclerview.widget.RecyclerView>
