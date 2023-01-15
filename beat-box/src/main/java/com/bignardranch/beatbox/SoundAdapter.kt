@@ -39,8 +39,7 @@ class SoundAdapter(
         fun bind(sound: Sound) {
             with(binding) {
                 soundButton.tag  = sound
-                val test = sound.name
-                soundButton.text = sound.name
+                soundButton.text = sound.name.drop(3) // removing weird prefixes
             }
         }
     }
