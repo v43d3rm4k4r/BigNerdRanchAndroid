@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(),
 
         binding.recyclerView.apply {
             adapter = SoundAdapter(beatBoxApplication.beatBox.sounds, ::onSoundClicked)
-            addItemDecoration(SpacingItemDecorator((resources.displayMetrics.density * 4).toInt()))
+//            addItemDecoration(SpacingItemDecorator((resources.displayMetrics.density * 4).toInt()))
         }
 
         binding.playSpeedSeekBar.setOnSeekBarChangeListener(this)
