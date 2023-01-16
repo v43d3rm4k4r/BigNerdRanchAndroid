@@ -23,7 +23,7 @@ class SoundAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SoundHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemSoundBinding.inflate(layoutInflater).apply {
-            root.setOnClickListener(this@SoundAdapter)
+            soundButton.setOnClickListener(this@SoundAdapter)
         }
         return SoundHolder(binding)
     }
