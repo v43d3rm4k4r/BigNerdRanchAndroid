@@ -35,7 +35,7 @@ internal class SoundViewModelTest {
 //        assertThat(subject.title.value, `is`(sound.name))
 
     @Test
-    fun callsBeatBoxPlayOnButtonClicked() {
+    fun `calls beatBoxPlayOnButtonClicked() method`() {
         subject.onSoundClicked(sound)
 
         verify(beatBox).play(sound)
