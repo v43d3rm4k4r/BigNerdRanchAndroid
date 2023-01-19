@@ -16,7 +16,7 @@ import org.junit.Assert.*
 import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+internal class MainActivityTest {
 
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
@@ -30,13 +30,17 @@ class MainActivityTest {
 
     @Test
     fun showsFirstFileName() {
-        onView(withText("65_cjipie"))
+        onView(withText(BUTTON_TEXT))
             .check(matches(isDisplayed()))
     }
 
     @Test
     fun playsSound() {
-        onView(withText("65_cjipie"))
+        onView(withText(BUTTON_TEXT))
             .perform(click())
+    }
+
+    private companion object {
+        const val BUTTON_TEXT = "cjipie"
     }
 }
