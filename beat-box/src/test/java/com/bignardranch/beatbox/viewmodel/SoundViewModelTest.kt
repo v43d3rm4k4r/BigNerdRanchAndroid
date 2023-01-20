@@ -22,11 +22,17 @@ internal class SoundViewModelTest {
     private lateinit var sound: Sound
     private lateinit var subject: SoundViewModel
 
+    private fun createSoundViewModel(beatBox: BeatBox) =
+        SoundViewModel(beatBox)
+
+    private fun createSound(assetPath: String, soundId: Int? = null) =
+        Sound(assetPath, soundId)
+
     @Before
     fun setUp() {
         beatBox = mock(BeatBox::class.java)
-        sound = Sound("assetPath")
-        subject = SoundViewModel(beatBox)
+        sound   = createSound("assetPath")
+        subject = createSoundViewModel(beatBox)
         //subject.sound = sound
     }
 
