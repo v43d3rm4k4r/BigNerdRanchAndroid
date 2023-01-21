@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:padding="4dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
+        app:spanCount="6"
         android:scrollbars="vertical"
         tools:itemCount="15"
         tools:listitem="@layout/list_item_sound"/>
@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:min="25"
         android:max="200"
         android:progress="100"/>
 
