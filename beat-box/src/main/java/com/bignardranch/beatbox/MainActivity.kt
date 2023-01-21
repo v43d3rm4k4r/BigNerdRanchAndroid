@@ -13,28 +13,29 @@ import com.bignardranch.beatbox.model.Sound
 import com.bignardranch.beatbox.viewmodel.SoundViewModel
 
 class MainActivity : AppCompatActivity(),
-    SeekBar.OnSeekBarChangeListener {
+    OnSeekBarChangeListener {
 
     private lateinit var binding: ActivityMainBinding
     private val soundViewModel: SoundViewModel by viewModels { factory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupUI()
+    }
 
+    private fun setupUI() {
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.recyclerView.apply {
-            adapter = SoundAdapter(beatBoxApplication.beatBox.sounds, ::onSoundClicked)
+        with(binding) {
+            setContentView(root)
+            recyclerView.adapter = SoundAdapter(beatBoxApplication.beatBox.sounds, ::onSoundClicked)
 //            addItemDecoration(SpacingItemDecorator((resources.displayMetrics.density * 4).toInt()))
+            playSpeedSeekBar.setOnSeekBarChangeListener(this@MainActivity)
+
+            soundViewModel.playbackSpeed.observe(this@MainActivity, Observer { value ->
+                playSpeedValue.text = getString(R.string.playback_speed, value)
+                playSpeedSeekBar.progress = value
+            })
         }
-
-        binding.playSpeedSeekBar.setOnSeekBarChangeListener(this)
-
-        soundViewModel.playbackSpeed.observe(this, Observer { value ->
-            binding.playSpeedValue.text = getString(R.string.playback_speed, value)
-            binding.playSpeedSeekBar.progress = value
-        })
     }
 
     private fun onSoundClicked(sound: Sound) = soundViewModel.onSoundClicked(sound)
