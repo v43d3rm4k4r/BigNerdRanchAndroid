@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.bignardranch.android"
+        applicationId "com.bignerdranch.android.geoquiz"
         minSdk 21
         targetSdk 33
         versionCode 1
