@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bignerdranch.android.nerdlauncher">
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
