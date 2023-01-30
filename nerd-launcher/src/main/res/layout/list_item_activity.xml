@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     android:clickable="true"
     android:focusable="true"
+    android:padding="8dp"
     android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/activity_title_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_height="match_parent"
         tools:text="Launchable Activity Label" />
 
 </FrameLayout>

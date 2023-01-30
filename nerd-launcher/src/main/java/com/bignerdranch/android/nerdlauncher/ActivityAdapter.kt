@@ -22,7 +22,7 @@ class ActivityAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ListItemActivityBinding.inflate(layoutInflater).apply {
+        val binding = ListItemActivityBinding.inflate(layoutInflater, parent, false).apply {
             root.setOnClickListener(this@ActivityAdapter)
         }
         return ActivityHolder(binding)
