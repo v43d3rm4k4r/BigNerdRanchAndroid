@@ -11,6 +11,8 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bignerdranch.android.nerdlauncher.databinding.ActivityNerdLauncherBinding
 
+// TODO: add uninstall apps on swipe
+
 class NerdLauncherActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNerdLauncherBinding
