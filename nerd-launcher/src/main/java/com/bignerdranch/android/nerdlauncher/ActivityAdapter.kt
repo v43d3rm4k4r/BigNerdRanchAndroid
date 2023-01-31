@@ -40,7 +40,7 @@ class ActivityAdapter(
         fun bind(resolveInfo: ResolveInfo) {
             with(binding) {
                 root.tag  = resolveInfo
-                activityTitleTextView.text = Strings.get(
+                activityTitleTextView.text = root.context.getString(
                     R.string.activity_label_extended,
                     resolveInfo.loadLabel(packageManager).toString(),
                     resolveInfo.activityInfo.applicationInfo.packageName,
