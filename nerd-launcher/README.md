@@ -7,3 +7,5 @@ An application launcher that can be used instead of the default one.
 
 ### Additionally added:
 - Full names of packages and launched activities
+- Launched activities icons
+- `TODO:` deleting apps by swap gesture
