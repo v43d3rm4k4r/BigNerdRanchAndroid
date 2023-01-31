@@ -40,6 +40,10 @@ class ActivityAdapter(
         fun bind(resolveInfo: ResolveInfo) {
             with(binding) {
                 root.tag  = resolveInfo
+
+                // TODO: get application label
+                resolveInfo.loadIcon(packageManager)
+
                 activityTitleTextView.text = root.context.getString(
                     R.string.activity_label_extended,
                     resolveInfo.loadLabel(packageManager).toString(),
