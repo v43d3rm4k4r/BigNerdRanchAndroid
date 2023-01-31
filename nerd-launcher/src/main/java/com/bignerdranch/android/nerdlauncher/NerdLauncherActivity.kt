@@ -31,7 +31,7 @@ class NerdLauncherActivity : AppCompatActivity() {
             appRecyclerView.addItemDecoration(dividerItemDecoration)
         }
     }
-    
+
     private fun queryLaunchableActivities(): List<ResolveInfo> {
         val startupIntent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
@@ -54,6 +54,7 @@ class NerdLauncherActivity : AppCompatActivity() {
 
         val intent = Intent(Intent.ACTION_MAIN).apply {
             setClassName(activityInfo.applicationInfo.packageName, activityInfo.name)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         startActivity(intent)
     }
