@@ -2,6 +2,7 @@ package com.bignerdranch.android.nerdlauncher
 
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +40,12 @@ class ActivityAdapter(
         fun bind(resolveInfo: ResolveInfo) {
             with(binding) {
                 root.tag  = resolveInfo
-                activityTitleTextView.text = resolveInfo.loadLabel(packageManager).toString()
+                activityTitleTextView.text = Strings.get(
+                    R.string.activity_label_extended,
+                    resolveInfo.loadLabel(packageManager).toString(),
+                    resolveInfo.activityInfo.applicationInfo.packageName,
+                    resolveInfo.activityInfo.name
+                )
             }
         }
     }

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.bignerdranch.android.nerdlauncher.databinding.ActivityNerdLauncherBinding
 
 class NerdLauncherActivity : AppCompatActivity() {
@@ -16,20 +18,20 @@ class NerdLauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUI()
-        setupAdapter()
     }
 
     private fun setupUI() {
         binding = ActivityNerdLauncherBinding.inflate(layoutInflater).apply {
             setContentView(root)
+
+            val activities = queryLaunchableActivities()
+            appRecyclerView.adapter = ActivityAdapter(activities, packageManager, ::onActivityClicked)
+
+            val dividerItemDecoration = DividerItemDecoration(this@NerdLauncherActivity, LinearLayout.VERTICAL)
+            appRecyclerView.addItemDecoration(dividerItemDecoration)
         }
     }
-
-    private fun setupAdapter() {
-        val activities = queryLaunchableActivities()
-        binding.appRecyclerView.adapter = ActivityAdapter(activities, packageManager, ::onActivityClicked)
-    }
-
+    
     private fun queryLaunchableActivities(): List<ResolveInfo> {
         val startupIntent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
