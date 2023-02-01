@@ -21,7 +21,7 @@ import kotlin.math.roundToInt
 class SimpleItemTouchHelperCallback(
     private val resources: Resources,
     private val adapter: ItemTouchHelperAdapter
-    ) : ItemTouchHelper.Callback() {
+) : ItemTouchHelper.Callback() {
 
     // Using resources for onChildDraw()
     private val displayMetrics = resources.displayMetrics
@@ -46,9 +46,8 @@ class SimpleItemTouchHelperCallback(
         return true
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) =
         adapter.onItemDismiss(viewHolder.adapterPosition);
-    }
 
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float = .33F
 
@@ -86,21 +85,23 @@ class SimpleItemTouchHelperCallback(
         //2. Printing the icons
         val textMargin = resources.getDimension(R.dimen.text_margin)
             .roundToInt()
+        val verticalOffset = (viewHolder.itemView.bottom - viewHolder.itemView.top) / 3
+
         deleteIcon.bounds = if (dX > 0) {
             Rect(
                 textMargin,
-                viewHolder.itemView.top + textMargin + 8.dp,
+                viewHolder.itemView.top + verticalOffset,
                 textMargin + deleteIcon.intrinsicWidth,
-                viewHolder.itemView.top + deleteIcon.intrinsicHeight
-                        + textMargin + 8.dp
+                viewHolder.itemView.top + verticalOffset + deleteIcon.intrinsicHeight
             )
         } else {
+//            val top_source    = viewHolder.itemView.top + textMargin + 8.dp
+//            val bottom_source = viewHolder.itemView.top + deleteIcon.intrinsicHeight + textMargin + 8.dp
             Rect(
                 width - textMargin - deleteIcon.intrinsicWidth,
-                viewHolder.itemView.top + textMargin + 8.dp,
+                viewHolder.itemView.top + verticalOffset,
                 width - textMargin,
-                viewHolder.itemView.top + deleteIcon.intrinsicHeight
-                        + textMargin + 8.dp
+                viewHolder.itemView.top + verticalOffset + deleteIcon.intrinsicHeight
             )
         }
 
