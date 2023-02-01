@@ -1,20 +1,22 @@
-package com.bignerdranch.android.nerdlauncher
+package com.bignerdranch.android.nerdlauncher.recyclerviewutils
 
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.nerdlauncher.R
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
 
 class ActivityAdapter(
     private val activities: List<ResolveInfo>,
     private val packageManager: PackageManager,
-    private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit
+    private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit,
+    private val onItemSwapped: (position: Int) -> Unit
 ) : RecyclerView.Adapter<ActivityAdapter.ActivityHolder>(),
-    View.OnClickListener {
+    View.OnClickListener,
+    ItemTouchHelperAdapter {
 
     override fun onClick(view: View) {
         val resolveInfo = view.tag as ResolveInfo
@@ -34,15 +36,21 @@ class ActivityAdapter(
 
     override fun getItemCount(): Int = activities.size
 
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {}
+
+    /**
+     * [ItemTouchHelperAdapter] implementation:
+     */
+    override fun onItemDismiss(position: Int) = onItemSwapped(position)
+
     inner class ActivityHolder(private val binding: ListItemActivityBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(resolveInfo: ResolveInfo) {
+        fun bind(resolveInfo: ResolveInfo) =
             with(binding) {
                 root.tag  = resolveInfo
 
-                // TODO: get application label
-                resolveInfo.loadIcon(packageManager)
+                appImageView.setImageDrawable(resolveInfo.loadIcon(packageManager))
 
                 activityTitleTextView.text = root.context.getString(
                     R.string.activity_label_extended,
@@ -51,6 +59,5 @@ class ActivityAdapter(
                     resolveInfo.activityInfo.name
                 )
             }
-        }
     }
 }
