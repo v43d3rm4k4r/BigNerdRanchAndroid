@@ -11,16 +11,16 @@ fun LifecycleOwner.showToast(msg: String) {
     val context = when (this) {
         is Activity -> this
         is Fragment -> requireContext()
-        else        -> null
+        else        -> return
     }
-    context.let { Toast.makeText(it, msg, Toast.LENGTH_SHORT).show() }
+    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }
 
 fun LifecycleOwner.showToast(@StringRes resId: Int) {
     val str = when (this) {
         is Activity -> getString(resId)
         is Fragment -> getString(resId)
-        else        -> null
+        else        -> return
     }
-    str?.let { showToast(it) }
+    showToast(str)
 }
