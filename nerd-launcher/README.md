@@ -9,3 +9,6 @@ An application launcher that can be used instead of the default one.
 - Full names of packages and launched activities
 - Launched activities icons
 - `TODO:` deleting apps by swap gesture
+
+---
+![Image alt](https://github.com/v43d3rm4k4r/BigNerdRanchAndroid/blob/main/nerd-launcher/screens/1.jpg)  
