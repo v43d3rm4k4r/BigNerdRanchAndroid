@@ -21,6 +21,7 @@
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="crime_call_suspect_text">Call Suspect</string>
     <string name="crime_call_suspect_disabled_text">Choose suspect first to call it</string>
+    <string name="crime_saved">Crime Saved</string>
     <string name="send_report">Send crime report via</string>
     <string name="no_crimes">No crimes yet.</string>
     <string name="tools_date">18 November 2022, 12:00</string>

@@ -20,6 +20,7 @@
     <string name="crime_report_subject">Отчёт о преступлении CriminalIntent</string>
     <string name="crime_call_suspect_text">Вызвать подозреваемого</string>
     <string name="crime_call_suspect_disabled_text">Выберите подозреваемого для звонка</string>
+    <string name="crime_saved">Преступление сохранено</string>
     <string name="send_report">Послать отчёт через</string>
     <string name="crime_title_label">Имя</string>
     <string name="no_crimes">Ещё нет преступлений.</string>

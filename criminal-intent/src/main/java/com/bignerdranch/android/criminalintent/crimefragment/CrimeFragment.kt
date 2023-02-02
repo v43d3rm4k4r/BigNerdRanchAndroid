@@ -31,6 +31,7 @@ import com.bignerdranch.android.criminalintent.crimefragment.datetimefragments.T
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.utils.getScaledBitmap
+import com.bignerdranch.android.criminalintent.utils.showToast
 
 import java.io.File
 import java.text.SimpleDateFormat
@@ -60,7 +61,7 @@ class CrimeFragment : Fragment() {
             it.moveToFirst()
             val suspectStr = it.getString(0)
             crime = crime.copy(suspect = suspectStr)
-            crimeViewModel.saveCrime(crime)
+            crimeViewModel.updateCrime(crime)
             binding.crimeChooseSuspectButton.text = getString(R.string.crime_suspect_text, suspectStr)
         }
     }
@@ -220,7 +221,12 @@ class CrimeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        crimeViewModel.saveCrime(crime)
+        if (crime.title.isBlank() || crime.title.isEmpty())
+            crimeViewModel.deleteCrime(crime)
+        else {
+            crimeViewModel.updateCrime(crime)
+            showToast(R.string.crime_saved)
+        }
         binding.progressBar.isVisible = true
     }
 
@@ -269,12 +275,12 @@ class CrimeFragment : Fragment() {
     }
 
     private fun updatePhotoView() {
-        if (photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-            binding.crimePhoto.setImageBitmap(bitmap)
+        val bitmap = if (photoFile.exists()) {
+            getScaledBitmap(photoFile.path, requireActivity())
         } else {
-            binding.crimePhoto.setImageBitmap(null)
+            null
         }
+        binding.crimePhoto.setImageBitmap(bitmap)
     }
 
     private fun showDatePickerDialogFragment() {
