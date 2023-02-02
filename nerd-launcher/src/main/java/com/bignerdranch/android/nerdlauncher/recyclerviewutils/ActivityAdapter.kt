@@ -1,22 +1,19 @@
 package com.bignerdranch.android.nerdlauncher.recyclerviewutils
 
-import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
-import com.bignerdranch.android.nerdlauncher.R
+import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.nerdlauncher.NerdLauncherUiItem
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
 
 class ActivityAdapter(
-    private val activities: List<ResolveInfo>,
-    private val packageManager: PackageManager,
     private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit,
     private val onItemSwapped: (position: Int) -> Unit
-) : ListAdapter<ResolveInfo, ActivityAdapter.ActivityHolder>(ItemCallback),
+) : ListAdapter<NerdLauncherUiItem, ActivityAdapter.ActivityHolder>(ItemCallback),
     View.OnClickListener,
     ItemTouchHelperAdapter {
 
@@ -34,9 +31,7 @@ class ActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: ActivityHolder, position: Int) =
-        holder.bind(activities[position])
-
-    override fun getItemCount(): Int = activities.size
+        holder.bind(getItem(position))
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {}
 
@@ -48,26 +43,20 @@ class ActivityAdapter(
     inner class ActivityHolder(private val binding: ListItemActivityBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(resolveInfo: ResolveInfo) =
+        fun bind(item: NerdLauncherUiItem) =
             with(binding) {
-                root.tag  = resolveInfo
+                root.tag  = item.resolveInfo
 
-                appImageView.setImageDrawable(resolveInfo.loadIcon(packageManager))
-
-                activityTitleTextView.text = root.context.getString(
-                    R.string.activity_label_extended,
-                    resolveInfo.loadLabel(packageManager).toString(),
-                    resolveInfo.activityInfo.applicationInfo.packageName,
-                    resolveInfo.activityInfo.name
-                )
+                appImageView.setImageDrawable(item.icon)
+                activityTitleTextView.text = item.title
             }
     }
 
-    object ItemCallback : DiffUtil.ItemCallback<ResolveInfo>() {
-        override fun areItemsTheSame(oldItem: ResolveInfo, newItem: ResolveInfo): Boolean =
-            oldItem.activityInfo.packageName == newItem.activityInfo.packageName
+    object ItemCallback : DiffUtil.ItemCallback<NerdLauncherUiItem>() {
+        override fun areItemsTheSame(oldItem: NerdLauncherUiItem, newItem: NerdLauncherUiItem): Boolean =
+            oldItem.resolveInfo.activityInfo.packageName == newItem.resolveInfo.activityInfo.packageName
 
-        override fun areContentsTheSame(oldItem: ResolveInfo, newItem: ResolveInfo): Boolean =
-            oldItem.activityInfo.packageName == newItem.activityInfo.packageName
+        override fun areContentsTheSame(oldItem: NerdLauncherUiItem, newItem: NerdLauncherUiItem): Boolean =
+            oldItem.resolveInfo.activityInfo.packageName == newItem.resolveInfo.activityInfo.packageName
     }
 }

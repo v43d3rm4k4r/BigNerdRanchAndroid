@@ -28,8 +28,11 @@ class NerdLauncherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNerdLauncherBinding
     private val viewModel by lazyViewModel { NerdLauncherViewModel(initQueryLaunchableActivities()) }
     private val adapter by fastLazy {
-        ActivityAdapter(viewModel.activitiesLiveData.value!!, packageManager, ::onActivityClicked, ::onActivityDelete)
+        ActivityAdapter(::onActivityClicked, ::onActivityDelete)
     }
+
+    private val uiItemMapper by fastLazy { NerdLauncherUiItemMapper(packageManager, this) }
+
     private var appIndexToDelete: Int? = null
     private val removeActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -65,7 +68,7 @@ class NerdLauncherActivity : AppCompatActivity() {
     private fun observeActivities() {
         viewModel.activitiesLiveData.observe(this) { apps ->
             Log.i(TAG, "Got activities ${apps.size}")
-            adapter.submitList(apps)
+            adapter.submitList(apps.map(uiItemMapper::map))
         }
     }
 
