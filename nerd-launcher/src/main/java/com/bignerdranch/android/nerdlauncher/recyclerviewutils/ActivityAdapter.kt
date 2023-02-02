@@ -5,7 +5,9 @@ import android.content.pm.ResolveInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.bignerdranch.android.nerdlauncher.R
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
 
@@ -14,7 +16,7 @@ class ActivityAdapter(
     private val packageManager: PackageManager,
     private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit,
     private val onItemSwapped: (position: Int) -> Unit
-) : RecyclerView.Adapter<ActivityAdapter.ActivityHolder>(),
+) : ListAdapter<ResolveInfo, ActivityAdapter.ActivityHolder>(ItemCallback),
     View.OnClickListener,
     ItemTouchHelperAdapter {
 
@@ -59,5 +61,13 @@ class ActivityAdapter(
                     resolveInfo.activityInfo.name
                 )
             }
+    }
+
+    object ItemCallback : DiffUtil.ItemCallback<ResolveInfo>() {
+        override fun areItemsTheSame(oldItem: ResolveInfo, newItem: ResolveInfo): Boolean =
+            oldItem.activityInfo.packageName == newItem.activityInfo.packageName
+
+        override fun areContentsTheSame(oldItem: ResolveInfo, newItem: ResolveInfo): Boolean =
+            oldItem.activityInfo.packageName == newItem.activityInfo.packageName
     }
 }

@@ -10,5 +10,4 @@
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:context=".NerdLauncherActivity"
     tools:itemCount="15"
-    tools:listitem="@layout/list_item_activity"
-    android:theme="@style/ItemStyle"/>
+    tools:listitem="@layout/list_item_activity"/>
