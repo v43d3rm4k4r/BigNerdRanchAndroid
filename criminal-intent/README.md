@@ -19,3 +19,7 @@ A single-Activity application with MVC architecture that provides a criminal int
 ### Additionally added:
 - Swipe-to-dismiss implementation
 - RecyclerView items animations & decorations 
+
+---
+![Image alt](https://github.com/v43d3rm4k4r/BigNerdRanchAndroid/blob/main/criminal-intent/screens/1.jpg)  
+![Image alt](https://github.com/v43d3rm4k4r/BigNerdRanchAndroid/blob/main/criminal-intent/screens/2.jpg)  
