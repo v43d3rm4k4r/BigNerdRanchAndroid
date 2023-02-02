@@ -39,7 +39,6 @@ import java.util.*
 
 class CrimeFragment : Fragment() {
 
-
     private var _binding: FragmentCrimeBinding? = null
     private val binding:  FragmentCrimeBinding
         get() = _binding!!

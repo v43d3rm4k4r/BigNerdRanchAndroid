@@ -16,9 +16,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".crimelistfragment.CrimeListFragment"
         tools:itemCount="5"
-        tools:listitem="@layout/list_item_crime">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/list_item_crime"/>
 
     <TextView
         android:id="@+id/noUsersTextView"
