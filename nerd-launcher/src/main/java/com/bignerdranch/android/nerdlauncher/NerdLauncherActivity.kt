@@ -8,16 +8,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
-
 import com.bignerdranch.android.nerdlauncher.databinding.ActivityNerdLauncherBinding
 import com.bignerdranch.android.nerdlauncher.recyclerviewutils.ActivityAdapter
 import com.bignerdranch.android.nerdlauncher.recyclerviewutils.SimpleItemTouchHelperCallback
 import com.bignerdranch.android.nerdlauncher.utils.showToast
-
 import kotlin.LazyThreadSafetyMode.NONE
 
 // TODO: add view model
@@ -25,6 +22,8 @@ import kotlin.LazyThreadSafetyMode.NONE
 // TODO: use ListAdapter?
 
 class NerdLauncherActivity : AppCompatActivity() {
+
+    private val uiItemMapper by lazy(NONE) { NerdLauncherItemUiMapper(packageManager, this) }
 
     private lateinit var binding: ActivityNerdLauncherBinding
     private val activities by lazy(NONE) { queryLaunchableActivities() }
@@ -45,7 +44,7 @@ class NerdLauncherActivity : AppCompatActivity() {
         binding = ActivityNerdLauncherBinding.inflate(layoutInflater).apply {
             setContentView(root)
 
-            val adapter = ActivityAdapter(activities, packageManager, ::onActivityClicked, ::onActivityDeleted)
+            val adapter = ActivityAdapter(activities.map(uiItemMapper::map), ::onActivityClicked, ::onActivityDeleted)
             appRecyclerView.adapter = adapter
 
             val callback = SimpleItemTouchHelperCallback(resources, adapter)

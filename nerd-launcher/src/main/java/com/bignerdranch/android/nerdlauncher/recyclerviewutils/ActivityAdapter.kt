@@ -1,17 +1,15 @@
 package com.bignerdranch.android.nerdlauncher.recyclerviewutils
 
-import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.nerdlauncher.R
+import com.bignerdranch.android.nerdlauncher.NerdLauncherUiItem
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
 
 class ActivityAdapter(
-    private val activities: List<ResolveInfo>,
-    private val packageManager: PackageManager,
+    private val activities: List<NerdLauncherUiItem>,
     private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit,
     private val onItemSwapped: (position: Int) -> Unit
 ) : RecyclerView.Adapter<ActivityAdapter.ActivityHolder>(),
@@ -46,18 +44,12 @@ class ActivityAdapter(
     inner class ActivityHolder(private val binding: ListItemActivityBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(resolveInfo: ResolveInfo) =
+        fun bind(item: NerdLauncherUiItem) =
             with(binding) {
-                root.tag  = resolveInfo
+                root.tag  = item.data
 
-                appImageView.setImageDrawable(resolveInfo.loadIcon(packageManager))
-
-                activityTitleTextView.text = root.context.getString(
-                    R.string.activity_label_extended,
-                    resolveInfo.loadLabel(packageManager).toString(),
-                    resolveInfo.activityInfo.applicationInfo.packageName,
-                    resolveInfo.activityInfo.name
-                )
+                appImageView.setImageDrawable(item.logo)
+                activityTitleTextView.text = item.title
             }
     }
 }
