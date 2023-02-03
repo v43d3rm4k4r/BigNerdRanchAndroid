@@ -39,7 +39,7 @@ class NerdLauncherActivity : AppCompatActivity() {
             showToast("App successfully removed")
         } else {
             showToast("Something goes wrong")
-            adapter.notifyItemChanged(viewModel.appIndexToDelete!!)
+            adapter.notifyItemChanged(viewModel.appIndexToDelete)
         }
     }
 

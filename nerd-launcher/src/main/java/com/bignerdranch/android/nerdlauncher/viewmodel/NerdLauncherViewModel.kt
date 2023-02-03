@@ -12,17 +12,17 @@ class NerdLauncherViewModel(activities: List<ResolveInfo>) : ViewModel() {
 
     private val _activitiesLiveData: MutableLiveData<List<ResolveInfo>> = MutableLiveData(activities)
     val activitiesLiveData: LiveData<List<ResolveInfo>> = _activitiesLiveData
+    val activitiesLiveDataValue = activitiesLiveData.value!!
 
-    var appIndexToDelete: Int? = null
+    var appIndexToDelete = -1
 
     fun handleActivityUninstallActionResult(resultCode: Int): Boolean {
         val deleted = if (resultCode == Activity.RESULT_OK) {
-            deleteActivity(appIndexToDelete!!)
+            deleteActivity(appIndexToDelete)
             true
         } else {
             false
         }
-        appIndexToDelete = null
         return deleted
     }
 
