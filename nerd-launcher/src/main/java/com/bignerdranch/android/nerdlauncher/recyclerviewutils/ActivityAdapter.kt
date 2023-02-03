@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.nerdlauncher.utils.NerdLauncherUiItem
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
+import com.bignerdranch.android.nerdlauncher.utils.NerdLauncherUiItem
 
 class ActivityAdapter(
     private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit,
-    private val onItemSwapped: (position: Int) -> Unit
+    private val onItemSwapped: (resolveInfo: ResolveInfo) -> Unit
 ) : ListAdapter<NerdLauncherUiItem, ActivityAdapter.ActivityHolder>(ItemCallback),
     View.OnClickListener,
     ItemTouchHelperAdapter {
@@ -38,7 +38,7 @@ class ActivityAdapter(
     /**
      * [ItemTouchHelperAdapter] implementation:
      */
-    override fun onItemDismiss(position: Int) = onItemSwapped(position)
+    override fun onItemDismiss(position: Int) = onItemSwapped(getItem(position).resolveInfo)
 
     inner class ActivityHolder(private val binding: ListItemActivityBinding)
         : RecyclerView.ViewHolder(binding.root) {
