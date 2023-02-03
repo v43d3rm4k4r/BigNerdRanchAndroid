@@ -16,12 +16,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.bignerdranch.android.nerdlauncher.databinding.ActivityNerdLauncherBinding
 import com.bignerdranch.android.nerdlauncher.recyclerviewutils.ActivityAdapter
 import com.bignerdranch.android.nerdlauncher.recyclerviewutils.SimpleItemTouchHelperCallback
+import com.bignerdranch.android.nerdlauncher.utils.NerdLauncherUiItemMapper
 import com.bignerdranch.android.nerdlauncher.utils.fastLazy
 import com.bignerdranch.android.nerdlauncher.utils.lazyViewModel
 import com.bignerdranch.android.nerdlauncher.utils.showToast
 import com.bignerdranch.android.nerdlauncher.viewmodel.NerdLauncherViewModel
 
-// TODO: fix app removing
+// TODO: refactor packages
 
 class NerdLauncherActivity : AppCompatActivity() {
 
@@ -33,15 +34,13 @@ class NerdLauncherActivity : AppCompatActivity() {
 
     private val uiItemMapper by fastLazy { NerdLauncherUiItemMapper(packageManager, this) }
 
-    private var appIndexToDelete: Int? = null
     private val removeActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (viewModel.handleActivityUninstallActionResult(result.resultCode)) {
             showToast("App successfully removed")
-            viewModel.deleteActivity(appIndexToDelete!!)
         } else {
             showToast("Something goes wrong")
+            adapter.notifyItemChanged(viewModel.appIndexToDelete!!)
         }
-        appIndexToDelete = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,9 +99,9 @@ class NerdLauncherActivity : AppCompatActivity() {
     }
 
     private fun onActivityDelete(position: Int) {
-        appIndexToDelete = position
+        viewModel.appIndexToDelete = position
         val appToDelete = viewModel.activitiesLiveData.value!![position]
-        val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE).apply {
+        val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE).apply { // TODO: use new API
             data = Uri.parse("package:${appToDelete.activityInfo.packageName}")
             putExtra(Intent.EXTRA_RETURN_RESULT, true)
         }

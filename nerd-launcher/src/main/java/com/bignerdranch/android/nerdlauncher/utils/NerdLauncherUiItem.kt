@@ -1,9 +1,9 @@
-package com.bignerdranch.android.nerdlauncher
+package com.bignerdranch.android.nerdlauncher.utils
 
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
 
-class NerdLauncherUiItem(
+data class NerdLauncherUiItem(
     val resolveInfo: ResolveInfo,
     val icon: Drawable?,
     val title: String,

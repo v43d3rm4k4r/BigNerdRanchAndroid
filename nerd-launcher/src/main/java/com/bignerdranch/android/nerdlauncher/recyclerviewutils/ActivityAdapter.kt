@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.nerdlauncher.NerdLauncherUiItem
+import com.bignerdranch.android.nerdlauncher.utils.NerdLauncherUiItem
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
 
 class ActivityAdapter(

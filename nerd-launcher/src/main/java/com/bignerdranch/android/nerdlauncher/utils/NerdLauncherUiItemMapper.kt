@@ -1,8 +1,9 @@
-package com.bignerdranch.android.nerdlauncher
+package com.bignerdranch.android.nerdlauncher.utils
 
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import com.bignerdranch.android.nerdlauncher.R
 
 class NerdLauncherUiItemMapper(
     private val packageManager: PackageManager,
