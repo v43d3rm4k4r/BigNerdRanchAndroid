@@ -200,7 +200,7 @@ class CrimeFragment : Fragment() {
                 setOnClickListener {
                     captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
 
-                    val cameraActivities = packageManager.queryIntentActivities(captureImageIntent, // TODO: fix this warning
+                    val cameraActivities = packageManager.queryIntentActivities(captureImageIntent,
                         PackageManager.MATCH_DEFAULT_ONLY)
 
                     for (cameraActivity in cameraActivities) {

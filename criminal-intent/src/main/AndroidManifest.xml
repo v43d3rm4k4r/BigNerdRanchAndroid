@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bignerdranch.android.criminalintent">
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.CAMERA_BUTTON"/>
+        </intent>
+    </queries>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false"/>
@@ -43,5 +49,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files"/>
         </provider>
+
     </application>
+
 </manifest>
