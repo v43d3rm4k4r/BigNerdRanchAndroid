@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher.recyclerviewutils
+package com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils
 
 import android.content.res.Resources
 import android.graphics.Canvas

@@ -21,7 +21,7 @@
         android:theme="@style/Theme.BigNerdRanchAndroid">
 
         <activity
-            android:name=".NerdLauncherActivity"
+            android:name=".ui.NerdLauncherActivity"
             android:exported="true">
 
             <intent-filter>

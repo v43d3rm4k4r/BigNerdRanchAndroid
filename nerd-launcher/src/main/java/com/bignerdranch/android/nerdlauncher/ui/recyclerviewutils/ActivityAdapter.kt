@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher.recyclerviewutils
+package com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils
 
 import android.content.pm.ResolveInfo
 import android.view.LayoutInflater

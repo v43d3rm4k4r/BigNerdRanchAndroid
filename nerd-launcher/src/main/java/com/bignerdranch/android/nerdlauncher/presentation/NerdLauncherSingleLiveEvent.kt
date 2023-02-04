@@ -6,9 +6,9 @@ sealed class NerdLauncherSingleLiveEvent {
 
     class ShowDeleteDialog(val resolveInfo: ResolveInfo) : NerdLauncherSingleLiveEvent()
 
-    object ShowSuccessDeletingApp : NerdLauncherSingleLiveEvent()
+    object ShowDeletingAppSuccess : NerdLauncherSingleLiveEvent()
 
-    class ShowErrorDeletingApp(val itemIdx: Int) : NerdLauncherSingleLiveEvent()
+    class ShowDeletingAppError(val itemIdx: Int) : NerdLauncherSingleLiveEvent()
 
-    class ShowActivity(val resolveInfo: ResolveInfo): NerdLauncherSingleLiveEvent()
+    class ShowActivity(val resolveInfo: ResolveInfo) : NerdLauncherSingleLiveEvent()
 }

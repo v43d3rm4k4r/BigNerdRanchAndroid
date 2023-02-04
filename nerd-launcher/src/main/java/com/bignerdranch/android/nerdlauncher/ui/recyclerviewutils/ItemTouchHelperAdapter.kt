@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher.recyclerviewutils
+package com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils
 
 interface ItemTouchHelperAdapter {
 

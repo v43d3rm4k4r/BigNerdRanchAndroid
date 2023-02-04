@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher
+package com.bignerdranch.android.nerdlauncher.ui
 
 import android.content.Intent
 import android.content.pm.ResolveInfo
@@ -6,25 +6,25 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
+
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
+
 import com.bignerdranch.android.nerdlauncher.databinding.ActivityNerdLauncherBinding
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowActivity
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeleteDialog
-import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowErrorDeletingApp
-import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowSuccessDeletingApp
+import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppError
+import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppSuccess
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherViewModel
-import com.bignerdranch.android.nerdlauncher.recyclerviewutils.ActivityAdapter
-import com.bignerdranch.android.nerdlauncher.recyclerviewutils.SimpleItemTouchHelperCallback
+import com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils.ActivityAdapter
+import com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils.SimpleItemTouchHelperCallback
 import com.bignerdranch.android.nerdlauncher.utils.NerdLauncherUiItemMapper
 import com.bignerdranch.android.nerdlauncher.utils.fastLazy
 import com.bignerdranch.android.nerdlauncher.utils.lazyViewModel
 import com.bignerdranch.android.nerdlauncher.utils.showToast
-
-// TODO: refactor packages
 
 class NerdLauncherActivity : AppCompatActivity() {
 
@@ -41,7 +41,7 @@ class NerdLauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUI()
-        viewModel.state.observe(this, ::renderState)
+        viewModel.state.observe(this,  ::renderState)
         viewModel.events.observe(this, ::handleEvent)
     }
 
@@ -60,23 +60,21 @@ class NerdLauncherActivity : AppCompatActivity() {
         }
     }
 
-    private fun renderState(state: List<ResolveInfo>) {
+    private fun renderState(state: List<ResolveInfo>) =
         adapter.submitList(state.map(uiItemMapper::map))
-    }
 
-    private fun handleEvent(event: NerdLauncherSingleLiveEvent) {
+    private fun handleEvent(event: NerdLauncherSingleLiveEvent) =
         when (event) {
-            is ShowDeleteDialog -> showDeleteDialog(event.resolveInfo)
-            is ShowErrorDeletingApp -> {
+            is ShowDeleteDialog     -> showDeleteDialog(event.resolveInfo)
+            is ShowDeletingAppError -> {
                 adapter.notifyItemChanged(event.itemIdx)
                 showToast("Something goes wrong")
             }
-            ShowSuccessDeletingApp -> showToast("App successfully removed")
-            is ShowActivity -> showActivity(event.resolveInfo)
+            ShowDeletingAppSuccess  -> showToast("App successfully removed")
+            is ShowActivity         -> showActivity(event.resolveInfo)
         }
-    }
 
-    private fun initQueryLaunchableActivities(): MutableList<ResolveInfo> {
+    private fun initQueryLaunchableActivities(): List<ResolveInfo> {
         val startupIntent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
