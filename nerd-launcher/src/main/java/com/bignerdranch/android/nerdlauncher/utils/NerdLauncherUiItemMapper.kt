@@ -3,6 +3,7 @@ package com.bignerdranch.android.nerdlauncher.utils
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+
 import com.bignerdranch.android.nerdlauncher.R
 
 class NerdLauncherUiItemMapper(
@@ -10,8 +11,8 @@ class NerdLauncherUiItemMapper(
     private val context: Context,
 ) {
 
-    fun map(item: ResolveInfo): NerdLauncherUiItem {
-        return NerdLauncherUiItem(
+    fun map(item: ResolveInfo): NerdLauncherUiItem =
+        NerdLauncherUiItem(
             resolveInfo = item,
             icon = item.loadIcon(packageManager),
             title = context.getString(
@@ -21,5 +22,4 @@ class NerdLauncherUiItemMapper(
                 item.activityInfo.name
             )
         )
-    }
 }
