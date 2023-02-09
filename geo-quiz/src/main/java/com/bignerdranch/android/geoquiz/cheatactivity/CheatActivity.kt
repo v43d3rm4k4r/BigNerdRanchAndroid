@@ -10,7 +10,8 @@ import android.widget.Button
 import android.widget.TextView
 
 import androidx.appcompat.app.AppCompatActivity
-import com.bignerdranch.android.R
+
+import com.bignerdranch.android.geoquiz.R
 
 const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geoquiz.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true" // Intent extra key

@@ -2,7 +2,6 @@ package com.bignerdranch.android.geoquiz
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.bignerdranch.android.R
 import com.bignerdranch.android.geoquiz.model.CheckedQuestion
 import com.bignerdranch.android.geoquiz.model.Question
 
