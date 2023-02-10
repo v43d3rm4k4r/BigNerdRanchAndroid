@@ -22,6 +22,7 @@
 
         <activity
             android:name=".ui.NerdLauncherActivity"
+            android:launchMode="singleInstance"
             android:exported="true">
 
             <intent-filter>
