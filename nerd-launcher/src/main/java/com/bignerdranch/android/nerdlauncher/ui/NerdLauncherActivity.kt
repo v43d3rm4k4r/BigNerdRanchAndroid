@@ -21,7 +21,7 @@ import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLive
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherViewModel
 import com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils.ActivityAdapter
 import com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils.SimpleItemTouchHelperCallback
-import com.bignerdranch.android.nerdlauncher.utils.NerdLauncherUiItemMapper
+import com.bignerdranch.android.nerdlauncher.utils.ui.NerdLauncherUiItemMapper
 import com.bignerdranch.android.nerdlauncher.utils.fastLazy
 import com.bignerdranch.android.nerdlauncher.utils.lazyViewModel
 import com.bignerdranch.android.nerdlauncher.utils.showToast

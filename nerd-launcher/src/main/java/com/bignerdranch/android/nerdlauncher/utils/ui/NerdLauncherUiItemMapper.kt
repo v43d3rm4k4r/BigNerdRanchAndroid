@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher.utils
+package com.bignerdranch.android.nerdlauncher.utils.ui
 
 import android.content.Context
 import android.content.pm.PackageManager
