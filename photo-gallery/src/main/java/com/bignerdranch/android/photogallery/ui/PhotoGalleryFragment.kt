@@ -13,7 +13,8 @@ import com.bignerdranch.android.photogallery.domain.FlickrFetcher
 
 class PhotoGalleryFragment : Fragment() {
 
-    private lateinit var binding: FragmentPhotoGalleryBinding
+    private var _binding: FragmentPhotoGalleryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +25,13 @@ class PhotoGalleryFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
+        _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

@@ -28,7 +28,8 @@ import com.bignerdranch.android.nerdlauncher.utils.showToast
 
 class NerdLauncherActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityNerdLauncherBinding
+    private var _binding: ActivityNerdLauncherBinding? = null
+    private val binding get() = _binding
     private val viewModel by lazyViewModel { NerdLauncherViewModel(initQueryLaunchableActivities()) }
     private val adapter by fastLazy { ActivityAdapter(viewModel::onItemClick, viewModel::onItemDelete) }
 
@@ -46,7 +47,7 @@ class NerdLauncherActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        binding = ActivityNerdLauncherBinding.inflate(layoutInflater).apply {
+        _binding = ActivityNerdLauncherBinding.inflate(layoutInflater).apply {
             setContentView(root)
 
             appRecyclerView.adapter = adapter

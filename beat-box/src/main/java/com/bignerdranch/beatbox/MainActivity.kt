@@ -15,7 +15,9 @@ import com.bignerdranch.beatbox.viewmodel.SoundViewModel
 class MainActivity : AppCompatActivity(),
     OnSeekBarChangeListener {
 
-    private lateinit var binding: ActivityMainBinding
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+
     private val soundViewModel: SoundViewModel by viewModels { factory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupUI() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         with(binding) {
             setContentView(root)
             recyclerView.adapter = SoundAdapter(beatBoxApplication.beatBox.sounds, ::onSoundClicked)
