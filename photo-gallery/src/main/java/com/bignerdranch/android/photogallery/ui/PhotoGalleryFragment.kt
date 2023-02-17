@@ -1,7 +1,6 @@
 package com.bignerdranch.android.photogallery.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,23 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 
 import com.bignerdranch.android.photogallery.databinding.FragmentPhotoGalleryBinding
-import com.bignerdranch.android.photogallery.domain.FlickrFetcher
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
+import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
+import com.bignerdranch.android.photogallery.utils.fastLazy
 
 class PhotoGalleryFragment : Fragment() {
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
-    val viewModel by viewModels<PhotoGalleryViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val flickrLiveData = FlickrFetcher().fetchPhotos()
-        flickrLiveData.observe(this) { responseGalleryItem ->
-            Log.d(TAG, "Response received: $responseGalleryItem")
-        }
-    }
+    private val viewModel by viewModels<PhotoGalleryViewModel>()
+    private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
@@ -35,8 +28,28 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.galleryItemLiveData.observe(viewLifecycleOwner) { galleryItems ->
-            // TODO: adapter.submit(galleryItems)
+        setupUI()
+        observePhotos()
+    }
+
+    private fun observePhotos() {
+        viewModel.galleryItemsLiveData.observe(viewLifecycleOwner) { galleryItems ->
+            adapter.submitList(galleryItems)
+        }
+    }
+
+    private fun setupUI() {
+        with(binding.photoRecyclerView) {
+            adapter = this@PhotoGalleryFragment.adapter
+
+            //val callback = SimpleItemTouchHelperCallback(requireContext().resources, this@CrimeListFragment.adapter)
+            //val touchHelper = ItemTouchHelper(callback)
+            //touchHelper.attachToRecyclerView(this)
+
+            //val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayout.VERTICAL)
+            //addItemDecoration(dividerItemDecoration)
+
+            // TODO: add itemAnimator
         }
     }
 
