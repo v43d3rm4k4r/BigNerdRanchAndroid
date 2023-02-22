@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 
 import com.bignerdranch.android.photogallery.databinding.FragmentPhotoGalleryBinding
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
+import com.bignerdranch.android.photogallery.presentation.ThumbnailDownloader
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.photogallery.utils.fastLazy
 
@@ -19,7 +20,12 @@ class PhotoGalleryFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<PhotoGalleryViewModel>()
-    private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked) }
+    private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(viewModel.thumbnailDownloader)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
@@ -56,6 +62,11 @@ class PhotoGalleryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(viewModel.thumbnailDownloader)
     }
 
     companion object {

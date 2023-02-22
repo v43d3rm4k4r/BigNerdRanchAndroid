@@ -16,7 +16,7 @@ import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 
 class PhotoAdapter(
     private val onItemClicked: (galleryItem: GalleryItem) -> Unit,
-//    private val onItemSwapped: (resolveInfo: ResolveInfo) -> Unit
+    private val queueThumbnail: (target: PhotoHolder, url: String) -> Unit
 ) : ListAdapter<GalleryItem, PhotoAdapter.PhotoHolder>(ItemCallback),
     View.OnClickListener {
 
@@ -33,9 +33,11 @@ class PhotoAdapter(
         return PhotoHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PhotoHolder, position: Int) =
-        holder.bind(getItem(position))
-
+    override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
+        val galleryItem = getItem(position)
+        holder.bind(galleryItem)
+        queueThumbnail(holder, galleryItem.url)
+    }
 //    /**
 //     * [ItemTouchHelperAdapter] implementation:
 //     */
