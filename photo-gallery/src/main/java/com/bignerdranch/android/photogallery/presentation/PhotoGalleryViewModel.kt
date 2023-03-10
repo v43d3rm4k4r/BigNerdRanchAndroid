@@ -25,6 +25,10 @@ class PhotoGalleryViewModel(
             photoHolder.bindDrawable(drawable)
         }
 
+    init {
+        thumbnailDownloader.start()
+    }
+
     fun onPhotoClicked(galleryItem: GalleryItem) {
         TODO()
     }
