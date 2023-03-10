@@ -23,7 +23,7 @@ import com.bignerdranch.android.nerdlauncher.ui.utils.recyclerview.ActivityAdapt
 import com.bignerdranch.android.nerdlauncher.ui.utils.recyclerview.SimpleItemTouchHelperCallback
 import com.bignerdranch.android.nerdlauncher.ui.utils.items.NerdLauncherUiItemMapper
 
-import com.bignerdranch.android.androidutils.lazyViewModel
+import com.bignerdranch.android.androidutils.fastLazyViewModel
 import com.bignerdranch.android.androidutils.showToast
 import com.bignerdranch.android.kotlinutils.fastLazy
 
@@ -31,7 +31,7 @@ class NerdLauncherActivity : AppCompatActivity() {
 
     private var _binding: ActivityNerdLauncherBinding? = null
     private val binding get() = _binding
-    private val viewModel by lazyViewModel { NerdLauncherViewModel(initQueryLaunchableActivities()) }
+    private val viewModel by fastLazyViewModel { NerdLauncherViewModel(initQueryLaunchableActivities()) }
     private val adapter by fastLazy { ActivityAdapter(viewModel::onItemClick, viewModel::onItemDelete) }
 
     private val uiItemMapper by fastLazy { NerdLauncherUiItemMapper(packageManager, this) }

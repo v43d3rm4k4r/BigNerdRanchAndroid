@@ -54,11 +54,11 @@ class ThumbnailDownloader<in T : Any>(
         val bitmap = flickrFetcher.fetchPhoto(url) ?: return
 
         responseHandler.post( Runnable {
-            if (requestMap[target] != url || hasQuit) { // WTF ?? зачем вообще эта проверка, и тем более в этой лямбде?
+            if (requestMap[target] != url || hasQuit) {
                 return@Runnable
             }
-            requestMap.remove(target) // почему здесь?
-            onThumbnailDownloaded(target, bitmap) // вроде как единственное, что тут должно быть
+            requestMap.remove(target)
+            onThumbnailDownloaded(target, bitmap)
         })
     }
 

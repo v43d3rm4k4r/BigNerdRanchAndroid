@@ -2,6 +2,7 @@ package com.bignerdranch.android.criminalintent.crimefragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 import com.bignerdranch.android.criminalintent.CrimeRepository

@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
 
     implementation project(":android-utils")
+    implementation project(":kotlin-utils")
 
     testImplementation 'junit:junit:4.13.2'
 

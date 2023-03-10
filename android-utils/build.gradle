@@ -37,7 +37,7 @@ dependencies {
     compileOnly 'androidx.lifecycle:lifecycle-common:2.6.0'
     compileOnly 'androidx.fragment:fragment-ktx:1.5.5'
 
-    api project(":kotlin-utils")
+    implementation project(":kotlin-utils")
 
 //    implementation 'androidx.appcompat:appcompat:1.6.1'
 //    implementation 'com.google.android.material:material:1.8.0'

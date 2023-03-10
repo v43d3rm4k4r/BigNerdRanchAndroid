@@ -11,7 +11,7 @@ import com.bignerdranch.android.photogallery.databinding.FragmentPhotoGalleryBin
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 
-import com.bignerdranch.android.androidutils.lazyViewModel
+import com.bignerdranch.android.androidutils.fastLazyViewModel
 import com.bignerdranch.android.kotlinutils.fastLazy
 
 class PhotoGalleryFragment : Fragment() {
@@ -19,7 +19,7 @@ class PhotoGalleryFragment : Fragment() {
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by lazyViewModel { PhotoGalleryViewModel(resources) }
+    private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(resources) }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

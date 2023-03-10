@@ -36,4 +36,7 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.6.0' // for viewModels() delegate for creating ViewModel instance
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.core:core-ktx:1.9.0'
+
+    implementation project(":android-utils")
+
 }
