@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
-import com.bignerdranch.android.androidutils.fastLazyViewModel
 
 import com.bignerdranch.android.geoquiz.cheatactivity.CheatActivity
 import com.bignerdranch.android.geoquiz.cheatactivity.EXTRA_ANSWER_SHOWN
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prevButton: View // ImageButton in activity_main.xml and Button in land-activity_main.xml
     private lateinit var nextButton: View //
 
-    private val viewModel: GeoQuizViewModel by fastLazyViewModel()
+    private val viewModel: GeoQuizViewModel by viewModels()
 
     // Must call before STARTED Activity state ("LifecycleOwners must call register before they are STARTED")
     private val cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

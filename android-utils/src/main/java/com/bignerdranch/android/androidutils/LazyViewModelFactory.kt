@@ -16,9 +16,6 @@ class LazyViewModelFactory<VM : ViewModel>(
     }
 }
 
-inline fun <reified VM : ViewModel> ViewModelStoreOwner.fastLazyViewModel() =
-    fastLazy { ViewModelProvider(this)[VM::class.java] }
-
 inline fun <reified VM : ViewModel> ViewModelStoreOwner.fastLazyViewModel(
     noinline vmFactory: () -> VM
 ) = fastLazy {
