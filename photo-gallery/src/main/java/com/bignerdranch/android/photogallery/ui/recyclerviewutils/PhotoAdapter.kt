@@ -1,6 +1,7 @@
 package com.bignerdranch.android.photogallery.ui.recyclerviewutils
 
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +55,11 @@ class PhotoAdapter(
                     R.drawable.mda
                 ) ?: ColorDrawable()
                 root.setImageDrawable(placeholder)
+            }
+
+        fun bindDrawable(drawable: Drawable) =
+            with(binding) {
+                root.setImageDrawable(drawable)
             }
     }
 

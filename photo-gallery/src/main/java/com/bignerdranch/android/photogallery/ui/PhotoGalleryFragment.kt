@@ -1,20 +1,18 @@
 package com.bignerdranch.android.photogallery.ui
 
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Photo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 
 import com.bignerdranch.android.photogallery.databinding.FragmentPhotoGalleryBinding
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
-import com.bignerdranch.android.photogallery.presentation.ThumbnailDownloader
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
-import com.bignerdranch.android.photogallery.utils.fastLazy
-import com.bignerdranch.android.photogallery.utils.lazyViewModel
+
+import com.bignerdranch.android.androidutils.lazyViewModel
+import com.bignerdranch.android.kotlinutils.fastLazy
 
 class PhotoGalleryFragment : Fragment() {
 
