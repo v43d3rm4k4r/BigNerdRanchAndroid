@@ -17,9 +17,9 @@ import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewuti
 import com.bignerdranch.android.criminalintent.crimelistfragment.recyclerviewutils.SimpleItemTouchHelperCallback
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import com.bignerdranch.android.criminalintent.model.Crime
-import com.bignerdranch.android.criminalintent.utils.showToast
 
-import kotlin.LazyThreadSafetyMode.NONE
+import com.bignerdranch.android.kotlinutils.fastLazy
+import com.bignerdranch.android.androidutils.showToast
 
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
@@ -27,10 +27,10 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private val binding: FragmentCrimeListBinding
         get() = _binding!!
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-    private val adapter by lazy(NONE) {
+    private val adapter by fastLazy {
         CrimesAdapter(navigator(), ::onCrimeClicked, ::onCallPoliceClicked, ::onCrimeSwiped, ::onCrimeMoved)
     }
-    private val menuProvider by lazy(NONE) { CrimeListMenuProvider(navigator(), crimeListViewModel) }
+    private val menuProvider by fastLazy { CrimeListMenuProvider(navigator(), crimeListViewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

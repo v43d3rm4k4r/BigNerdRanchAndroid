@@ -29,8 +29,8 @@ class GeoQuizViewModel : ViewModel() {
     fun setCurrentAnswerCheated() { checkedAnswers[currentQuestion].isCheated = true; ++cheatedAnswers }
 
     var currentQuestion = 0
-    var correctAnswers = 0
-    var cheatedAnswers = 0
+    var correctAnswers  = 0
+    var cheatedAnswers  = 0
 
     val isCurrentAnswerCheated: Boolean get() = checkedAnswers[currentQuestion].isCheated
     val isCurrentAnswerChecked: Boolean get() = checkedAnswers[currentQuestion].isChecked

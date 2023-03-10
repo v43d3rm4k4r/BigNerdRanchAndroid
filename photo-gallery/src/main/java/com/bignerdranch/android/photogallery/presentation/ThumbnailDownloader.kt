@@ -1,38 +1,75 @@
 package com.bignerdranch.android.photogallery.presentation
 
+import android.graphics.Bitmap
+import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
+import android.os.Message
 import android.util.Log
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 
-class ThumbnailDownloader<in T> : HandlerThread(TAG),
-    DefaultLifecycleObserver {
+import com.bignerdranch.android.photogallery.domain.FlickrFetcher
 
-    private var hasQuit = false
+import java.util.concurrent.ConcurrentHashMap
 
-    override fun quit(): Boolean {
-        hasQuit = true
-        return super.quit()
+class ThumbnailDownloader<in T : Any>(
+    private val flickrFetcher: FlickrFetcher,
+    private val responseHandler: Handler,
+    private val onThumbnailDownloaded: (T, Bitmap) -> Unit
+) : HandlerThread(TAG) {
+
+    private var hasQuit = false                  // TODO: MB delete
+    private lateinit var requestHandler: Handler
+    private val requestMap = ConcurrentHashMap<T, String>()
+
+    @Suppress("UNCHECKED_CAST")
+    //@SuppressLint("HandlerLeak")
+    override fun onLooperPrepared() {
+        requestHandler = object : Handler(Looper.myLooper()!!) {
+
+            override fun handleMessage(msg: Message) {
+                if (msg.what == MESSAGE_DOWNLOAD) {
+                    val target = msg.obj as T
+                    Log.i(TAG, "Got a request for URL: ${requestMap[target]}")
+                    handleRequest(target)
+                }
+            }
+        }
     }
 
-    override fun onCreate(owner: LifecycleOwner) {
+    override fun start() {
         Log.i(TAG, "Starting background thread")
-        start()
+        super.start()
         looper // ??
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        Log.i(TAG, "Exiting background thread")
-        quit()
     }
 
     fun queueThumbnail(target: T, url: String) {
         Log.i(TAG, "Got a URL: $url")
+        requestMap[target] = url
+        requestHandler.obtainMessage(MESSAGE_DOWNLOAD, target)
+            .sendToTarget()
+    }
+
+    private fun handleRequest(target: T) {
+        val url = requestMap[target] ?: return
+        val bitmap = flickrFetcher.fetchPhoto(url) ?: return
+
+        responseHandler.post( Runnable {
+            if (requestMap[target] != url || hasQuit) { // WTF ?? зачем вообще эта проверка, и тем более в этой лямбде?
+                return@Runnable
+            }
+            requestMap.remove(target) // почему здесь?
+            onThumbnailDownloaded(target, bitmap) // вроде как единственное, что тут должно быть
+        })
+    }
+
+    override fun quit(): Boolean {
+        Log.i(TAG, "Exiting background thread")
+        hasQuit = super.quit()
+        return hasQuit
     }
 
     private companion object {
         const val TAG = "ThumbnailDownloader"
+        const val MESSAGE_DOWNLOAD = 0
     }
 }

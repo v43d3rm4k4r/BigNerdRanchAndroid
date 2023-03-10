@@ -19,12 +19,13 @@ import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLive
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppError
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppSuccess
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherViewModel
-import com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils.ActivityAdapter
-import com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils.SimpleItemTouchHelperCallback
-import com.bignerdranch.android.nerdlauncher.utils.ui.NerdLauncherUiItemMapper
-import com.bignerdranch.android.nerdlauncher.utils.fastLazy
-import com.bignerdranch.android.nerdlauncher.utils.lazyViewModel
-import com.bignerdranch.android.nerdlauncher.utils.showToast
+import com.bignerdranch.android.nerdlauncher.ui.utils.recyclerview.ActivityAdapter
+import com.bignerdranch.android.nerdlauncher.ui.utils.recyclerview.SimpleItemTouchHelperCallback
+import com.bignerdranch.android.nerdlauncher.ui.utils.items.NerdLauncherUiItemMapper
+
+import com.bignerdranch.android.androidutils.lazyViewModel
+import com.bignerdranch.android.androidutils.showToast
+import com.bignerdranch.android.kotlinutils.fastLazy
 
 class NerdLauncherActivity : AppCompatActivity() {
 

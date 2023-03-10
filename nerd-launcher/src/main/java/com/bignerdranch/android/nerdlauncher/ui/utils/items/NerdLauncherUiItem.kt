@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher.utils.ui
+package com.bignerdranch.android.nerdlauncher.ui.utils.items
 
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable

@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nerdlauncher.ui.recyclerviewutils
+package com.bignerdranch.android.nerdlauncher.ui.utils.recyclerview
 
 import android.content.pm.ResolveInfo
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 import com.bignerdranch.android.nerdlauncher.databinding.ListItemActivityBinding
-import com.bignerdranch.android.nerdlauncher.utils.ui.NerdLauncherUiItem
+import com.bignerdranch.android.nerdlauncher.ui.utils.items.NerdLauncherUiItem
 
 class ActivityAdapter(
     private val onItemClicked: (resolveInfo: ResolveInfo) -> Unit,

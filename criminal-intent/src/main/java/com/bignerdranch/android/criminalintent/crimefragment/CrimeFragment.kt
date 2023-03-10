@@ -22,6 +22,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bignerdranch.android.androidutils.showToast
 
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.crimefragment.datetimefragments.DatePickerDialogFragment
@@ -31,7 +32,6 @@ import com.bignerdranch.android.criminalintent.crimefragment.datetimefragments.T
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeBinding
 import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.utils.getScaledBitmap
-import com.bignerdranch.android.criminalintent.utils.showToast
 
 import java.io.File
 import java.text.SimpleDateFormat

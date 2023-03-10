@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.bignerdranch.android.androidutils.lazyViewModel
 
 import com.bignerdranch.beatbox.databinding.ActivityMainBinding
 import com.bignerdranch.beatbox.model.Sound
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(),
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private val soundViewModel: SoundViewModel by viewModels { factory() }
+    private val soundViewModel: SoundViewModel by lazyViewModel { SoundViewModel(beatBoxApplication.beatBox) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

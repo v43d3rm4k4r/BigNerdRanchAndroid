@@ -6,19 +6,20 @@ import android.content.pm.ResolveInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
-import com.bignerdranch.android.nerdlauncher.utils.NotNullMutableLiveData
+import com.bignerdranch.android.androidutils.NotNullMutableLiveData
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowActivity
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeleteDialog
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppError
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppSuccess
-import com.bignerdranch.android.nerdlauncher.utils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.SingleLiveEvent
 
 class NerdLauncherViewModel(activities: List<ResolveInfo>) : ViewModel() {
 
-    private val _state: NotNullMutableLiveData<List<ResolveInfo>> = NotNullMutableLiveData(activities)
+    private val _state: com.bignerdranch.android.androidutils.NotNullMutableLiveData<List<ResolveInfo>> =
+        com.bignerdranch.android.androidutils.NotNullMutableLiveData(activities)
     val state: LiveData<List<ResolveInfo>> = _state
 
-    val events = SingleLiveEvent<NerdLauncherSingleLiveEvent>()
+    val events = com.bignerdranch.android.androidutils.SingleLiveEvent<NerdLauncherSingleLiveEvent>()
 
     private var itemToDelete: ResolveInfo? = null
 
