@@ -22,10 +22,10 @@ class PhotoGalleryFragment : Fragment() {
     private val viewModel by lazyViewModel { PhotoGalleryViewModel(resources) }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        //lifecycle.addObserver(viewModel.thumbnailDownloader)
-//    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.thumbnailDownloader.start()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
@@ -62,12 +62,13 @@ class PhotoGalleryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewModel.thumbnailDownloader.clearQueue()
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        lifecycle.removeObserver(viewModel.thumbnailDownloader)
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.thumbnailDownloader.quit()
+    }
 
     companion object {
         fun newInstance() = PhotoGalleryFragment()

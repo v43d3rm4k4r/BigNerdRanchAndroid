@@ -62,6 +62,12 @@ class ThumbnailDownloader<in T : Any>(
         })
     }
 
+    fun clearQueue() {
+        Log.i(TAG, "Clearing all requests from queue")
+        requestHandler.removeMessages(MESSAGE_DOWNLOAD)
+        requestMap.clear()
+    }
+
     override fun quit(): Boolean {
         Log.i(TAG, "Exiting background thread")
         hasQuit = super.quit()
