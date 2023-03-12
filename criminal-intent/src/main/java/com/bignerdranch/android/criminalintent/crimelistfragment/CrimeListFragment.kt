@@ -78,7 +78,7 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
     private fun onCrimeSwiped(crime: Crime) = crimeListViewModel.deleteCrime(crime)
 
     private fun onCrimeMoved(fromPosition: Int, toPosition: Int) {
-        TODO("No needed in this app, for now")
+        TODO("Not needed in this app, for now")
     }
 
     override fun onDestroyView() {
