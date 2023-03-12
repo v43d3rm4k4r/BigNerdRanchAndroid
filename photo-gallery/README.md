@@ -8,3 +8,6 @@ An application that uses the Flickr API to display interesting photos. In progre
 - SharedPreferences
 - WorkManager
 - WebView
+
+Additionally added:
+- LRU caching
