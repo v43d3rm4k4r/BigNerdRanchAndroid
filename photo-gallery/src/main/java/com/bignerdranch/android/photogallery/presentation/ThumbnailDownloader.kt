@@ -17,9 +17,10 @@ class ThumbnailDownloader<in T : Any>(
     private val onThumbnailDownloaded: (T, Bitmap) -> Unit
 ) : HandlerThread(TAG) {
 
-    private var hasQuit = false                  // TODO: MB delete
-    private lateinit var requestHandler: Handler
+    private var hasQuit = false
+    private var requestHandler: Handler? = null
     private val requestMap = ConcurrentHashMap<T, String>()
+    private val lruCache = ThumbnailLruCache(ONE_FLICKR_PAGE_SIZE);
 
     @Suppress("UNCHECKED_CAST")
     //@SuppressLint("HandlerLeak")
@@ -39,19 +40,24 @@ class ThumbnailDownloader<in T : Any>(
     override fun start() {
         Log.i(TAG, "Starting background thread")
         super.start()
-        looper // ??
+        looper
     }
 
     fun queueThumbnail(target: T, url: String) {
         Log.i(TAG, "Got a URL: $url")
         requestMap[target] = url
-        requestHandler.obtainMessage(MESSAGE_DOWNLOAD, target)
-            .sendToTarget()
+        requestHandler?.obtainMessage(MESSAGE_DOWNLOAD, target)
+            ?.sendToTarget()
     }
 
     private fun handleRequest(target: T) {
         val url = requestMap[target] ?: return
-        val bitmap = flickrFetcher.fetchPhoto(url) ?: return
+        var bitmap = lruCache.getBitmapFromMemory(url)
+
+        if (bitmap == null) {
+            bitmap = flickrFetcher.fetchPhoto(url) ?: return
+            lruCache.setBitmapToMemory(url, bitmap)
+        }
 
         responseHandler.post( Runnable {
             if (requestMap[target] != url || hasQuit) {
@@ -64,7 +70,7 @@ class ThumbnailDownloader<in T : Any>(
 
     fun clearQueue() {
         Log.i(TAG, "Clearing all requests from queue")
-        requestHandler.removeMessages(MESSAGE_DOWNLOAD)
+        requestHandler?.removeMessages(MESSAGE_DOWNLOAD)
         requestMap.clear()
     }
 
@@ -77,5 +83,6 @@ class ThumbnailDownloader<in T : Any>(
     private companion object {
         const val TAG = "ThumbnailDownloader"
         const val MESSAGE_DOWNLOAD = 0
+        const val ONE_FLICKR_PAGE_SIZE = 100
     }
 }
