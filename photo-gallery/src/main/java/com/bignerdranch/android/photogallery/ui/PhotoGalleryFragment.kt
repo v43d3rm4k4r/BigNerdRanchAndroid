@@ -20,10 +20,10 @@ class PhotoGalleryFragment : Fragment() {
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(resources) }
+    private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(requireActivity().application) }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
-    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel::searchPhotos) }
+    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)

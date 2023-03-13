@@ -1,6 +1,6 @@
 package com.bignerdranch.android.photogallery.presentation
 
-import android.content.res.Resources
+import android.app.Application
 import android.graphics.drawable.BitmapDrawable
 import android.os.Handler
 import android.os.Looper
@@ -10,23 +10,22 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 import com.bignerdranch.android.photogallery.domain.FlickrFetcher
+import com.bignerdranch.android.photogallery.domain.QueryPreferences
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 
 class PhotoGalleryViewModel(
-    private val resources: Resources
+    private val app: Application
 ) : ViewModel() {
 
     private val flickrFetcher = FlickrFetcher()
-    private val mutableSearchTerm = MutableLiveData("")
 
-    private var isInitialCall = true
+    private val _searchTerm = MutableLiveData("")
+    val searchTerm: String get() = _searchTerm.value ?: ""
 
-    val galleryItemsLiveData = Transformations.switchMap(mutableSearchTerm) { searchTerm ->
-        if (isInitialCall) {
-            isInitialCall = false
+    val galleryItemsLiveData = Transformations.switchMap(_searchTerm) { searchTerm ->
+        if (searchTerm.isBlank())
             flickrFetcher.fetchInterestingPhotos()
-        }
         else
             flickrFetcher.searchPhotos(searchTerm)
     }
@@ -34,16 +33,18 @@ class PhotoGalleryViewModel(
     val thumbnailDownloader = ThumbnailDownloader<PhotoAdapter.PhotoHolder>(
         flickrFetcher,
         Handler(Looper.getMainLooper())) { photoHolder, bitmap ->
-            val drawable = BitmapDrawable(resources, bitmap)
+            val drawable = BitmapDrawable(app.resources, bitmap)
             photoHolder.bindDrawable(drawable)
         }
 
     init {
         thumbnailDownloader.start()
+        _searchTerm.value = QueryPreferences.getStoredQuery(app)
     }
 
     fun searchPhotos(query: String = "") {
-        mutableSearchTerm.postValue(query)
+        QueryPreferences.setStoredQuery(app.applicationContext, query)
+        _searchTerm.postValue(query)
     }
 
     fun onPhotoClicked(galleryItem: GalleryItem) {
