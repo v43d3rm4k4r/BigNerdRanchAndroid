@@ -6,8 +6,11 @@ An application that uses the Flickr API to display interesting photos. In progre
 - Looper, Hander & HandlerThread
 - SearchView
 - SharedPreferences
+
+In process:
 - WorkManager
 - WebView
+- Broadcasts
 
-Additionally added:
+### Additionally added:
 - LRU caching
