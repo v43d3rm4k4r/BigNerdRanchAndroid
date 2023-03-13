@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 
 import com.bignerdranch.android.photogallery.databinding.FragmentPhotoGalleryBinding
@@ -38,7 +39,19 @@ class PhotoGalleryFragment : Fragment() {
 
     private fun observePhotos() {
         viewModel.galleryItemsLiveData.observe(viewLifecycleOwner) { galleryItems ->
-            adapter.submitList(galleryItems)
+            with(binding) {
+                if (galleryItems.isNotEmpty()) {
+                    photoRecyclerView.isVisible = true
+                    noPhotosFoundTextView.isVisible = false
+                    adapter.submitList(galleryItems)
+                }
+                else {
+                    with(binding) {
+                        photoRecyclerView.isVisible = false
+                        noPhotosFoundTextView.isVisible = true
+                    }
+                }
+            }
         }
     }
 

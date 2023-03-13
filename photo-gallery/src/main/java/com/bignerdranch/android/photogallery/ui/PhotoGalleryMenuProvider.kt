@@ -13,7 +13,7 @@ import com.bignerdranch.android.photogallery.R
  * Menu provider used by [PhotoGalleryFragment].
  */
 class PhotoGalleryMenuProvider(
-    private val searchPhotos: (String) -> Unit
+    private val searchPhotos: (query: String) -> Unit
 ) : MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
