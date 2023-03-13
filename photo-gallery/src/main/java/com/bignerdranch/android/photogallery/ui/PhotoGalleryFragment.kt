@@ -22,6 +22,8 @@ class PhotoGalleryFragment : Fragment() {
     private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(resources) }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
+    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel::searchPhotos) }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
         return binding.root
@@ -29,6 +31,7 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(menuProvider)
         setupUI()
         observePhotos()
     }
@@ -56,8 +59,9 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         viewModel.thumbnailDownloader.clearQueue()
+        requireActivity().removeMenuProvider(menuProvider)
+        _binding = null
     }
 
     companion object {

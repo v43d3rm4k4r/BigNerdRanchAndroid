@@ -11,29 +11,44 @@ import androidx.lifecycle.MutableLiveData
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse
+import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
+import okhttp3.OkHttpClient
 
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
+typealias GalleryItemsLiveData = LiveData<List<GalleryItem>>
+
 class FlickrFetcher {
 
     private val flickrAPI: FlickrAPI
-    private val flickrHomePageRequest: Call<FlickrResponse>
+    private var flickrRequest: Call<FlickrResponse>? = null
 
     init {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(PhotoInterceptor())
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.flickr.com/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
         flickrAPI = retrofit.create()
-        flickrHomePageRequest = flickrAPI.fetchPhotos()
     }
 
-    fun fetchPhotos(): LiveData<List<GalleryItem>> { // TODO: get other pages + add paging3
+    fun fetchInterestingPhotos(): GalleryItemsLiveData =
+        fetchPhotoMetadata(flickrAPI.fetchInterestingPhotos())
+
+    fun searchPhotos(query: String): GalleryItemsLiveData =
+        fetchPhotoMetadata(flickrAPI.searchPhotos(query))
+
+    private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponse>): GalleryItemsLiveData { // TODO: get other pages + add paging3
         val responseLiveData = MutableLiveData<List<GalleryItem>>()
 
-        flickrHomePageRequest.enqueue(object : Callback<FlickrResponse> {
+        this.flickrRequest = flickrRequest
+        flickrRequest.enqueue(object : Callback<FlickrResponse> {
 
             override fun onResponse(call: Call<FlickrResponse>, response: Response<FlickrResponse>) {
                 Log.d(TAG, "Response received: ${response.body()}")
@@ -64,8 +79,8 @@ class FlickrFetcher {
     }
 
     fun cancelRequestInFlight() {
-        if (!flickrHomePageRequest.isCanceled)
-            flickrHomePageRequest.cancel()
+        if (!flickrRequest?.isCanceled!!)
+            flickrRequest?.cancel()
     }
 
     private companion object {
