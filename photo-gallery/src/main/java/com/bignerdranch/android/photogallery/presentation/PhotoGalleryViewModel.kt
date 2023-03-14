@@ -9,10 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
+import com.bignerdranch.android.androidutils.SingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.FlickrFetcher
 import com.bignerdranch.android.photogallery.domain.QueryPreferences
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
 
 class PhotoGalleryViewModel(
     private val app: Application
@@ -23,7 +25,11 @@ class PhotoGalleryViewModel(
     private val _searchTerm = MutableLiveData("")
     val searchTerm: String get() = _searchTerm.value ?: ""
 
+    val events = SingleLiveEvent<PhotoGallerySingleLiveEvent>()
+    val flickrFetcherEvents = flickrFetcher.events
+
     val galleryItemsLiveData = Transformations.switchMap(_searchTerm) { searchTerm ->
+        events.postValue(ShowProgressBar)
         if (searchTerm.isBlank())
             flickrFetcher.fetchInterestingPhotos()
         else
@@ -48,7 +54,7 @@ class PhotoGalleryViewModel(
     }
 
     fun onPhotoClicked(galleryItem: GalleryItem) {
-        TODO()
+        //TODO()
     }
 
     override fun onCleared() {

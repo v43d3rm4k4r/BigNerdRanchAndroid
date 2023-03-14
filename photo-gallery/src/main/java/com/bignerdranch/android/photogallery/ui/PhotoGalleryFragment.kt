@@ -15,6 +15,13 @@ import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.androidutils.fastLazyViewModel
 import com.bignerdranch.android.kotlinutils.fastLazy
 import com.bignerdranch.android.androidutils.closeKeyboard
+import com.bignerdranch.android.photogallery.R
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.HideProgressBar
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowRequestError
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowResult
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowEmptyResult
 
 class PhotoGalleryFragment : Fragment() {
 
@@ -36,22 +43,51 @@ class PhotoGalleryFragment : Fragment() {
         requireActivity().addMenuProvider(menuProvider)
         setupUI()
         observePhotos()
+        viewModel.events.observe(viewLifecycleOwner, ::handleEvent)
+        viewModel.flickrFetcherEvents.observe(viewLifecycleOwner, ::handleEvent)
     }
+
+    private fun handleEvent(event: PhotoGallerySingleLiveEvent) =
+        with(binding) {
+            when (event) {
+                is ShowProgressBar -> {
+                    progressBar.isVisible = true
+                    photoRecyclerView.isVisible = false
+                    bottomTextView.isVisible = false
+                }
+                is HideProgressBar -> {
+                    progressBar.isVisible = false
+                    photoRecyclerView.isVisible = true
+                    bottomTextView.isVisible = false
+                }
+                is ShowRequestError -> {
+                    progressBar.isVisible = false
+                    photoRecyclerView.isVisible = false
+                    bottomTextView.text = getString(R.string.network_error)
+                    bottomTextView.isVisible = true
+                }
+                is ShowResult -> {
+                    photoRecyclerView.isVisible = true
+                    bottomTextView.isVisible = false
+                    adapter.submitList(event.galleryItems)
+                    progressBar.isVisible = false
+                }
+                is ShowEmptyResult -> {
+                    photoRecyclerView.isVisible = false
+                    bottomTextView.text = getText(R.string.no_photos_found)
+                    bottomTextView.isVisible = true
+                    progressBar.isVisible = false
+                }
+            }
+        }
 
     private fun observePhotos() {
         viewModel.galleryItemsLiveData.observe(viewLifecycleOwner) { galleryItems ->
-            with(binding) {
-                if (galleryItems.isNotEmpty()) {
-                    photoRecyclerView.isVisible = true
-                    noPhotosFoundTextView.isVisible = false
-                    adapter.submitList(galleryItems)
-                }
-                else {
-                    with(binding) {
-                        photoRecyclerView.isVisible = false
-                        noPhotosFoundTextView.isVisible = true
-                    }
-                }
+            if (galleryItems.isNotEmpty()) {
+                handleEvent(ShowResult(galleryItems))
+            }
+            else {
+                handleEvent(ShowEmptyResult)
             }
         }
     }

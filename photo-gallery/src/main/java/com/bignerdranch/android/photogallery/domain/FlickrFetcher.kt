@@ -8,10 +8,14 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
+import com.bignerdranch.android.androidutils.SingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse
 import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowRequestError
+
 import okhttp3.OkHttpClient
 
 import retrofit2.*
@@ -23,6 +27,10 @@ class FlickrFetcher {
 
     private val flickrAPI: FlickrAPI
     private var flickrRequest: Call<FlickrResponse>? = null
+
+    private val responseLiveData = MutableLiveData<List<GalleryItem>>()
+
+    val events = SingleLiveEvent<PhotoGallerySingleLiveEvent>()
 
     init {
         val client = OkHttpClient.Builder()
@@ -45,8 +53,6 @@ class FlickrFetcher {
         fetchPhotoMetadata(flickrAPI.searchPhotos(query))
 
     private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponse>): GalleryItemsLiveData { // TODO: get other pages + add paging3
-        val responseLiveData = MutableLiveData<List<GalleryItem>>()
-
         this.flickrRequest = flickrRequest
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
 
@@ -65,6 +71,7 @@ class FlickrFetcher {
                 val msg = if (call.isCanceled) "Request has been canceled"
                 else "Failed to fetch photos"
                 Log.e(TAG, msg, t)
+                events.postValue(ShowRequestError)
             }
         })
         return responseLiveData

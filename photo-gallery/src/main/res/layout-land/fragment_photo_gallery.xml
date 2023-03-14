@@ -7,6 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/photo_recycler_view"
         android:layout_width="match_parent"
@@ -18,7 +24,7 @@
         tools:context=".ui.PhotoGalleryFragment"/>
 
     <TextView
-        android:id="@+id/no_photos_found_text_view"
+        android:id="@+id/bottom_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
