@@ -1,6 +1,7 @@
 package com.bignerdranch.android.androidutils
 
 import android.app.Activity
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 
 import androidx.annotation.StringRes
@@ -23,4 +24,17 @@ fun LifecycleOwner.showToast(@StringRes resId: Int) {
         else        -> return
     }
     showToast(str)
+}
+
+fun LifecycleOwner.closeKeyboard() {
+    val activity: Activity = when (this) {
+        is Activity -> this
+        is Fragment -> requireActivity()
+        else        -> return
+    }
+    val view = activity.currentFocus ?: return
+    val manager = activity.getSystemService(
+        Activity.INPUT_METHOD_SERVICE
+    ) as InputMethodManager?
+    manager?.hideSoftInputFromWindow(view.windowToken, 0)
 }
