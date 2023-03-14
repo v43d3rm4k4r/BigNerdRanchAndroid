@@ -15,11 +15,10 @@ import com.bignerdranch.android.androidutils.SingleLiveEvent
 
 class NerdLauncherViewModel(activities: List<ResolveInfo>) : ViewModel() {
 
-    private val _state: com.bignerdranch.android.androidutils.NotNullMutableLiveData<List<ResolveInfo>> =
-        com.bignerdranch.android.androidutils.NotNullMutableLiveData(activities)
+    private val _state: NotNullMutableLiveData<List<ResolveInfo>> = NotNullMutableLiveData(activities)
     val state: LiveData<List<ResolveInfo>> = _state
 
-    val events = com.bignerdranch.android.androidutils.SingleLiveEvent<NerdLauncherSingleLiveEvent>()
+    val events = SingleLiveEvent<NerdLauncherSingleLiveEvent>()
 
     private var itemToDelete: ResolveInfo? = null
 
