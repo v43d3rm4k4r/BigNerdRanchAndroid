@@ -14,6 +14,7 @@ import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 
 import com.bignerdranch.android.androidutils.fastLazyViewModel
 import com.bignerdranch.android.kotlinutils.fastLazy
+import com.bignerdranch.android.androidutils.closeKeyboard
 
 class PhotoGalleryFragment : Fragment() {
 
@@ -23,7 +24,7 @@ class PhotoGalleryFragment : Fragment() {
     private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(requireActivity().application) }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
-    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel) }
+    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel, this::closeKeyboard) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)

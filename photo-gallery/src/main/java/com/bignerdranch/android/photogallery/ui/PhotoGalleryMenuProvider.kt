@@ -12,7 +12,8 @@ import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
 
 /** Menu provider used by [PhotoGalleryFragment]. */
 class PhotoGalleryMenuProvider(
-    private val viewModel: PhotoGalleryViewModel
+    private val viewModel: PhotoGalleryViewModel,
+    private val hideKeyboard: () -> Unit
 ) : MenuProvider {
 
     private var searchView: SearchView? = null
@@ -26,6 +27,8 @@ class PhotoGalleryMenuProvider(
 
                 override fun onQueryTextSubmit(query: String): Boolean {
                     viewModel.searchPhotos(query)
+                    hideKeyboard()
+                    onActionViewCollapsed()
                     return true
                 }
 
