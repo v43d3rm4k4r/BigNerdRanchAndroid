@@ -10,11 +10,10 @@ import androidx.lifecycle.MutableLiveData
 
 import com.bignerdranch.android.androidutils.SingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse
 import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowRequestError
+import com.bignerdranch.android.photogallery.domain.FlickrFetcherSingleLiveEvent.ErrorLoading
 
 import okhttp3.OkHttpClient
 
@@ -30,7 +29,7 @@ class FlickrFetcher {
 
     private val responseLiveData = MutableLiveData<List<GalleryItem>>()
 
-    val events = SingleLiveEvent<PhotoGallerySingleLiveEvent>()
+    val events = SingleLiveEvent<FlickrFetcherSingleLiveEvent>()
 
     init {
         val client = OkHttpClient.Builder()
@@ -71,7 +70,7 @@ class FlickrFetcher {
                 val msg = if (call.isCanceled) "Request has been canceled"
                 else "Failed to fetch photos"
                 Log.e(TAG, msg, t)
-                events.postValue(ShowRequestError)
+                events.postValue(ErrorLoading)
             }
         })
         return responseLiveData

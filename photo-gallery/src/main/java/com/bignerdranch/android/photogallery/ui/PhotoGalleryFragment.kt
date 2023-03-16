@@ -16,6 +16,7 @@ import com.bignerdranch.android.androidutils.fastLazyViewModel
 import com.bignerdranch.android.kotlinutils.fastLazy
 import com.bignerdranch.android.androidutils.closeKeyboard
 import com.bignerdranch.android.photogallery.R
+import com.bignerdranch.android.photogallery.domain.QueryPreferences
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.HideProgressBar
@@ -28,7 +29,7 @@ class PhotoGalleryFragment : Fragment() {
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(requireActivity().application) }
+    private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(QueryPreferences(requireContext().applicationContext)) }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
     private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel, this::closeKeyboard) }
@@ -43,8 +44,7 @@ class PhotoGalleryFragment : Fragment() {
         requireActivity().addMenuProvider(menuProvider)
         setupUI()
         observePhotos()
-        viewModel.events.observe(viewLifecycleOwner, ::handleEvent)
-        viewModel.flickrFetcherEvents.observe(viewLifecycleOwner, ::handleEvent)
+        viewModel.mediator.observe(viewLifecycleOwner, ::handleEvent)
     }
 
     private fun handleEvent(event: PhotoGallerySingleLiveEvent) =

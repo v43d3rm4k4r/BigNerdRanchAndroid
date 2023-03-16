@@ -1,6 +1,8 @@
 package com.bignerdranch.android.androidutils
 
 import android.app.Activity
+import android.app.Application
+import android.media.tv.interactive.AppLinkInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 
