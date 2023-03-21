@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.domain
+package com.bignerdranch.android.photogallery.model
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,7 +13,7 @@ import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse
 import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
-import com.bignerdranch.android.photogallery.domain.FlickrFetcherSingleLiveEvent.ErrorLoading
+import com.bignerdranch.android.photogallery.model.FlickrFetcherSingleLiveEvent.ErrorLoading
 
 import okhttp3.OkHttpClient
 
@@ -58,8 +58,8 @@ class FlickrFetcher {
             override fun onResponse(call: Call<FlickrResponse>, response: Response<FlickrResponse>) {
                 Log.d(TAG, "Response received: ${response.body()}")
                 val flickrResponse = response.body()
-                val photosResponse = flickrResponse?.photos
-                var galleryItems = photosResponse?.galleryItems ?: mutableListOf()
+                val photosResponse = flickrResponse?.photos ?: return
+                var galleryItems = photosResponse.galleryItems ?: mutableListOf()
                 galleryItems = galleryItems.filter {
                     it.url.isNotBlank()
                 }

@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.domain
+package com.bignerdranch.android.photogallery.model
 
 sealed class FlickrFetcherSingleLiveEvent {
 

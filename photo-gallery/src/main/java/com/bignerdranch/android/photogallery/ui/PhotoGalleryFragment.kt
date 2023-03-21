@@ -19,7 +19,7 @@ import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.NetworkConnectivityObserver
 import com.bignerdranch.android.androidutils.showSnackbar
 import com.bignerdranch.android.photogallery.R
-import com.bignerdranch.android.photogallery.domain.QueryPreferences
+import com.bignerdranch.android.photogallery.model.QueryPreferences
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
 
@@ -29,7 +29,8 @@ class PhotoGalleryFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by fastLazyViewModel {
-        PhotoGalleryViewModel(QueryPreferences(requireContext().applicationContext),
+        PhotoGalleryViewModel(
+            QueryPreferences(requireContext().applicationContext),
             NetworkConnectivityObserver(requireContext().applicationContext))
     }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
@@ -82,8 +83,8 @@ class PhotoGalleryFragment : Fragment() {
                 }
                 is ShowNetworkStatus -> {
                     when (event.status) {
-                        ConnectivityObserver.Status.Lost      -> showSnackbar(R.string.network_lost)
-                        ConnectivityObserver.Status.Available -> showSnackbar(R.string.network_available)
+                        ConnectivityObserver.Status.LOST      -> showSnackbar(R.string.network_lost)
+                        ConnectivityObserver.Status.AVAILABLE -> showSnackbar(R.string.network_available)
                         else -> {}
                     }
                 }

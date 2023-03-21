@@ -9,17 +9,16 @@ import androidx.lifecycle.*
 import com.bignerdranch.android.androidutils.SingleLiveEvent
 import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleLiveEvent
-import com.bignerdranch.android.photogallery.domain.FlickrFetcher
-import com.bignerdranch.android.photogallery.domain.GalleryItemsLiveData
-import com.bignerdranch.android.photogallery.domain.QueryPreferences
+import com.bignerdranch.android.photogallery.model.QueryStore
+import com.bignerdranch.android.photogallery.model.FlickrFetcher
+import com.bignerdranch.android.photogallery.model.GalleryItemsLiveData
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
 
-// TODO: add reinitialization after network connection
 class PhotoGalleryViewModel(
-    private val queryPreferences: QueryPreferences,
+    private val queryPreferences: QueryStore,
     private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
@@ -30,13 +29,19 @@ class PhotoGalleryViewModel(
 
     private val events = SingleLiveEvent<PhotoGallerySingleLiveEvent>()
 
+    private var isInitCall = true
     val mediator: LiveData<PhotoGallerySingleLiveEvent> = MediatorLiveData<PhotoGallerySingleLiveEvent>().apply {
         addSource(events) { value = it }
         addSource(flickrFetcher.events) { value = ShowRequestError }
         addSource(connectivityObserver.events) {
-            //startGettingPhotos() /// need to call in on network available, except first time
-            if (it is ConnectivityObserverSingleLiveEvent.NetworkStatus) // mb refactor this
+            if (isInitCall) {
+                isInitCall = false
+                return@addSource
+            }
+            if (it is ConnectivityObserverSingleLiveEvent.NetworkStatus) { // mb refactor this
+                if (it.status == ConnectivityObserver.Status.AVAILABLE) startGettingPhotos()
                 value = ShowNetworkStatus(it.status)
+            }
         }
     }
 

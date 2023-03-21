@@ -6,12 +6,12 @@ interface ConnectivityObserver {
 
     val events: SingleLiveEvent<ConnectivityObserverSingleLiveEvent>
 
-    fun onClear() {}
+    fun onClear()
 
     enum class Status {
-        Available,
-        Unavailable,
-        Losing,
-        Lost
+        AVAILABLE,
+        UNAVAILABLE,
+        LOSING,
+        LOST
     }
 }
