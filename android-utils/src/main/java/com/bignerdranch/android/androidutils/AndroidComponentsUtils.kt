@@ -1,8 +1,7 @@
 package com.bignerdranch.android.androidutils
 
 import android.app.Activity
-import android.app.Application
-import android.media.tv.interactive.AppLinkInfo
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 
@@ -10,7 +9,9 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 
-fun LifecycleOwner.showToast(msg: String) {
+import com.google.android.material.snackbar.Snackbar
+
+fun LifecycleOwner.showToast(msg: CharSequence) {
     val context = when (this) {
         is Activity -> this
         is Fragment -> requireContext()
@@ -26,6 +27,24 @@ fun LifecycleOwner.showToast(@StringRes resId: Int) {
         else        -> return
     }
     showToast(str)
+}
+
+fun LifecycleOwner.showSnackbar(msg: CharSequence, duration: Int = Snackbar.LENGTH_LONG) {
+    val view = when (this) {
+        is Activity -> findViewById<View>(android.R.id.content)
+        is Fragment -> requireActivity().findViewById(android.R.id.content)
+        else        -> return
+    }
+    Snackbar.make(view, msg, duration).show()
+}
+
+fun LifecycleOwner.showSnackbar(@StringRes resId: Int, duration: Int = Snackbar.LENGTH_LONG) {
+    val str = when (this) {
+        is Activity -> getString(resId)
+        is Fragment -> getString(resId)
+        else        -> return
+    }
+    showSnackbar(str, duration)
 }
 
 fun LifecycleOwner.closeKeyboard() {
