@@ -15,21 +15,23 @@ import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.androidutils.fastLazyViewModel
 import com.bignerdranch.android.kotlinutils.fastLazy
 import com.bignerdranch.android.androidutils.closeKeyboard
+import com.bignerdranch.android.androidutils.network.ConnectivityObserver
+import com.bignerdranch.android.androidutils.network.NetworkConnectivityObserver
+import com.bignerdranch.android.androidutils.showSnackbar
 import com.bignerdranch.android.photogallery.R
 import com.bignerdranch.android.photogallery.domain.QueryPreferences
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.HideProgressBar
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowRequestError
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowResult
-import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowEmptyResult
+import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
 
 class PhotoGalleryFragment : Fragment() {
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by fastLazyViewModel { PhotoGalleryViewModel(QueryPreferences(requireContext().applicationContext)) }
+    private val viewModel by fastLazyViewModel {
+        PhotoGalleryViewModel(QueryPreferences(requireContext().applicationContext),
+            NetworkConnectivityObserver(requireContext().applicationContext))
+    }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
     private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel, this::closeKeyboard) }
@@ -77,6 +79,13 @@ class PhotoGalleryFragment : Fragment() {
                     bottomTextView.text = getText(R.string.no_photos_found)
                     bottomTextView.isVisible = true
                     progressBar.isVisible = false
+                }
+                is ShowNetworkStatus -> {
+                    when (event.status) {
+                        ConnectivityObserver.Status.Lost      -> showSnackbar(R.string.network_lost)
+                        ConnectivityObserver.Status.Available -> showSnackbar(R.string.network_available)
+                        else -> {}
+                    }
                 }
             }
         }

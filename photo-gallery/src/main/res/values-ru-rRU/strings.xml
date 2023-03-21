@@ -5,4 +5,6 @@
     <string name="clear_search">Очистить Поиск</string>
     <string name="no_photos_found">Изображения не найдены</string>
     <string name="network_error">Ошибка сети</string>
+    <string name="network_lost">Сеть потеряна</string>
+    <string name="network_available">Сеть доступна</string>
 </resources>

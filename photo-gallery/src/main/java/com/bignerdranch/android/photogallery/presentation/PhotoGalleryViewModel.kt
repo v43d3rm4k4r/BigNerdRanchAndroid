@@ -1,19 +1,16 @@
 package com.bignerdranch.android.photogallery.presentation
 
-import android.app.Application
 import android.content.res.Resources
 import android.graphics.drawable.BitmapDrawable
 import android.os.Handler
 import android.os.Looper
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 
 import com.bignerdranch.android.androidutils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.network.ConnectivityObserver
+import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.FlickrFetcher
+import com.bignerdranch.android.photogallery.domain.GalleryItemsLiveData
 import com.bignerdranch.android.photogallery.domain.QueryPreferences
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
@@ -22,7 +19,8 @@ import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLive
 
 // TODO: add reinitialization after network connection
 class PhotoGalleryViewModel(
-    private val queryPreferences: QueryPreferences
+    private val queryPreferences: QueryPreferences,
+    private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     private val flickrFetcher = FlickrFetcher()
@@ -31,19 +29,19 @@ class PhotoGalleryViewModel(
     val searchTerm: String get() = _searchTerm.value ?: ""
 
     private val events = SingleLiveEvent<PhotoGallerySingleLiveEvent>()
-    private val flickrFetcherEvents = flickrFetcher.events
 
     val mediator: LiveData<PhotoGallerySingleLiveEvent> = MediatorLiveData<PhotoGallerySingleLiveEvent>().apply {
         addSource(events) { value = it }
-        addSource(flickrFetcherEvents) { value = ShowRequestError }
+        addSource(flickrFetcher.events) { value = ShowRequestError }
+        addSource(connectivityObserver.events) {
+            //startGettingPhotos() /// need to call in on network available, except first time
+            if (it is ConnectivityObserverSingleLiveEvent.NetworkStatus) // mb refactor this
+                value = ShowNetworkStatus(it.status)
+        }
     }
 
     val galleryItemsLiveData = Transformations.switchMap(_searchTerm) { searchTerm ->
-        events.postValue(ShowProgressBar)
-        if (searchTerm.isBlank())
-            flickrFetcher.fetchInterestingPhotos()
-        else
-            flickrFetcher.searchPhotos(searchTerm)
+        startGettingPhotos(searchTerm)
     }
 
     val thumbnailDownloader = ThumbnailDownloader<PhotoAdapter.PhotoHolder>(
@@ -56,6 +54,14 @@ class PhotoGalleryViewModel(
     init {
         thumbnailDownloader.start()
         _searchTerm.value = queryPreferences.getStoredQuery()
+    }
+
+    private fun startGettingPhotos(query: String = ""): GalleryItemsLiveData {
+        events.postValue(ShowProgressBar)
+        return if (searchTerm.isBlank())
+            flickrFetcher.fetchInterestingPhotos()
+        else
+            flickrFetcher.searchPhotos(query)
     }
 
     fun searchPhotos(query: String = "") {
@@ -71,5 +77,6 @@ class PhotoGalleryViewModel(
         super.onCleared()
         flickrFetcher.cancelRequestInFlight()
         thumbnailDownloader.quit()
+        connectivityObserver.onClear()
     }
 }
