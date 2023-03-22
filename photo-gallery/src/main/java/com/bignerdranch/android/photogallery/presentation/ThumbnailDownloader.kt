@@ -7,7 +7,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 
-import com.bignerdranch.android.photogallery.model.FlickrFetcher
+import com.bignerdranch.android.photogallery.data.FlickrFetcher
 
 import java.util.concurrent.ConcurrentHashMap
 

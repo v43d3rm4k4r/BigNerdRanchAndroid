@@ -1,6 +1,9 @@
 package com.bignerdranch.android.androidutils.network
 
-sealed class ConnectivityObserverSingleLiveEvent {
+/**
+ * Make sealed if new events appear.
+ */
+open class ConnectivityObserverSingleLiveEvent {
 
     class NetworkStatus(val status: ConnectivityObserver.Status) : ConnectivityObserverSingleLiveEvent()
 }

@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.model
+package com.bignerdranch.android.photogallery.data
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,7 +13,7 @@ import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse
 import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
-import com.bignerdranch.android.photogallery.model.FlickrFetcherSingleLiveEvent.ErrorLoading
+import com.bignerdranch.android.photogallery.data.FlickrFetcherSingleLiveEvent.ErrorLoading
 
 import okhttp3.OkHttpClient
 
@@ -45,11 +45,13 @@ class FlickrFetcher {
         flickrAPI = retrofit.create()
     }
 
-    fun fetchInterestingPhotos(): GalleryItemsLiveData =
-        fetchPhotoMetadata(flickrAPI.fetchInterestingPhotos())
+    fun fetchInterestingPhotosRequest(): Call<FlickrResponse> = flickrAPI.fetchInterestingPhotos()
 
-    fun searchPhotos(query: String): GalleryItemsLiveData =
-        fetchPhotoMetadata(flickrAPI.searchPhotos(query))
+    fun searchPhotosRequest(query: String) = flickrAPI.searchPhotos(query)
+
+    fun fetchInterestingPhotos(): GalleryItemsLiveData = fetchPhotoMetadata(fetchInterestingPhotosRequest())
+
+    fun searchPhotos(query: String): GalleryItemsLiveData = fetchPhotoMetadata(searchPhotosRequest(query))
 
     private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponse>): GalleryItemsLiveData { // TODO: get other pages + add paging3
         this.flickrRequest = flickrRequest

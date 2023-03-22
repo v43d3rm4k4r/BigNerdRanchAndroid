@@ -9,16 +9,17 @@ import androidx.lifecycle.*
 import com.bignerdranch.android.androidutils.SingleLiveEvent
 import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleLiveEvent
-import com.bignerdranch.android.photogallery.model.QueryStore
-import com.bignerdranch.android.photogallery.model.FlickrFetcher
-import com.bignerdranch.android.photogallery.model.GalleryItemsLiveData
+import com.bignerdranch.android.photogallery.data.QueryStore
+import com.bignerdranch.android.photogallery.data.FlickrFetcher
+import com.bignerdranch.android.photogallery.data.GalleryItemsLiveData
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
 
+// TODO: implement photo enlargement fragment on click
 class PhotoGalleryViewModel(
-    private val queryPreferences: QueryStore,
+    private val queryStore: QueryStore,
     private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
@@ -38,10 +39,9 @@ class PhotoGalleryViewModel(
                 isInitCall = false
                 return@addSource
             }
-            if (it is ConnectivityObserverSingleLiveEvent.NetworkStatus) { // mb refactor this
-                if (it.status == ConnectivityObserver.Status.AVAILABLE) startGettingPhotos()
-                value = ShowNetworkStatus(it.status)
-            }
+            val status = (it as ConnectivityObserverSingleLiveEvent.NetworkStatus).status
+            if (status == ConnectivityObserver.Status.AVAILABLE) startGettingPhotos()
+            value = ShowNetworkStatus(status)
         }
     }
 
@@ -58,7 +58,7 @@ class PhotoGalleryViewModel(
 
     init {
         thumbnailDownloader.start()
-        _searchTerm.value = queryPreferences.getStoredQuery()
+        _searchTerm.value = queryStore.getStoredQuery()
     }
 
     private fun startGettingPhotos(query: String = ""): GalleryItemsLiveData {
@@ -70,7 +70,7 @@ class PhotoGalleryViewModel(
     }
 
     fun searchPhotos(query: String = "") {
-        queryPreferences.setStoredQuery(query)
+        queryStore.setStoredQuery(query)
         _searchTerm.postValue(query)
     }
 
