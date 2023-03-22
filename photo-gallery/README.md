@@ -14,3 +14,4 @@ In process:
 
 ### Additionally added:
 - LRU caching
+- Network connectivtiy observer
