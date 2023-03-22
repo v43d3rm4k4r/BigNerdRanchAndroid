@@ -31,11 +31,13 @@ class PhotoGalleryFragment : Fragment() {
     private val viewModel by fastLazyViewModel {
         PhotoGalleryViewModel(
             QueryPreferences(requireContext().applicationContext),
-            NetworkConnectivityObserver(requireContext().applicationContext))
+            NetworkConnectivityObserver(requireContext().applicationContext)
+        )
     }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
-    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(viewModel, this::closeKeyboard) }
+    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(requireActivity().applicationContext,
+        viewModel, this::closeKeyboard) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)
@@ -53,17 +55,17 @@ class PhotoGalleryFragment : Fragment() {
     private fun handleEvent(event: PhotoGallerySingleLiveEvent) =
         with(binding) {
             when (event) {
-                is ShowProgressBar -> {
+                ShowProgressBar -> {
                     progressBar.isVisible = true
                     photoRecyclerView.isVisible = false
                     bottomTextView.isVisible = false
                 }
-                is HideProgressBar -> {
+                HideProgressBar -> {
                     progressBar.isVisible = false
                     photoRecyclerView.isVisible = true
                     bottomTextView.isVisible = false
                 }
-                is ShowRequestError -> {
+                ShowRequestError -> {
                     progressBar.isVisible = false
                     photoRecyclerView.isVisible = false
                     bottomTextView.text = getString(R.string.network_error)
@@ -75,7 +77,7 @@ class PhotoGalleryFragment : Fragment() {
                     adapter.submitList(event.galleryItems)
                     progressBar.isVisible = false
                 }
-                is ShowEmptyResult -> {
+                ShowEmptyResult -> {
                     photoRecyclerView.isVisible = false
                     bottomTextView.text = getText(R.string.no_photos_found)
                     bottomTextView.isVisible = true

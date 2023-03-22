@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PhotoGallery</string>
+    <string name="app_name">Фото Галерея</string>
     <string name="search">Поиск</string>
-    <string name="clear_search">Очистить Поиск</string>
+    <string name="clear_search">Очистить поиск</string>
     <string name="no_photos_found">Изображения не найдены</string>
     <string name="network_error">Ошибка сети</string>
     <string name="network_lost">Сеть потеряна</string>
     <string name="network_available">Сеть доступна</string>
+
+    <!-- Notifications: -->
+    <string name="notification_channel_name">FlickrFetcher</string>
+    <string name="new_pictures_title">Новые картинки в Фото Галерее </string>
+    <string name="new_pictures_text">Доступны новые картинки в Фото Галерее</string>
+    <string name="start_polling">Начать опрос</string>
+    <string name="stop_polling">Оставновить опрос</string>
 </resources>

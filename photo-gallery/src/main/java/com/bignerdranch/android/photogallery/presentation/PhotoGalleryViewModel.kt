@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.drawable.BitmapDrawable
 import android.os.Handler
 import android.os.Looper
+
 import androidx.lifecycle.*
 
 import com.bignerdranch.android.androidutils.SingleLiveEvent
@@ -17,9 +18,9 @@ import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLive
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
 
-// TODO: implement photo enlargement fragment on click
+// TODO: Fix download on turn screen
 class PhotoGalleryViewModel(
-    private val queryStore: QueryStore,
+    val queryStore: QueryStore,
     private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
