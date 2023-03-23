@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.bignerdranch.android.androidutils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleLiveEvent.*
 
 @RequiresApi(Build.VERSION_CODES.N)

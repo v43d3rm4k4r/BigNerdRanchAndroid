@@ -1,8 +1,8 @@
-package com.bignerdranch.android.androidutils
+package com.bignerdranch.android.androidutils.livedata
 
 import androidx.lifecycle.MutableLiveData
 
-class NotNullMutableLiveData<T>(value: T) : MutableLiveData<T>(value) {
+open class NotNullMutableLiveData<T> : MutableLiveData<T>() {
 
     override fun getValue(): T =
         super.getValue() ?: throw IllegalStateException("live data not initialized")

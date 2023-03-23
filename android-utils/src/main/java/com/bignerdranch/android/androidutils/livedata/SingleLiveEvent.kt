@@ -1,4 +1,4 @@
-package com.bignerdranch.android.androidutils
+package com.bignerdranch.android.androidutils.livedata
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

@@ -1,6 +1,6 @@
 package com.bignerdranch.android.androidutils.network
 
-import com.bignerdranch.android.androidutils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 
 interface ConnectivityObserver {
 
