@@ -8,7 +8,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-import com.bignerdranch.android.androidutils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse

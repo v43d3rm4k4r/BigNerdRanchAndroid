@@ -6,12 +6,12 @@ import android.content.pm.ResolveInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
-import com.bignerdranch.android.androidutils.NotNullMutableLiveData
+import com.bignerdranch.android.androidutils.livedata.NotNullMutableLiveData
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowActivity
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeleteDialog
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppError
 import com.bignerdranch.android.nerdlauncher.presentation.NerdLauncherSingleLiveEvent.ShowDeletingAppSuccess
-import com.bignerdranch.android.androidutils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 
 class NerdLauncherViewModel(activities: List<ResolveInfo>) : ViewModel() {
 

@@ -6,8 +6,10 @@ import android.os.Handler
 import android.os.Looper
 
 import androidx.lifecycle.*
+import com.bignerdranch.android.androidutils.livedata.NotNullMediatorLiveData
 
-import com.bignerdranch.android.androidutils.SingleLiveEvent
+import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
+import com.bignerdranch.android.androidutils.livedata.SingleMediatorLiveEvent
 import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleLiveEvent
 import com.bignerdranch.android.photogallery.data.QueryStore
@@ -32,7 +34,7 @@ class PhotoGalleryViewModel(
     private val events = SingleLiveEvent<PhotoGallerySingleLiveEvent>()
 
     private var isInitCall = true
-    val mediator: LiveData<PhotoGallerySingleLiveEvent> = MediatorLiveData<PhotoGallerySingleLiveEvent>().apply {
+    val mediator: LiveData<PhotoGallerySingleLiveEvent> = SingleMediatorLiveEvent<PhotoGallerySingleLiveEvent>().apply {
         addSource(events) { value = it }
         addSource(flickrFetcher.events) { value = ShowRequestError }
         addSource(connectivityObserver.events) {
