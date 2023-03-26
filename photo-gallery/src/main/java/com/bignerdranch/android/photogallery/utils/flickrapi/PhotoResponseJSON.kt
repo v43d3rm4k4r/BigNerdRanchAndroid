@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Represents a `photos` JSON object.
  */
-class PhotoResponse {
+class PhotoResponseJSON {
 
     @SerializedName("photo")
     var galleryItems: List<GalleryItem>? = null

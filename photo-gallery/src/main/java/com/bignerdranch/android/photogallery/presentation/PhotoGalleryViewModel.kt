@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 
 import androidx.lifecycle.*
-import com.bignerdranch.android.androidutils.livedata.NotNullMediatorLiveData
 
 import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 import com.bignerdranch.android.androidutils.livedata.SingleMediatorLiveEvent
@@ -15,12 +14,12 @@ import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleL
 import com.bignerdranch.android.photogallery.data.QueryStore
 import com.bignerdranch.android.photogallery.data.FlickrFetcher
 import com.bignerdranch.android.photogallery.data.GalleryItemsLiveData
+import com.bignerdranch.android.photogallery.domain.ThumbnailDownloader
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
 
-// TODO: Fix download on turn screen
 class PhotoGalleryViewModel(
     val queryStore: QueryStore,
     private val connectivityObserver: ConnectivityObserver

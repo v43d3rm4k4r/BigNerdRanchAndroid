@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.presentation
+package com.bignerdranch.android.photogallery.domain
 
 import android.graphics.Bitmap
 import android.os.Handler

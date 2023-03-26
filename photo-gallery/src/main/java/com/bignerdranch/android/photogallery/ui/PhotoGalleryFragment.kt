@@ -36,8 +36,7 @@ class PhotoGalleryFragment : Fragment() {
     }
     private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
 
-    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(requireActivity().applicationContext,
-        viewModel, this::closeKeyboard) }
+    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(requireActivity().applicationContext, viewModel, ::closeKeyboard) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)

@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
-import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponse
+import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponseJSON
 import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
 import com.bignerdranch.android.photogallery.data.FlickrFetcherSingleLiveEvent.ErrorLoading
 
@@ -25,7 +25,7 @@ typealias GalleryItemsLiveData = LiveData<List<GalleryItem>>
 class FlickrFetcher {
 
     private val flickrAPI: FlickrAPI
-    private var flickrRequest: Call<FlickrResponse>? = null
+    private var flickrRequest: Call<FlickrResponseJSON>? = null
 
     private val responseLiveData = MutableLiveData<List<GalleryItem>>()
 
@@ -45,19 +45,17 @@ class FlickrFetcher {
         flickrAPI = retrofit.create()
     }
 
-    fun fetchInterestingPhotosRequest(): Call<FlickrResponse> = flickrAPI.fetchInterestingPhotos()
+    fun fetchInterestingPhotosRequest():    Call<FlickrResponseJSON> = flickrAPI.fetchInterestingPhotos()
+    fun searchPhotosRequest(query: String): Call<FlickrResponseJSON> = flickrAPI.searchPhotos(query)
 
-    fun searchPhotosRequest(query: String) = flickrAPI.searchPhotos(query)
-
-    fun fetchInterestingPhotos(): GalleryItemsLiveData = fetchPhotoMetadata(fetchInterestingPhotosRequest())
-
+    fun fetchInterestingPhotos():    GalleryItemsLiveData = fetchPhotoMetadata(fetchInterestingPhotosRequest())
     fun searchPhotos(query: String): GalleryItemsLiveData = fetchPhotoMetadata(searchPhotosRequest(query))
 
-    private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponse>): GalleryItemsLiveData { // TODO: get other pages + add paging3
+    private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponseJSON>): GalleryItemsLiveData { // TODO: get other pages + add paging3
         this.flickrRequest = flickrRequest
-        flickrRequest.enqueue(object : Callback<FlickrResponse> {
+        flickrRequest.enqueue(object : Callback<FlickrResponseJSON> {
 
-            override fun onResponse(call: Call<FlickrResponse>, response: Response<FlickrResponse>) {
+            override fun onResponse(call: Call<FlickrResponseJSON>, response: Response<FlickrResponseJSON>) {
                 Log.d(TAG, "Response received: ${response.body()}")
                 val flickrResponse = response.body()
                 val photosResponse = flickrResponse?.photos ?: return
@@ -68,7 +66,7 @@ class FlickrFetcher {
                 responseLiveData.postValue(galleryItems)
             }
 
-            override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
+            override fun onFailure(call: Call<FlickrResponseJSON>, t: Throwable) {
                 val msg = if (call.isCanceled) "Request has been canceled"
                 else "Failed to fetch photos"
                 Log.e(TAG, msg, t)
