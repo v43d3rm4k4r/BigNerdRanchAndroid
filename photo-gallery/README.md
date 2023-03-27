@@ -3,7 +3,7 @@ An application that uses the Flickr API to display interesting photos. In progre
 ### Reviewed Topics:
 - Using REST API via Retrofit
 - GSON + Retrofit
-- Looper, Hander & HandlerThread
+- Looper, Handler & HandlerThread
 - SearchView
 - SharedPreferences
 - WorkManager
@@ -14,4 +14,4 @@ In process:
 
 ### Additionally added:
 - LRU caching
-- Network connectivtiy observer
+- Network connectivity observer
