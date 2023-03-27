@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.utils.flickrapi
+package com.bignerdranch.android.photogallery.data.flickrapi
 
 import okhttp3.Interceptor
 import okhttp3.Response

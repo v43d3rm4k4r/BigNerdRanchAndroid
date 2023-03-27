@@ -10,9 +10,9 @@ import androidx.lifecycle.MutableLiveData
 
 import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
-import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrAPI
-import com.bignerdranch.android.photogallery.utils.flickrapi.FlickrResponseJSON
-import com.bignerdranch.android.photogallery.utils.flickrapi.PhotoInterceptor
+import com.bignerdranch.android.photogallery.data.flickrapi.FlickrAPI
+import com.bignerdranch.android.photogallery.data.flickrapi.FlickrResponseJSON
+import com.bignerdranch.android.photogallery.data.flickrapi.PhotoInterceptor
 import com.bignerdranch.android.photogallery.data.FlickrFetcherSingleLiveEvent.ErrorLoading
 
 import okhttp3.OkHttpClient

@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.utils.flickrapi
+package com.bignerdranch.android.photogallery.data.flickrapi
 
 import okhttp3.ResponseBody
 
@@ -13,11 +13,11 @@ interface FlickrAPI {
      * Fetches interesting photos for today.
      */
     @GET("services/rest?method=flickr.interestingness.getList")
-    fun fetchInterestingPhotos(): Call<FlickrResponse>
+    fun fetchInterestingPhotos(): Call<FlickrResponseJSON>
 
     @GET
     fun fetchUrlBytes(@Url url: String): Call<ResponseBody>
 
     @GET("services/rest?method=flickr.photos.search")
-    fun searchPhotos(@Query("text") query: String): Call<FlickrResponse>
+    fun searchPhotos(@Query("text") query: String): Call<FlickrResponseJSON>
 }

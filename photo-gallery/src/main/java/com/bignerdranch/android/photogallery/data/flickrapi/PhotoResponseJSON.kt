@@ -1,4 +1,4 @@
-package com.bignerdranch.android.photogallery.utils.flickrapi
+package com.bignerdranch.android.photogallery.data.flickrapi
 
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 
