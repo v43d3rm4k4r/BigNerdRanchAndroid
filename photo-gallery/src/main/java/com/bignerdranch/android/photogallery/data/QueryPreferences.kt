@@ -1,8 +1,9 @@
 package com.bignerdranch.android.photogallery.data
 
 import android.content.Context
+import javax.inject.Inject
 
-class QueryPreferences(
+class QueryPreferences @Inject constructor(
     context: Context
 ) : QueryStore {
 

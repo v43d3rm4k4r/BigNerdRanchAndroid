@@ -7,6 +7,7 @@ import android.view.ViewGroup
 
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 
 import com.bignerdranch.android.photogallery.databinding.FragmentPhotoGalleryBinding
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
@@ -19,24 +20,33 @@ import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.NetworkConnectivityObserver
 import com.bignerdranch.android.androidutils.showSnackbar
 import com.bignerdranch.android.photogallery.R
+import com.bignerdranch.android.photogallery.appComponent
+import com.bignerdranch.android.photogallery.data.FlickrFetcherImpl
 import com.bignerdranch.android.photogallery.data.QueryPreferences
+import com.bignerdranch.android.photogallery.di.DaggerAppComponent
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
+import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModelFactory
+import javax.inject.Inject
 
 class PhotoGalleryFragment : Fragment() {
 
     private var _binding: FragmentPhotoGalleryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by fastLazyViewModel {
-        PhotoGalleryViewModel(
-            QueryPreferences(requireContext().applicationContext),
-            NetworkConnectivityObserver(requireContext().applicationContext)
-        )
-    }
-    private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
+    @Inject
+    lateinit var viewModelFactory: PhotoGalleryViewModelFactory
+    private val viewModel: PhotoGalleryViewModel by viewModels { viewModelFactory }
 
-    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(requireActivity().applicationContext, viewModel, ::closeKeyboard) }
+    @Inject lateinit var queryPreferences: QueryPreferences
+
+    private val adapter by fastLazy { PhotoAdapter(viewModel::onPhotoClicked, viewModel.thumbnailDownloader::queueThumbnail) }
+    private val menuProvider by fastLazy { PhotoGalleryMenuProvider(requireActivity().applicationContext, viewModel, ::closeKeyboard, queryPreferences) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().appComponent.inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPhotoGalleryBinding.inflate(layoutInflater)

@@ -10,6 +10,7 @@ import androidx.core.view.MenuProvider
 import androidx.work.*
 
 import com.bignerdranch.android.photogallery.R
+import com.bignerdranch.android.photogallery.data.QueryStore
 import com.bignerdranch.android.photogallery.domain.notifications.RefreshPhotosWorker
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
 
@@ -19,7 +20,8 @@ import java.util.concurrent.TimeUnit
 class PhotoGalleryMenuProvider(
     private val context: Context,
     private val viewModel: PhotoGalleryViewModel,
-    private val hideKeyboard: () -> Unit
+    private val hideKeyboard: () -> Unit,
+    private val queryStore: QueryStore
 ) : MenuProvider {
 
     private var searchView: SearchView? = null
@@ -54,11 +56,11 @@ class PhotoGalleryMenuProvider(
                 true
             }
             R.id.menu_item_toggle_polling -> {
-                val isPolling = viewModel.queryStore.isPolling()
+                val isPolling = queryStore.isPolling()
                 val workManager = WorkManager.getInstance()
                 if (isPolling) {
                     workManager.cancelUniqueWork(POLL_WORK)
-                    viewModel.queryStore.setPolling(false)
+                    queryStore.setPolling(false)
                     menuItem.title = context.getString(R.string.start_polling)
                 } else {
                     val constraints = Constraints.Builder()
@@ -68,7 +70,7 @@ class PhotoGalleryMenuProvider(
                         .setConstraints(constraints)
                         .build()
                     workManager.enqueueUniquePeriodicWork(POLL_WORK, ExistingPeriodicWorkPolicy.KEEP, periodicRequest)
-                    viewModel.queryStore.setPolling(true)
+                    queryStore.setPolling(true)
                     menuItem.title = context.getString(R.string.stop_polling)
                 }
                 true

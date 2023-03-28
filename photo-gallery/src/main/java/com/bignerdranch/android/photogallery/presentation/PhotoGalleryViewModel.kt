@@ -11,21 +11,22 @@ import com.bignerdranch.android.androidutils.livedata.SingleLiveEvent
 import com.bignerdranch.android.androidutils.livedata.SingleMediatorLiveEvent
 import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.ConnectivityObserverSingleLiveEvent
-import com.bignerdranch.android.photogallery.data.QueryStore
 import com.bignerdranch.android.photogallery.data.FlickrFetcher
+import com.bignerdranch.android.photogallery.data.QueryStore
+import com.bignerdranch.android.photogallery.data.FlickrFetcherImpl
 import com.bignerdranch.android.photogallery.data.GalleryItemsLiveData
 import com.bignerdranch.android.photogallery.domain.ThumbnailDownloader
 import com.bignerdranch.android.photogallery.domain.model.GalleryItem
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.*
 import com.bignerdranch.android.photogallery.ui.recyclerviewutils.PhotoAdapter
 import com.bignerdranch.android.photogallery.presentation.PhotoGallerySingleLiveEvent.ShowProgressBar
+import javax.inject.Inject
 
-class PhotoGalleryViewModel(
-    val queryStore: QueryStore,
-    private val connectivityObserver: ConnectivityObserver
+class PhotoGalleryViewModel @Inject constructor(
+    private val queryStore: QueryStore,
+    private val connectivityObserver: ConnectivityObserver,
+    private val flickrFetcher: FlickrFetcher
 ) : ViewModel() {
-
-    private val flickrFetcher = FlickrFetcher()
 
     private val _searchTerm = MutableLiveData("")
     val searchTerm: String get() = _searchTerm.value ?: ""

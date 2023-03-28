@@ -15,28 +15,35 @@ import androidx.work.WorkerParameters
 import com.bignerdranch.android.photogallery.PhotoGalleryApplication
 import com.bignerdranch.android.photogallery.R
 import com.bignerdranch.android.photogallery.data.FlickrFetcher
+import com.bignerdranch.android.photogallery.data.FlickrFetcherImpl
 import com.bignerdranch.android.photogallery.data.QueryPreferences
+import com.bignerdranch.android.photogallery.data.QueryStore
 import com.bignerdranch.android.photogallery.ui.PhotoGalleryActivity
+import javax.inject.Inject
 
 class RefreshPhotosWorker(
     private val context: Context,
     workerParameters: WorkerParameters
 ) : Worker(context, workerParameters) {
 
-    private val sharedPreferences = QueryPreferences(context)
+    @Inject
+    lateinit var sharedPreferences: QueryStore
+
+    @Inject
+    lateinit var flickrFetcher: FlickrFetcher
 
     override fun doWork(): Result {
         Log.i(TAG, "Work request triggered")
         val query = sharedPreferences.getStoredQuery()
         val lastResultId = sharedPreferences.getLastResultId()
         val items = if (query.isEmpty()) {
-            FlickrFetcher().fetchInterestingPhotosRequest()
+            flickrFetcher.fetchInterestingPhotosRequest()
                 .execute()
                 .body()
                 ?.photos
                 ?.galleryItems
         } else {
-            FlickrFetcher().searchPhotosRequest(query)
+            flickrFetcher.searchPhotosRequest(query)
                 .execute()
                 .body()
                 ?.photos

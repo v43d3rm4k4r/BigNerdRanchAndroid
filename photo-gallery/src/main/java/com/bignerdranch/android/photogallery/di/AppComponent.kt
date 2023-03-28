@@ -5,14 +5,9 @@ import dagger.Component
 import dagger.Module
 import javax.inject.Singleton
 
-@Component(modules = [])
+@Singleton
+@Component(modules = [RemoteModule::class, LocalStorageModule::class, PresentationModule::class])
 interface AppComponent {
 
-    //fun inject(fragment: PhotoGalleryFragment)
+    fun inject(to: PhotoGalleryFragment)
 }
-
-//@Module
-//class PresentationModule {
-//
-//
-//}
