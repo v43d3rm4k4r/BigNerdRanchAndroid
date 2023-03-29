@@ -27,11 +27,12 @@ class RefreshPhotosWorker(
 ) : Worker(context, workerParameters) {
 
     @Inject
-    lateinit var sharedPreferences: QueryStore
+    lateinit var sharedPreferences: QueryStore // TODO: fix inject
 
     @Inject
-    lateinit var flickrFetcher: FlickrFetcher
+    lateinit var flickrFetcher: FlickrFetcher // TODO: fix inject
 
+    // TODO: test it:
     override fun doWork(): Result {
         Log.i(TAG, "Work request triggered")
         val query = sharedPreferences.getStoredQuery()
