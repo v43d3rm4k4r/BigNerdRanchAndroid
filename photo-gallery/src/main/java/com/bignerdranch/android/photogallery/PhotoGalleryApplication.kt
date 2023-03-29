@@ -30,9 +30,9 @@ class PhotoGalleryApplication : Application(), Configuration.Provider {
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
 
-        appComponent = DaggerAppComponent.builder()
-            .presentationModule(PresentationModule(this))
-            .build()
+        appComponent = DaggerAppComponent
+            .factory()
+            .create(context = this)
             .apply { inject(this@PhotoGalleryApplication) }
     }
 

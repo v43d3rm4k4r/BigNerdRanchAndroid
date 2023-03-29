@@ -15,11 +15,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class PresentationModule(private val appContext: Context) {
-
-    @Provides
-    @Singleton
-    fun provideApplicationContext() = appContext
+class PresentationModule() {
 
     @Provides
     @Singleton
