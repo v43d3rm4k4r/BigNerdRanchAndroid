@@ -15,3 +15,6 @@ In process:
 ### Additionally added:
 - LRU caching
 - Network connectivity observer
+
+---
+![Image alt](https://github.com/v43d3rm4k4r/BigNerdRanchAndroid/blob/main/photo-gallery/screens/1.jpg)  
