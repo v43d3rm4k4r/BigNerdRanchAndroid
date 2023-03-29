@@ -5,32 +5,23 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
-
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-
 import com.bignerdranch.android.photogallery.PhotoGalleryApplication
 import com.bignerdranch.android.photogallery.R
 import com.bignerdranch.android.photogallery.data.FlickrFetcher
-import com.bignerdranch.android.photogallery.data.FlickrFetcherImpl
-import com.bignerdranch.android.photogallery.data.QueryPreferences
 import com.bignerdranch.android.photogallery.data.QueryStore
 import com.bignerdranch.android.photogallery.ui.PhotoGalleryActivity
-import javax.inject.Inject
 
 class RefreshPhotosWorker(
     private val context: Context,
-    workerParameters: WorkerParameters
+    workerParameters: WorkerParameters,
+    private val sharedPreferences: QueryStore,
+    private val flickrFetcher: FlickrFetcher,
 ) : Worker(context, workerParameters) {
-
-    @Inject
-    lateinit var sharedPreferences: QueryStore // TODO: fix inject
-
-    @Inject
-    lateinit var flickrFetcher: FlickrFetcher // TODO: fix inject
 
     // TODO: test it:
     override fun doWork(): Result {
@@ -62,10 +53,9 @@ class RefreshPhotosWorker(
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+                ) == PackageManager.PERMISSION_GRANTED) {
                 val intent = PhotoGalleryActivity.newIntent(context)
-                val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
                 val resources = context.resources
                 val notification = NotificationCompat

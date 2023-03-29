@@ -5,18 +5,25 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.work.Configuration
+import androidx.work.DelegatingWorkerFactory
 import com.bignerdranch.android.photogallery.di.AppComponent
 import com.bignerdranch.android.photogallery.di.DaggerAppComponent
 import com.bignerdranch.android.photogallery.di.PresentationModule
+import com.bignerdranch.android.photogallery.domain.notifications.CustomWorkerFactory
+import javax.inject.Inject
 
-class PhotoGalleryApplication : Application() {
+class PhotoGalleryApplication : Application(), Configuration.Provider {
 
     lateinit var appComponent: AppComponent
 
-    /** Making channel on Oreo and higher. */
+    @Inject
+    lateinit var customWorkerFactory: CustomWorkerFactory
+
     override fun onCreate() {
         super.onCreate()
 
+        // Making channel on Oreo and higher:
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val channelName = getString(R.string.notification_channel_name)
         val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
@@ -25,6 +32,16 @@ class PhotoGalleryApplication : Application() {
 
         appComponent = DaggerAppComponent.builder()
             .presentationModule(PresentationModule(this))
+            .build()
+            .apply { inject(this@PhotoGalleryApplication) }
+    }
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        val myWorkerFactory = DelegatingWorkerFactory()
+        myWorkerFactory.addFactory(customWorkerFactory)
+        return Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.INFO)
+            .setWorkerFactory(myWorkerFactory)
             .build()
     }
 

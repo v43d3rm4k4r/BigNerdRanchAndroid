@@ -4,16 +4,17 @@ import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
-import androidx.work.*
-
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.bignerdranch.android.photogallery.R
 import com.bignerdranch.android.photogallery.data.QueryStore
 import com.bignerdranch.android.photogallery.domain.notifications.RefreshPhotosWorker
 import com.bignerdranch.android.photogallery.presentation.PhotoGalleryViewModel
-
 import java.util.concurrent.TimeUnit
 
 /** Menu provider used by [PhotoGalleryFragment]. */
@@ -57,10 +58,10 @@ class PhotoGalleryMenuProvider(
             }
             R.id.menu_item_toggle_polling -> {
                 val isPolling = queryStore.isPolling()
-                val workManager = WorkManager.getInstance()
+                val workManager = WorkManager.getInstance(context)
                 if (isPolling) {
                     workManager.cancelUniqueWork(POLL_WORK)
-                    queryStore.setPolling(false)
+                    queryStore.setPolling(false) // TODO: refactor this
                     menuItem.title = context.getString(R.string.start_polling)
                 } else {
                     val constraints = Constraints.Builder()
