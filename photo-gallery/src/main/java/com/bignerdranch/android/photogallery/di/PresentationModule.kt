@@ -15,7 +15,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class PresentationModule() {
+object PresentationModule {
 
     @Provides
     @Singleton

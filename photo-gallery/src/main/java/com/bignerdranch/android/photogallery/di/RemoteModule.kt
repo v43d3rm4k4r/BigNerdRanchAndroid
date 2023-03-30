@@ -15,7 +15,7 @@ import retrofit2.create
 import javax.inject.Singleton
 
 @Module
-class RemoteModule {
+object RemoteModule {
 
     @Singleton
     @Provides
