@@ -5,6 +5,7 @@ import com.bignerdranch.android.androidutils.network.ConnectivityObserver
 import com.bignerdranch.android.androidutils.network.NetworkConnectivityObserver
 import com.bignerdranch.android.photogallery.data.FlickrFetcher
 import com.bignerdranch.android.photogallery.data.FlickrFetcherImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -14,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [RemoteModule.Declarations::class])
 object RemoteModule {
 
     @Singleton
@@ -58,7 +59,11 @@ object RemoteModule {
     @Provides
     fun provideNetworkConnectivityObserver(context: Context): ConnectivityObserver = NetworkConnectivityObserver(context)
 
-    @Singleton
-    @Provides
-    fun provideFlickrFetcher(retrofit: Retrofit): FlickrFetcher = FlickrFetcherImpl(retrofit)
+    @Module
+    interface Declarations {
+
+        @Singleton
+        @Binds
+        fun bindFlickrFetcher(impl: FlickrFetcherImpl): FlickrFetcher
+    }
 }

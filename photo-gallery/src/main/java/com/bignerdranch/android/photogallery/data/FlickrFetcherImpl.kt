@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 typealias GalleryItemsLiveData = LiveData<List<GalleryItem>>
 
-class FlickrFetcherImpl(
+class FlickrFetcherImpl @Inject constructor(
     retrofit: Retrofit
 ) : FlickrFetcher {
 

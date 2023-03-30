@@ -16,6 +16,7 @@ import javax.inject.Inject
 class PhotoGalleryApplication : Application(), Configuration.Provider {
 
     lateinit var appComponent: AppComponent
+        private set
 
     @Inject
     lateinit var customWorkerFactory: CustomWorkerFactory
