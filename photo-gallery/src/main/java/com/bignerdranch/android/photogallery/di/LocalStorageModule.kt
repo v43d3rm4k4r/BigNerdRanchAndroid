@@ -11,6 +11,5 @@ import javax.inject.Singleton
 object LocalStorageModule {
 
     @Provides
-    @Singleton
     fun provideQueryPreferences(context: Context): QueryStore = QueryPreferences(context)
 }

@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Module
 object PresentationModule {
 
-    @Provides
     @Singleton
     fun providePhotoGalleryViewModelFactory(
         queryPreferences: QueryStore,

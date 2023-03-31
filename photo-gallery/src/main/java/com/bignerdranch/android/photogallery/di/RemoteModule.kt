@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @Module(includes = [RemoteModule.Declarations::class])
 object RemoteModule {
 
-    @Singleton
     @Provides
     fun providePhotoInterceptor(): Interceptor =
         Interceptor { chain ->
@@ -39,14 +38,12 @@ object RemoteModule {
             chain.proceed(newRequest)
         }
 
-    @Singleton
     @Provides
     fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build()
 
-    @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
@@ -55,14 +52,12 @@ object RemoteModule {
             .client(client)
             .build()
 
-    @Singleton
     @Provides
     fun provideNetworkConnectivityObserver(context: Context): ConnectivityObserver = NetworkConnectivityObserver(context)
 
     @Module
     interface Declarations {
 
-        @Singleton
         @Binds
         fun bindFlickrFetcher(impl: FlickrFetcherImpl): FlickrFetcher
     }
